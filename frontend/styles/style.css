@@ -1,0 +1,462 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    /* background-color: #0e0e0e; */
+    background-color: #2d2d2d;
+    color: #fff;
+    line-height: 1.6;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(8px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    font-weight: 1000;
+    font-size: 2rem;
+    letter-spacing: 1px;
+    /* ADDED: To make image and text align horizontally */
+    display: flex;
+    align-items: center;
+    /* Vertically align image and text */
+}
+
+/* ADDED: Styling for the logo image */
+.logo-img {
+    height: 30px;
+    /* Adjust as needed */
+    width: auto;
+    /* Maintain aspect ratio */
+    margin-right: 10px;
+    /* Space between the image and the text */
+    /* You might want to add other styles like border-radius if your logo is square and you want rounded corners */
+}
+
+
+.nav-links a {
+    /* margin: 0 1.2rem; */
+    margin-left: 1rem;
+    color: #bbb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #fff;
+}
+
+.profile-link .profile-icon {
+    color: #bbb;
+    /* Default color (light grey) */
+    transition: color 0.3s ease;
+    /* Smooth transition for color change */
+}
+
+/* Hover state for the icon when its parent link is hovered */
+.profile-link:hover .profile-icon {
+    color: #fff;
+    /* Color on hover (e.g., red) */
+}
+
+.profile-link .profile-text {
+    color: #bbb;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.profile-link:hover .profile-text {
+    color: #fff;
+}
+
+.nav-buttons button {
+    margin-left: 1rem;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-login {
+    background: transparent;
+    color: #bbb;
+    border: 1px solid #444;
+    transition: 0.3s;
+}
+
+.btn-login:hover {
+    color: #fff;
+    border-color: #888;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4e00c2, #a100ff);
+    color: #fff;
+    transition: transform 0.3s ease;
+    margin-left: auto;
+    /* margin-left: 1rem; */
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+.hero {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at 20% 30%, #181818, #0a0a0a);
+    padding: 0 2rem;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.subtitle {
+    color: #a100ff;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+}
+
+.hero p {
+    color: #bbb;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.hero-buttons .btn-primary,
+.hero-buttons .btn-secondary {
+    margin: 0.5rem;
+    padding: 0.8rem 2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-secondary {
+    background: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+}
+
+.btn-secondary:hover {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+
+
+/* --- Event Cards Section --- */
+.event-cards-section {
+    padding: 8rem 4rem 4rem;
+    /* Add padding top to be below the fixed navbar */
+    background-color: #0e0e0e;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+    color: #fff;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    /* Allows cards to wrap on smaller screens */
+}
+
+.card {
+    background: #1c1c1c;
+    border-radius: 12px;
+    overflow: hidden;
+    /* Ensures the image corners are rounded */
+    width: 360px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #2a2a2a;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 12px 30px rgba(161, 0, 255, 0.25);
+}
+
+.card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    /* Ensures image covers the area without distortion */
+}
+
+.card-content {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.card-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+}
+
+.card-meta {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.card-meta .fa {
+    color: #a100ff;
+    /* Use accent color for icons */
+}
+
+.card-description {
+    color: #ccc;
+    font-size: 1rem;
+    line-height: 1.5;
+    flex-grow: 1;
+    /* This pushes the button to the bottom */
+    margin-bottom: 1.5rem;
+}
+
+.card-button {
+    width: 100%;
+    padding: 0.8rem;
+    border-radius: 8px;
+    text-align: center;
+    border: none;
+    /* Resetting border for consistency */
+}
+
+
+/* --- Data Table Section --- */
+.data-table-section {
+    padding: 8rem 4rem 4rem;
+    background-color: #0e0e0e;
+    min-height: 100vh;
+}
+
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+/* Container to allow horizontal scrolling on small screens */
+.table-container {
+    overflow-x: auto;
+    background: #1c1c1c;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #2a2a2a;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+    /* Prevents table from getting too squished */
+}
+
+.data-table th,
+.data-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.data-table thead {
+    background-color: #252525;
+}
+
+.data-table th {
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+}
+
+.data-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.data-table tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+.data-table td {
+    color: #ccc;
+}
+
+.data-table td:last-child {
+    text-align: right;
+}
+
+.btn-action {
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-left: 0.5rem;
+}
+
+.btn-edit {
+    background-color: #2a6fdb;
+    color: #fff;
+}
+
+.btn-edit:hover {
+    background-color: #518eeb;
+}
+
+.btn-delete {
+    background-color: #c9302c;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background-color: #e44d49;
+}
+
+
+/* --- REGISTRATION FORM STYLES --- */
+
+/* Creates a two-column grid for First and Last Name */
+.form-card .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+/* Style for the Bio textarea to match other inputs */
+.form-card .form-group textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #2d2d2d;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+    /* Ensure font consistency */
+    transition: border-color 0.3s ease;
+    resize: vertical;
+    /* Allow user to resize vertically only */
+}
+
+.form-card .form-group textarea:focus {
+    outline: none;
+    border-color: #a100ff;
+    /* Purple border on focus */
+}
+
+/* Style for the Role dropdown to match other inputs */
+.form-card .form-group select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background-color: #2d2d2d;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+
+    /* Remove default browser appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    /* Custom dropdown arrow */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23cccccc' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+}
+
+.form-card .form-group select:focus {
+    outline: none;
+    border-color: #a100ff;
+}
+
+/* Placeholder color for the disabled "Select your role" option */
+.form-card .form-group select:invalid {
+    color: #888;
+}
+
+/* Style for the "Sign In" link at the bottom */
+.signin-link-container {
+    text-align: center;
+    margin-top: 2rem;
+    color: #888;
+}
+
+.signin-link {
+    color: #a100ff;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.signin-link:hover {
+    text-decoration: underline;
+}
+
+
+.footer {
+    background: #0a0a0a;
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.9rem;
+    color: #666;
+}

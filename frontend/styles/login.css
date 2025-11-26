@@ -1,0 +1,137 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at 25% 25%, #1a132b, #0d0a14);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: #fff;
+  }
+  
+  /* Card Layout */
+  .form-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(25px);
+    box-shadow: 0 0 50px rgba(160, 70, 255, 0.25);
+    width: 100%;
+    max-width: 420px;
+    padding: 3rem 2.5rem;
+    animation: fadeIn 0.8s ease;
+    text-align: center;
+  }
+  
+  /* Animation */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Logo and Tagline */
+  .logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+  }
+  
+  .logo-text {
+    font-weight: 700;
+    font-size: 2.2rem;
+    color: #ffffff;
+  }
+  
+  .logo-tagline {
+    font-size: 0.9rem;
+    color: #b1a9c8;
+    margin-top: 0.3rem;
+  }
+  
+  /* Subtitle */
+  .section-subtitle {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #fff;
+    text-align: left;
+  }
+  
+  /* Form */
+  .form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+  
+  .form-group label {
+    display: block;
+    font-size: 0.95rem;
+    color: #c9c4da;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input::placeholder {
+    color: #aaa;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #a855ff;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  
+  /* Button */
+  .form-submit-btn {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.9rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+    border: none;
+    color: #fff;
+    background: linear-gradient(90deg, #7b2ff7, #f107a3);
+    transition: all 0.3s ease;
+  }
+  
+  .form-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(160, 70, 255, 0.4);
+  }
+  
+  /* Signup Link */
+  .signup-link-container {
+    text-align: center;
+    margin-top: 2rem;
+    color: #aaa;
+  }
+  
+  .signup-link {
+    color: #a855ff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }
+  

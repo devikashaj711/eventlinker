@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>View Event | Event Linker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/event_detail.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body style="color: #fff;">
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-text">Event Linker</span>
+            <small class="logo-tagline">An Integrated Event Networking Platform</small>
+        </div>
+
+        <nav class="nav-links">
+            {% if is_attendee %}
+                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
+                <a href="#" class="profile-link">
+                    <i class="fa fa-user profile-icon"></i>
+                    <span class="profile-text">Profile</span>
+                </a>
+                <a href="#">About</a>
+            {% else %}
+                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
+                <a href="#" class="profile-link">
+                    <i class="fa fa-user profile-icon"></i>
+                    <span class="profile-text">Profile</span>
+                </a>
+                <a href="#">About</a>
+            {% endif %}
+        </nav>
+        
+    </header>
+
+    <main>
+        <div class="event-container">
+
+            <!-- Banner Image -->
+            {% if event.image_path %}
+            <div class="event-banner">
+                <img src="{{ event.image_path }}" alt="Event Image">
+            </div>
+            {% endif %}
+
+            <!-- Event Title -->
+            <h1 class="event-title">{{ event.event_title }}</h1>
+
+            <!-- Two Column Layout -->
+            <div class="event-details-grid">
+
+                <!-- LEFT: EVENT DETAILS -->
+                <div class="event-info">
+                    <p><strong>Category:</strong> {{ event.category_name }}</p>
+                    <p><strong>Description:</strong> {{ event.description }}</p>
+                    <p><strong>Date:</strong> {{ event.event_date }}</p>
+                    <p><strong>Location:</strong> {{ event.location }}</p>
+                </div>
+
+                <!-- RIGHT: QR CODE -->
+                <div class="event-qr">
+                    {% if event.qr_code_path %}
+                    <p><strong>QR Code:</strong></p>
+                    <img src="{{ event.qr_code_path }}" alt="Event QR Code">
+                    {% endif %}
+                </div>
+
+            </div>
+
+            <!-- BACK BUTTON -->
+            <div style="margin-top: 2rem;">
+                <a href="{{ url_for('attendee_bp.attendee_homepage') if is_attendee else url_for('organizer_bp.organizer_homepage') }}"
+                    class="back-button">
+                    Back to Events
+                </a>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

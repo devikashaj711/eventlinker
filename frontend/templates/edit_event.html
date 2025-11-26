@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Event | Event Linker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="body-card-login">
+
+    <div class="form-card">
+        <div class="logo">
+            <span class="logo-text">Edit Event</span>
+            <small class="logo-tagline">Modify your event details</small>
+        </div>
+
+        <form action="{{ url_for('organizer_bp.update_event', event_id=event.event_id) }}" method="POST"
+            enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label>Category</label>
+                <select name="category" required>
+                    {% for cat in categories %}
+                    <option value="{{ cat.category_id }}" {% if event.category_id==cat.category_id %}selected{% endif
+                        %}>
+                        {{ cat.category_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Event Title</label>
+                <input type="text" name="title" value="{{ event.event_title }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea name="description" rows="3">{{ event.description }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Date & Time</label>
+                <input type="datetime-local" name="date" value="{{ event.event_date|replace(' ', 'T') }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" name="location" value="{{ event.location }}">
+            </div>
+
+            <div class="form-group">
+                <label>Current Image</label><br>
+                {% if event.image_path %}
+                <img src="{{ event.image_path }}" width="180" style="border-radius:8px;">
+                {% else %}
+                <p>No image uploaded</p>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>Upload New Image (Optional)</label>
+                <input type="file" name="image_file">
+            </div>
+
+            <button type="submit" class="btn-primary form-submit-btn">Save Changes</button>
+        </form>
+    </div>
+
+</body>
+
+</html>

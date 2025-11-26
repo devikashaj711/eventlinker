@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EventLinker - Attendee</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/attendee_homepage.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-text">Event Linker</span>
+      <small class="logo-tagline">An Integrated Event Networking Platform</small>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#">Attendee</a>
+      <a href="#" class="profile-link">
+        <i class="fa fa-user profile-icon"></i>
+        <span class="profile-text">Profile</span>
+      </a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <section class="event-cards-section">
+    <div class="card-container">
+
+      {% for event in events %}
+      <div class="card">
+        <img
+          src="{{ event.image_path }}"
+          alt="{{ event.event_title }}"
+          class="card-image"
+        >
+
+        <div class="card-content">
+          <h3 class="card-title">{{ event.event_title }}</h3>
+
+          <p class="card-meta">
+            <i class="fa fa-calendar"></i> {{ event.event_date }} |
+            <i class="fa fa-map-marker"></i> {{ event.location }}
+          </p>
+
+          <p class="card-description">
+            {{ event.description }}
+          </p>
+
+          <a href="/attendee/event/{{ event.event_id }}">
+            <button class="btn-primary card-button">View</button>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if events|length == 0 %}
+      <p style="text-align:center; padding:20px; font-size:1.1rem;">
+        No events available at the moment.
+      </p>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>© 2025 EventLinker. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
