@@ -13,6 +13,10 @@ import io
 BUCKET = os.getenv("AWS_S3_BUCKET")
 REGION = os.getenv("AWS_REGION")
 
+# print("DEBUG AWS BUCKET =", BUCKET)
+# print("DEBUG AWS REGION =", REGION)
+
+
 s3 = boto3.client(
     's3',
     aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),

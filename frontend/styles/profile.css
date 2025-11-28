@@ -1,0 +1,85 @@
+/* ----------------------------------------
+   BEAUTIFUL PROFILE PAGE (MATCHES ORGANIZER)
+------------------------------------------*/
+
+/* Section container */
+.profile-page-wrapper {
+    max-width: 1000px;
+    margin: 5rem auto 4rem;
+    padding: 3rem;
+    text-align: center;
+}
+
+/* Title */
+.profile-title {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 2rem;
+    text-shadow: 0 0 18px rgba(140, 0, 255, 0.7);
+}
+
+/* Gorgeous glass card */
+.profile-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: 18px;
+    padding: 2.5rem 3rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    box-shadow:
+        0 0 25px rgba(123, 47, 247, 0.25),
+        inset 0 0 12px rgba(255, 255, 255, 0.05);
+    width: 100%;
+    max-width: 850px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Each profile row */
+.profile-row {
+    font-size: 1.15rem;
+    color: #d5cfff;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Remove last row border */
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+/* Label text */
+.profile-row strong {
+    color: #c78bff;
+    font-weight: 600;
+}
+
+/* Links styling */
+.profile-card a {
+    color: #d68bff;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.3s ease;
+}
+
+.profile-card a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 10px #be63ff;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-card {
+        padding: 1.8rem 1.4rem;
+    }
+
+    .profile-title {
+        font-size: 2rem;
+    }
+
+    .profile-row {
+        font-size: 1.05rem;
+    }
+}

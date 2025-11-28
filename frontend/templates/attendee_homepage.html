@@ -6,8 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EventLinker - Attendee</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/attendee_homepage.css') }}" />
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body>
@@ -18,12 +20,16 @@
     </div>
 
     <nav class="nav-links">
+      <a href="#" onclick="openAboutModal()">About</a>
       <a href="#">Attendee</a>
-      <a href="#" class="profile-link">
+      <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
         <i class="fa fa-user profile-icon"></i>
         <span class="profile-text">Profile</span>
       </a>
-      <a href="#">About</a>
+      <a href="{{ url_for('user_bp.logout_user') }}">
+        <i class="fa fa-user fa fa-sign-out"></i>
+        <span class="profile-text">Logout</span>
+      </a>
     </nav>
   </header>
 
@@ -32,11 +38,7 @@
 
       {% for event in events %}
       <div class="card">
-        <img
-          src="{{ event.image_path }}"
-          alt="{{ event.event_title }}"
-          class="card-image"
-        >
+        <img src="{{ event.image_path }}" alt="{{ event.event_title }}" class="card-image">
 
         <div class="card-content">
           <h3 class="card-title">{{ event.event_title }}</h3>
@@ -70,5 +72,38 @@
     <p>© 2025 EventLinker. All rights reserved.</p>
   </footer>
 
+  <!-- ABOUT MODAL -->
+  <div id="aboutModal" class="modal">
+    <div class="modal-content about-content">
+      <h2>About EventLinker</h2>
+      <p>
+        EventLinker is an integrated event networking platform designed for organizers and attendees.
+        It allows event creation, QR-based attendee onboarding, profile creation, and seamless
+        networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
+        EventLinker simplifies event management and enhances professional connections.
+      </p>
+      <button class="modal-btn" onclick="closeAboutModal()">Close</button>
+    </div>
+  </div>
+
 </body>
+
+<script>
+  function openAboutModal() {
+    document.getElementById('aboutModal').style.display = 'flex';
+  }
+
+  function closeAboutModal() {
+    document.getElementById('aboutModal').style.display = 'none';
+  }
+
+  // Close when clicking outside
+  window.onclick = function (e) {
+    let modal = document.getElementById('aboutModal');
+    if (e.target === modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
 </html>

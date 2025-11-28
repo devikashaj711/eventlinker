@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
+
+    <!-- Fonts / Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <span class="logo-text">Event Linker</span>
+        </div>
+
+        <nav class="nav-links">
+            {% if session["user_role_id"] == 1 %}
+            <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
+            {% else %}
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
+            {% endif %}
+
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-user fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
+        </nav>
+    </header>
+
+    <div class="profile-page-wrapper">
+        <h2 class="profile-title">User Profile</h2>
+
+        <div class="profile-card">
+
+            <p class="profile-row"><strong>Name:</strong> {{ user.first_name }} {{ user.last_name }}</p>
+
+            <p class="profile-row"><strong>Email:</strong> {{ user.email }}</p>
+
+            <p class="profile-row"><strong>Bio:</strong> {{ user.bio }}</p>
+
+            <p class="profile-row"><strong>Interests:</strong> {{ user.interests }}</p>
+
+            <p class="profile-row"><strong>Instagram:</strong>
+                <a href="{{ user.insta_link }}" target="_blank">{{ user.insta_link }}</a>
+            </p>
+
+            <p class="profile-row"><strong>LinkedIn:</strong>
+                <a href="{{ user.linkedin_link }}" target="_blank">{{ user.linkedin_link }}</a>
+            </p>
+
+        </div>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
+
+</body>
+
+</html>

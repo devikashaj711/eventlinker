@@ -130,15 +130,27 @@ def save_event():
 
     # Upload Event Image to S3
     image = request.files.get("image_file")
-    image_path = None
+    # image_path = None
 
-    if image and image.filename.strip():
+    # if image and image.filename.strip():
+    #     try:
+    #         image_path = upload_file_to_s3(image, "event_images")
+    #     except Exception as e:
+    #         print("Image upload error:", e)
+    #         flash("Failed to upload event image.", "danger")
+    #         return redirect(url_for("organizer_bp.add_event_page"))
+        
+
+    if image and hasattr(image, "filename") and image.filename:
         try:
             image_path = upload_file_to_s3(image, "event_images")
         except Exception as e:
             print("Image upload error:", e)
             flash("Failed to upload event image.", "danger")
             return redirect(url_for("organizer_bp.add_event_page"))
+    else:
+        image_path = None
+
 
     conn = get_db_connection()
     cursor = None

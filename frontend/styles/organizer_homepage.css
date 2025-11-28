@@ -226,7 +226,7 @@ main {
   margin-top: auto;
 }
 
-/* Modal */
+/* Modal Background */
 .modal {
   display: none;
   position: fixed;
@@ -234,28 +234,51 @@ main {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
+/* Modal Box */
 .modal-content {
-  background: rgba(255, 255, 255, 0.1);
+  width: 50%;
+  height: 50%;
   padding: 2rem 3rem;
-  border-radius: 12px;
+  border-radius: 18px;
+
+  background: rgba(248, 245, 245, 0.975);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  color: #050505;
   text-align: center;
-  color: #fff;
-  box-shadow: 0 0 25px rgba(161, 0, 255, 0.3);
+  overflow-y: auto;
+  /* If content is longer, scroll inside box */
+
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 35px rgba(123, 47, 247, 0.5);
 }
 
+/* Close Button */
 .modal-content button {
+  margin-top: 1.5rem;
   background: linear-gradient(90deg, #7b2ff7, #f107a3);
   border: none;
   padding: 0.6rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 10px;
   color: #fff;
   cursor: pointer;
+  font-size: 1rem;
+  transition: 0.2s;
 }
+
+.modal-content button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 18px rgba(147, 0, 255, 0.45);
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -265,5 +288,11 @@ main {
 
   .navbar {
     padding: 1rem 2rem;
+  }
+
+  .modal-content {
+    width: 85%;
+    height: 60%;
+    padding: 1.5rem;
   }
 }

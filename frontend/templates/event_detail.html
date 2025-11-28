@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/event_detail.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body style="color: #fff;">
@@ -20,22 +21,28 @@
 
         <nav class="nav-links">
             {% if is_attendee %}
-                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
-                <a href="#" class="profile-link">
-                    <i class="fa fa-user profile-icon"></i>
-                    <span class="profile-text">Profile</span>
-                </a>
-                <a href="#">About</a>
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-user fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
             {% else %}
-                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
-                <a href="#" class="profile-link">
-                    <i class="fa fa-user profile-icon"></i>
-                    <span class="profile-text">Profile</span>
-                </a>
-                <a href="#">About</a>
+            <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-user fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
             {% endif %}
         </nav>
-        
+
     </header>
 
     <main>

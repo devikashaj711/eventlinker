@@ -24,12 +24,16 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
-            <a href="#" class="profile-link">
+            <a href="#" onclick="openAboutModal()">About</a>
+            <a href="#">Organizer</a>
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
-            <a href="#">About</a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-user fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
         </nav>
     </header>
 
@@ -119,6 +123,21 @@
         </div>
     </div>
 
+    <!-- ABOUT MODAL -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content about-content">
+            <h2>About Event Linker</h2>
+            <p>
+                EventLinker is an integrated event networking platform designed for organizers and attendees.
+                It allows event creation, QR-based attendee onboarding, profile creation, and seamless
+                networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
+                EventLinker simplifies event management and enhances professional connections.
+            </p>
+            <button class="modal-btn" onclick="closeAboutModal()">Close</button>
+        </div>
+    </div>
+
+
     <!-- JS -->
     <script>
         function showModal() {
@@ -144,6 +163,23 @@
                 window.history.replaceState({}, document.title, newUrl);
             };
         }
+
+        function openAboutModal() {
+            document.getElementById('aboutModal').style.display = 'flex';
+        }
+
+        function closeAboutModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+
+        // Close when clicking outside
+        window.onclick = function (e) {
+            let modal = document.getElementById('aboutModal');
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
     </script>
 
 
