@@ -41,3 +41,27 @@ def attendee_homepage():
             close_db_connection(conn, cursor)
 
     return render_template('attendee_homepage.html', events=events)
+
+
+# ------------------------------
+# Member list page
+# ------------------------------
+@attendee_bp.route('/attendee/event/<int:event_id>/members')
+def attendee_member_list(event_id):
+    conn = get_db_connection()
+    members = []
+
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT u.first_name, u.last_name, u.email
+                FROM event_registrations er
+                JOIN users u ON er.user_id = u.user_id
+                WHERE er.event_id = %s
+            """, (event_id,))
+            members = cursor.fetchall()
+        finally:
+            close_db_connection(conn, cursor)
+
+    return render_template("member_list.html", members=members, event_id=event_id)

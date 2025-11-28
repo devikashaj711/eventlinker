@@ -52,7 +52,7 @@
             {{ event.description }}
           </p>
 
-          <a href="/attendee/event/{{ event.event_id }}">
+          <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id) }}">
             <button class="btn-primary card-button">View</button>
           </a>
         </div>

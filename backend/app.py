@@ -43,7 +43,7 @@ app.register_blueprint(organizer_bp, url_prefix='/organizer')
 # --------------------------------------------------------------------
 # Go to attendee functionality
 # ---------------------------------------------------------------------
-app.register_blueprint(attendee_bp)
+app.register_blueprint(attendee_bp, url_prefix='/attendee')
 
 
 # --------------------------------------------------------------------

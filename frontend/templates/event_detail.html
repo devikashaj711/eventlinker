@@ -67,6 +67,9 @@
                     <p><strong>Description:</strong> {{ event.description }}</p>
                     <p><strong>Date:</strong> {{ event.event_date }}</p>
                     <p><strong>Location:</strong> {{ event.location }}</p>
+                    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id) }}" class="member-list-btn">
+                    View Member List
+                    </a>
                 </div>
 
                 <!-- RIGHT: QR CODE -->

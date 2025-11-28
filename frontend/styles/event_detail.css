@@ -85,6 +85,31 @@ main {
     opacity: 0.85;
 }
 
+/* Member List Button */
+.member-list-btn {
+    display: block; /* full width like back-button */
+    width: 100%;
+    max-width: 250px; /* optional limit width */
+    text-align: center;
+    margin: 2rem 0 0 0;
+    background: linear-gradient(90deg, #8a2be2, #ff00aa);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: 0.3s ease;
+    box-shadow: 0 0 15px rgba(255, 0, 150, 0.25);
+}
+
+.member-list-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+
+
 /* Responsive Fix */
 @media (max-width: 768px) {
     .event-details-grid {
