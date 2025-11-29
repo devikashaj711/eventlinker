@@ -4,37 +4,68 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign In | Event Linker</title>
+  <title>Sign In | EventLinker</title>
+
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
 
-<body class="body-card-login">
-  <div class="form-card">
-    <div class="logo">
-      <span class="logo-text">Event Linker</span>
-      <small class="logo-tagline">An Integrated Event Networking Platform</small>
+<body>
+
+  <div class="login-container">
+
+    <!-- LEFT COLUMN -->
+    <div class="left-side">
+
+      <!-- LOGO -->
+      <div class="logo-box">
+        <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+        <span class="logo-text">EventLinker</span>
+      </div>
+
+      <h1 class="welcome-title">Hello,<br>Welcome Back</h1>
+      <p class="welcome-subtitle">Hey, welcome back to your special place</p>
+
+      <!-- LOGIN FORM -->
+      <form action="#" method="POST" class="login-form">
+
+        <div class="form-group">
+          <input type="email" name="email" placeholder="stanley@gmail.com" required>
+        </div>
+
+        <div class="form-group">
+          <input type="password" name="password" placeholder="••••••••••••" required>
+        </div>
+
+        <div class="options-row">
+          <label class="remember-me">
+            <input type="checkbox">
+            <span>Remember me</span>
+          </label>
+
+          <a href="#" class="forgot-link">Forgot Password?</a>
+        </div>
+
+        <button type="submit" class="btn-primary">Sign In</button>
+
+      </form>
+
+      <p class="signup-text">
+        Don’t have an account?
+        <a href="/register" class="signup-link">Sign Up</a>
+      </p>
+
     </div>
 
-    <h3 class="section-subtitle">Sign In</h3>
-
-    <form action="#" method="POST">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
-      </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-      </div>
-      <button type="submit" class="form-submit-btn">Sign In</button>
-    </form>
-
-    <div class="signup-link-container">
-      <p>Don't have an account? <a href="/register" class="signup-link">Sign Up</a></p>
+    <!-- RIGHT PURPLE CARD -->
+    <div class="right-side">
+      <img src="{{ url_for('static', filename='images/eventlinker-login3.png') }}"
+           class="illustration-clean"
+           alt="Event Illustration">
     </div>
+
   </div>
+
 </body>
 
 </html>
