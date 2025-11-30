@@ -178,6 +178,14 @@ def user_profile():
     user_role_id = session["user_role_id"]
     print('user_role_id----', user_role_id)
 
+    # is_attendee = false
+    # if "user_role_id" is 2:
+    #     is_attendee=True
+    # else:
+    #     is_attendee=false
+
+    is_attendee = (user_role_id == 2)
+
     conn = get_db_connection()
     user = None
 
@@ -196,7 +204,7 @@ def user_profile():
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("profile.html", user=user)
+    return render_template("profile.html", user=user, is_attendee=is_attendee)
 
 
 # ------------------------

@@ -6,6 +6,9 @@
 }
 
 /* GLOBAL LAYOUT */
+/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
+
+/* body padding should match navbar height */
 body {
     font-family: "Poppins", sans-serif;
     color: #1e1238;
@@ -17,20 +20,19 @@ body {
     /* navbar height */
     padding-bottom: 56px;
     /* footer height */
-    overflow: hidden;
-    /* no full-page scroll */
+    overflow-x: hidden;
     font-size: 0.9rem;
-    /* slightly smaller base font */
 }
 
-/* Background overlay (optional) */
+/* gradient bg layer */
 .page-bg {
     position: fixed;
     inset: 0;
     z-index: -1;
+    background: linear-gradient(135deg, #b8affe, #ffffff);
 }
 
-/* NAVBAR – fixed at top */
+/* NAVBAR */
 .navbar {
     width: 100%;
     padding: 0.9rem 3rem;
@@ -46,6 +48,7 @@ body {
     z-index: 100;
 }
 
+/* left side: logo + tagline */
 .nav-left {
     display: flex;
     align-items: center;
@@ -67,6 +70,7 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 0.9rem;
+    overflow: hidden;
 }
 
 .logo-text-wrap {
@@ -84,7 +88,7 @@ body {
     color: #736b94;
 }
 
-/* Nav links */
+/* right side links */
 .nav-links {
     display: flex;
     align-items: center;
@@ -111,6 +115,7 @@ body {
 .logout-link i {
     font-size: 0.9rem;
 }
+
 
 /* MAIN LAYOUT – fills remaining viewport between nav & footer */
 .main-layout {

@@ -4,26 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Event Members | Event Linker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/member_list.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body style="color: #fff; font-family: Poppins, sans-serif;">
+<body>
 
-    <!-- NAVBAR -->
+    <div class="page-bg"></div>
+
+    <!-- NAVBAR (shared look with registration screen) -->
     <header class="navbar">
-        <div class="logo">
-            <span class="logo-text">Event Linker</span>
-            <small class="logo-tagline">An Integrated Event Networking Platform</small>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Attendee Dashboard</small>
+                </div>
+                <div class="logo-box">
+                </div>
+            </div>
         </div>
 
         <nav class="nav-links">
-            <a href="#" onclick="openAboutModal()">About</a>
             <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
             <a href="#">Similarity</a>
-            <a href="#">Attendee</a>
-
+            <!-- Events dropdown -->
             <div class="dropdown">
                 <a href="#" id="eventsLink">My Events ▾</a>
                 <div id="eventsSubmenu" class="submenu-vertical">
@@ -35,8 +44,8 @@
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-user fa fa-sign-out"></i>
+            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+                <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
             </a>
         </nav>
@@ -45,52 +54,58 @@
     <!-- MAIN CONTENT -->
     <main>
         <div class="member-container">
+
+            <!-- Back link -->
+            <div class="back-link">
+                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
+            </div>
+
             <h1 class="title">Registered Members</h1>
 
             {% if members|length == 0 %}
-                <p class="empty-msg">No members registered for this event yet.</p>
+            <p class="empty-msg">No members registered for this event yet.</p>
             {% else %}
-                <table class="member-table">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Name</th>
-                            <th>Connect</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for m in members %}
-                        <tr>
-                            <td>{{ loop.index }}</td>
-                            <td>{{ m.first_name }} {{ m.last_name }}</td>
-                            <td>
-                                {% set member_id = m.user_id if m.user_id is defined and m.user_id else m.id %}
-                                {% if member_id == session['user_id'] %}
-                                    <span style="color:#aaa; font-size:0.9rem;">You</span>
-                                {% else %}
-                                    <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}" method="POST">
-                                        <input type="hidden" name="receiver_id" value="{{ member_id }}">
-                                        <button class="connect-btn"
-                                                type="submit"
-                                                {% if m.status_id in [1,2] %} disabled {% endif %}>
-                                            {% if m.status_id == 1 %}
-                                                Pending
-                                            {% elif m.status_id == 2 %}
-                                                Accepted
-                                            {% else %}
-                                                Request
-                                            {% endif %}
-                                        </button>
-                                    </form>
-                                {% endif %}
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <table class="member-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Connect</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in members %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ m.first_name }} {{ m.last_name }}</td>
+                        <td>
+                            {% set member_id = m.user_id if m.user_id is defined and m.user_id else m.id %}
+                            {% if member_id == session['user_id'] %}
+                            <span style="color:#aaa; font-size:0.9rem;">You</span>
+                            {% else %}
+                            <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}"
+                                method="POST">
+                                <input type="hidden" name="receiver_id" value="{{ member_id }}">
+                                <button class="connect-btn" type="submit" {% if m.status_id in [1,2] %} disabled {%
+                                    endif %}>
+                                    {% if m.status_id == 1 %}
+                                    Pending
+                                    {% elif m.status_id == 2 %}
+                                    Accepted
+                                    {% else %}
+                                    Request
+                                    {% endif %}
+                                </button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             {% endif %}
-
-            <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event_id) }}" class="back-btn">Back to Event</a>
         </div>
     </main>
 
@@ -122,7 +137,7 @@
         function closeAboutModal() {
             document.getElementById('aboutModal').style.display = 'none';
         }
-        window.onclick = function(e) {
+        window.onclick = function (e) {
             let modal = document.getElementById('aboutModal');
             if (e.target === modal) {
                 modal.style.display = "none";
@@ -133,12 +148,12 @@
         const eventsLink = document.getElementById('eventsLink');
         const eventsSubmenu = document.getElementById('eventsSubmenu');
 
-        eventsLink.addEventListener('click', function(e) {
+        eventsLink.addEventListener('click', function (e) {
             e.preventDefault();
             eventsSubmenu.classList.toggle('active');
         });
 
-        window.addEventListener('click', function(e) {
+        window.addEventListener('click', function (e) {
             if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
                 eventsSubmenu.classList.remove('active');
             }
@@ -149,7 +164,7 @@
             const button = form.querySelector('button.connect-btn');
 
             if (!button.disabled) {
-                form.addEventListener('submit', function(e) {
+                form.addEventListener('submit', function (e) {
                     e.preventDefault();
                     button.textContent = 'Pending';
                     button.disabled = true;
@@ -159,16 +174,17 @@
                         method: 'POST',
                         body: formData
                     })
-                    .then(response => { /* handle response if needed */ })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        button.disabled = false;
-                        button.textContent = 'Request';
-                    });
+                        .then(response => { /* handle response if needed */ })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            button.disabled = false;
+                            button.textContent = 'Request';
+                        });
                 });
             }
         });
     </script>
 
 </body>
+
 </html>
