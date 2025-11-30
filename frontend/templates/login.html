@@ -57,9 +57,7 @@
             <span>Remember me</span>
           </label>
 
-          <a href="javascript:void(0)" onclick="openResetModal()" class="forgot-link">
-            Forgot Password?
-          </a>          
+          <a href="javascript:void(0)" onclick="openEmailModal()" class="forgot-link">Forgot Password?</a>       
           
           
         </div>
@@ -86,58 +84,109 @@
 
     <!-- FORGOT PASSWORD POPUP -->
     <!-- RESET PASSWORD POPUP -->
-  <div id="resetModal" class="modal-background" style="display:none;">
-    <div class="modal-box">
+  <!-- RESET STEP 1: ENTER EMAIL -->
+    <div id="emailModal" class="modal-background" style="display:none;">
+      <div class="modal-box">
+        <h2 class="modal-title">Reset Password</h2>
+        <p class="modal-subtitle">Enter your registered email</p>
 
-      <h2 class="modal-title">Reset Password</h2>
-      <p class="modal-subtitle">Set a new password for your account</p>
+        <form action="{{ url_for('user_bp.send_reset_otp') }}" method="POST">
+          <input type="email" 
+                name="email" 
+                class="modal-input"
+                placeholder="Enter your email"
+                required>
 
-      <form action="{{ url_for('user_bp.direct_reset_password') }}" method="POST">
+          <button type="submit" class="modal-btn">Send OTP</button>
+        </form>
 
-        <input type="email" 
-            name="email" 
-            class="modal-input"
-            placeholder="Enter your registered email"
-            required>
-
-
-        <input type="password" 
-              name="password" 
-              class="modal-input"
-              placeholder="New password"
-              required>
-
-        <input type="password" 
-              name="confirm_password" 
-              class="modal-input"
-              placeholder="Confirm new password"
-              required>
-
-        <button type="submit" class="modal-btn">Reset Password</button>
-      </form>
-
-      <button class="modal-close" onclick="closeResetModal()">Close</button>
-
+        <button class="modal-close" onclick="closeEmailModal()">Close</button>
+      </div>
     </div>
-  </div>
 
-  <script>
-    function openResetModal() {
-      document.getElementById("resetModal").style.display = "flex";
-    }
+    <!-- RESET STEP 2: VERIFY OTP -->
+    <div id="otpModal" class="modal-background" style="display:none;">
+      <div class="modal-box">
+        <h2 class="modal-title">Verify OTP</h2>
+        <p class="modal-subtitle">Enter the 6-digit OTP sent to your email</p>
 
-    function closeResetModal() {
-      document.getElementById("resetModal").style.display = "none";
-    }
+        <form action="{{ url_for('user_bp.verify_reset_otp') }}" method="POST">
+          <input type="text" 
+                name="otp" 
+                class="modal-input"
+                placeholder="Enter OTP"
+                required>
 
-    // Auto-hide flash messages after 5 seconds
-    setTimeout(() => {
-      const flashMessages = document.querySelectorAll('.flash-box');
-      flashMessages.forEach(msg => {
-        msg.classList.add('fade-out');
-      });
-    }, 5000); // 5 seconds
+          <button type="submit" class="modal-btn">Verify OTP</button>
+        </form>
+
+        <button class="modal-close" onclick="closeOtpModal()">Close</button>
+      </div>
+    </div>
+
+    <!-- RESET STEP 3: NEW PASSWORD -->
+    <div id="passwordModal" class="modal-background" style="display:none;">
+      <div class="modal-box">
+
+        <h2 class="modal-title">Set New Password</h2>
+        <p class="modal-subtitle">Enter your new password</p>
+
+        <form action="{{ url_for('user_bp.direct_reset_password') }}" method="POST">
+          <input type="password" name="password" class="modal-input" placeholder="New Password" required>
+
+          <input type="password" name="confirm_password" class="modal-input" placeholder="Confirm Password" required>
+
+          <button type="submit" class="modal-btn">Update Password</button>
+        </form>
+
+        <button class="modal-close" onclick="closePasswordModal()">Close</button>
+      </div>
+    </div>
+
+
+
+    <script>
+      function openEmailModal() {
+          document.getElementById("emailModal").style.display = "flex";
+      }
+      function closeEmailModal() {
+          document.getElementById("emailModal").style.display = "none";
+      }
+  
+      function openOtpModal() {
+          document.getElementById("otpModal").style.display = "flex";
+      }
+      function closeOtpModal() {
+          document.getElementById("otpModal").style.display = "none";
+      }
+  
+      function openPasswordModal() {
+          document.getElementById("passwordModal").style.display = "flex";
+      }
+      function closePasswordModal() {
+          document.getElementById("passwordModal").style.display = "none";
+      }
+  
+      // Auto-hide flash messages after 5 seconds
+      setTimeout(() => {
+        const flashMessages = document.querySelectorAll('.flash-box');
+        flashMessages.forEach(msg => {
+          msg.classList.add('fade-out');
+        });
+      }, 5000);
   </script>
+  
+  <!-- AUTO OPEN MODALS FROM BACKEND -->
+  {% if session.get('open_otp_modal') %}
+    <script> openOtpModal(); </script>
+    {% set _ = session.pop('open_otp_modal') %}
+  {% endif %}
+  
+  {% if session.get('open_password_modal') %}
+    <script> openPasswordModal(); </script>
+    {% set _ = session.pop('open_password_modal') %}
+  {% endif %}
+  
 
 </body>
 
