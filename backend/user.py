@@ -17,6 +17,14 @@ def login_user():
         email = request.form.get('email')
         password = request.form.get('password')
 
+        print("LOGIN INPUT:", email, password)
+        cursor.execute("SELECT password FROM users WHERE email = %s", (email,))
+        row = cursor.fetchone()
+        print("DB PASSWORD:", row)
+
+        # Save email for reset password popup
+        session["last_login_email"] = email
+
         conn = get_db_connection()
         if conn:
             try:
@@ -52,6 +60,57 @@ def login_user():
                 close_db_connection(conn, cursor)
 
     return render_template('login.html')
+
+@user_bp.route('/direct-reset-password', methods=['POST'])
+def direct_reset_password():
+    email = request.form.get('email')
+    new_password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+
+    # Password match check
+    if new_password != confirm_password:
+        flash("Passwords do not match.", "danger")
+        return redirect(url_for('user_bp.login_user'))
+
+    conn = get_db_connection()
+    if not conn:
+        flash("Could not connect to database.", "danger")
+        return redirect(url_for('user_bp.login_user'))
+
+    try:
+        cursor = conn.cursor()
+
+        # First check if user exists
+        cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
+        user_exists = cursor.fetchone()
+
+        if not user_exists:
+            flash("No account found with this email.", "danger")
+            close_db_connection(conn, cursor)            
+            return redirect(url_for('user_bp.login_user'))
+
+        # Update the password
+        cursor.execute(
+            "UPDATE users SET password = %s WHERE email = %s",
+            (new_password, email)
+        )
+
+        conn.commit()
+
+        # Check if 1 row was updated
+        if cursor.rowcount == 1:
+            flash("Password updated successfully!", "success")
+        else:
+            flash("Password update failed. Please try again.", "danger")
+
+    except Exception as e:
+        print("Reset password error:", e)
+        flash("Something went wrong. Try again.", "danger")
+
+    finally:
+        close_db_connection(conn, cursor)
+
+    return redirect(url_for('user_bp.login_user'))
 
 
 

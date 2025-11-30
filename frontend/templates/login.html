@@ -16,6 +16,20 @@
 
     <!-- LEFT COLUMN -->
     <div class="left-side">
+      
+      <!-- FLASH MESSAGES (EventLinker Style) -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-wrapper">
+          {% for category, message in messages %}
+            <div class="flash-box {{ category }}">
+              <span class="flash-text">{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% endwith %}
+
 
       <!-- LOGO -->
       <div class="logo-box">
@@ -27,7 +41,7 @@
       <p class="welcome-subtitle">Hey, welcome back to your special place</p>
 
       <!-- LOGIN FORM -->
-      <form action="#" method="POST" class="login-form">
+      <form action="{{ url_for('user_bp.login_user') }}" method="POST" class="login-form">
 
         <div class="form-group">
           <input type="email" name="email" placeholder="stanley@gmail.com" required>
@@ -43,7 +57,11 @@
             <span>Remember me</span>
           </label>
 
-          <a href="#" class="forgot-link">Forgot Password?</a>
+          <a href="javascript:void(0)" onclick="openResetModal()" class="forgot-link">
+            Forgot Password?
+          </a>          
+          
+          
         </div>
 
         <button type="submit" class="btn-primary">Sign In</button>
@@ -65,6 +83,53 @@
     </div>
 
   </div>
+
+    <!-- FORGOT PASSWORD POPUP -->
+    <!-- RESET PASSWORD POPUP -->
+  <div id="resetModal" class="modal-background" style="display:none;">
+    <div class="modal-box">
+
+      <h2 class="modal-title">Reset Password</h2>
+      <p class="modal-subtitle">Set a new password for your account</p>
+
+      <form action="{{ url_for('user_bp.direct_reset_password') }}" method="POST">
+
+        <input type="email" 
+            name="email" 
+            class="modal-input"
+            placeholder="Enter your registered email"
+            required>
+
+
+        <input type="password" 
+              name="password" 
+              class="modal-input"
+              placeholder="New password"
+              required>
+
+        <input type="password" 
+              name="confirm_password" 
+              class="modal-input"
+              placeholder="Confirm new password"
+              required>
+
+        <button type="submit" class="modal-btn">Reset Password</button>
+      </form>
+
+      <button class="modal-close" onclick="closeResetModal()">Close</button>
+
+    </div>
+  </div>
+
+  <script>
+    function openResetModal() {
+      document.getElementById("resetModal").style.display = "flex";
+    }
+
+    function closeResetModal() {
+      document.getElementById("resetModal").style.display = "none";
+    }
+  </script>
 
 </body>
 

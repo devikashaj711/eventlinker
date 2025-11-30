@@ -151,3 +151,134 @@ body {
   object-fit: cover;
   border-radius: 24px;
 }
+
+/* MODAL OVERLAY */
+.modal-background {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease;
+}
+
+/* MODAL BOX */
+.modal-box {
+  width: 420px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 32px;
+  text-align: center;
+  animation: slideUp 0.25s ease;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+}
+
+/* TITLE */
+.modal-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.modal-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* INPUT */
+.modal-input {
+  width: 90%;
+  max-width: 350px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #e5e5e5;
+  background: #fafafa;
+  font-size: 14px;
+  margin-bottom: 22px;
+}
+
+.modal-input:focus {
+  border-color: #6a5ae0;
+  box-shadow: 0 0 0 3px rgba(106, 90, 224, 0.2);
+  outline: none;
+}
+
+/* BUTTON */
+.modal-btn {
+  width: 60%;
+  padding: 12px 14px;
+  background: #6a5ae0;
+  color: white;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.modal-btn:hover {
+  background: #5a4bd0;
+}
+
+/* CLOSE BUTTON */
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  color: #777;
+  margin-top: 8px;
+}
+
+/* ANIMATIONS */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+/* Flash message wrapper */
+.flash-wrapper {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+/* Flash box design */
+.flash-box {
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  font-family: 'Inter', sans-serif;
+  display: flex;
+  align-items: center;
+  letter-spacing: 0.3px;
+}
+
+/* SUCCESS (greenish, soft) */
+.flash-box.success {
+  background: rgba(34, 197, 94, 0.15);   /* #22C55E light */
+  color: #166534;                         /* dark green */
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* ERROR (reddish, soft) */
+.flash-box.danger {
+  background: rgba(239, 68, 68, 0.15);    /* #EF4444 light */
+  color: #7F1D1D;                         /* dark red */
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* TEXT inside box */
+.flash-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
