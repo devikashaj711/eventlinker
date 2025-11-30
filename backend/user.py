@@ -17,11 +17,6 @@ def login_user():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        print("LOGIN INPUT:", email, password)
-        cursor.execute("SELECT password FROM users WHERE email = %s", (email,))
-        row = cursor.fetchone()
-        print("DB PASSWORD:", row)
-
         # Save email for reset password popup
         session["last_login_email"] = email
 

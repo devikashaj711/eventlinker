@@ -129,6 +129,14 @@
     function closeResetModal() {
       document.getElementById("resetModal").style.display = "none";
     }
+
+    // Auto-hide flash messages after 5 seconds
+    setTimeout(() => {
+      const flashMessages = document.querySelectorAll('.flash-box');
+      flashMessages.forEach(msg => {
+        msg.classList.add('fade-out');
+      });
+    }, 5000); // 5 seconds
   </script>
 
 </body>
