@@ -1,208 +1,204 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/* Make full-screen card with no scroll on desktop */
+html,
 body {
-  font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at 20% 20%, #1b1526, #0c0b12);
-  color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
-/* Card Container */
-.form-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  backdrop-filter: blur(25px);
-  box-shadow: 0 0 50px rgba(160, 70, 255, 0.25);
-  padding: 3rem 2.5rem;
-  width: 90%;
-  max-width: 750px;
+/* BACKGROUND GRADIENT */
+.page-bg {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(135deg, #b8affe, #f2e9ff);
+  z-index: -1;
+}
+
+/* MAIN CARD */
+.register-container {
+  width: 95%;
+  /* 🔹 card width = 95% of screen */
+  max-width: 1400px;
+  height: calc(100vh - 4rem);
+  /* card fits viewport height */
   margin: 2rem auto;
-  animation: fadeIn 0.8s ease;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.5rem 3rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  /* clip image inside card */
+  gap: 3rem;
+  /* 🔹 space between left and right panels */
 }
 
-/* Animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+/* FADE-IN ANIMATION */
+.fade-in {
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.6s ease forwards;
+}
 
+@keyframes fadeInUp {
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* Logo */
+/* LEFT PANEL (FORM) */
+.register-left {
+  flex: 0 0 52%;
+  max-width: 52%;
+}
+
+/* Logo text at top */
 .logo {
-  text-align: center;
-  margin-bottom: 2.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
 }
 
 .logo-text {
-  font-size: 2.2rem;
+  font-size: 32px;
   font-weight: 700;
-  color: #fff;
 }
 
 .logo-tagline {
-  color: #b1a9c8;
-  font-size: 0.9rem;
+  display: block;
+  font-size: 13px;
+  color: #666;
+  margin-top: 2px;
 }
 
-/* Form Styling */
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-.form-group {
-  margin-bottom: 1.3rem;
-}
-
+/* FORM STYLING */
 .form-group label {
   display: block;
+  font-size: 14px;
   font-weight: 500;
-  font-size: 0.95rem;
-  color: #c9c4da;
-  margin-bottom: 0.4rem;
+  margin-bottom: 4px;
 }
 
 .form-group input,
-.form-group textarea,
-.form-group select {
+.form-group select,
+.form-group textarea {
   width: 100%;
-  padding: 0.85rem 1rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #fff;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  border: 1px solid #c9b9ff;
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-  outline: none;
-  border-color: #a855ff;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-
-/* .form-group select {
-  height: 48px;
-  line-height: 48px;
-}
-
-
-.form-group select option {
-  background: #1b1526;
-  color: #fff;
-}
-
-
-.form-group select:focus {
-  outline: none;
-  border-color: #a855ff;
-  background: rgba(255, 255, 255, 0.12);
-} */
-
-
-/* Textarea resize */
+/* compact textarea */
 .form-group textarea {
   resize: vertical;
+  min-height: 60px;
 }
 
-/* Dropdown styling */
-.form-group select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23b869ff' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  cursor: pointer;
+/* SIDE-BY-SIDE ROWS */
+.form-row {
+  display: flex;
+  gap: 16px;
 }
 
-/* Button */
+.form-row .form-group {
+  flex: 1;
+}
+
+/* BUTTON */
 .form-submit-btn {
   width: 100%;
-  padding: 0.9rem;
+  padding: 12px;
+  background: #6c4dfc;
   border: none;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #7b2ff7, #f107a3);
-  font-weight: 600;
-  color: #fff;
-  font-size: 1rem;
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 0.6rem;
+  margin-top: 4px;
 }
 
 .form-submit-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 20px rgba(160, 70, 255, 0.4);
+  background: #5b3fe4;
 }
 
-/* Sign-in link */
-.signin-link-container {
+/* SIGN-IN TEXT */
+.signin-text {
+  margin-top: 0.8rem;
+  font-size: 13px;
   text-align: center;
-  margin-top: 1.8rem;
-  color: #aaa;
-  font-size: 0.9rem;
+  color: #444;
 }
 
 .signin-link {
-  color: #a855ff;
-  font-weight: 600;
+  color: #4b4dfb;
   text-decoration: none;
 }
 
-.signin-link:hover {
-  text-decoration: underline;
+/* RIGHT PANEL (IMAGE) */
+.register-right {
+  flex: 0 0 44%;
+  max-width: 44%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
+/* Image is fully inside card & fits panel */
+.register-right img {
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
+  object-fit: cover;
+  border-radius: 18px;
 }
 
-.modal-content {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.8rem 2.3rem;
-  border-radius: 12px;
-  text-align: center;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(160, 70, 255, 0.3);
-}
+/* ------------ RESPONSIVE (MOBILE/TABLET) ------------ */
+@media (max-width: 900px) {
 
-
-/* Responsive */
-@media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
+  html,
+  body {
+    height: auto;
+    overflow-y: auto;
+    /* allow scroll on small screens */
   }
 
-  .form-card {
+  .register-container {
+    flex-direction: column;
+    height: auto;
+    margin: 1.5rem auto;
     padding: 2rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .register-left,
+  .register-right {
+    max-width: 100%;
+    flex: 1 1 100%;
+  }
+
+  .register-right {
+    margin-top: 0.5rem;
+    height: auto;
+  }
+
+  .register-right img {
+    width: 80%;
+    height: auto;
+    border-radius: 18px;
+  }
+
+  .form-row {
+    flex-direction: column;
   }
 }

@@ -4,144 +4,113 @@
 <head>
     <meta charset="UTF-8">
     <title>View Event | Event Linker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/event_detail.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body style="color: #fff;">
 
-   <header class="navbar">
-    <div class="logo">
-      <span class="logo-text">Event Linker</span>
-      <small class="logo-tagline">An Integrated Event Networking Platform</small>
-    </div>
 
-    <nav class="nav-links">
-      <a href="#" onclick="openAboutModal()">About</a>
-      <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
-      <a href="#">Similarity</a>
-      <a href="#">Attendee</a>
+<body>
+    <!-- soft gradient background, same as add / edit form -->
+    <div class="page-bg"></div>
 
-      <!-- Events dropdown -->
-      <div class="dropdown">
-        <a href="#" id="eventsLink">My Events ▾</a>
-        <div id="eventsSubmenu" class="submenu-vertical">
-          <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
+    <!-- NAVBAR (same structure as event_form) -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    {% if is_attendee %}
+                    <small class="logo-tagline">Attendee Dashboard</small>
+                    {% else %}
+                    <small class="logo-tagline">Organizer Dashboard</small>
+                    {% endif %}
+                </div>
+                <div class="logo-box">
+                </div>
+            </div>
         </div>
-      </div>
 
-      <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-        <i class="fa fa-user profile-icon"></i>
-        <span class="profile-text">Profile</span>
-      </a>
-      <a href="{{ url_for('user_bp.logout_user') }}">
-        <i class="fa fa-user fa fa-sign-out"></i>
-        <span class="profile-text">Logout</span>
-      </a>
-    </nav>
-  </header>
+        <nav class="nav-links">
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
+            <a href="#">Similarity</a>
+
+            <!-- Events dropdown -->
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
+                <div id="eventsSubmenu" class="submenu-vertical">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('user_bp.user_profile') }}">
+                <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </nav>
+    </header>
 
     <main>
         <div class="event-container">
 
-            <!-- Banner Image -->
-            {% if event.image_path %}
-            <div class="event-banner">
-                <img src="{{ event.image_path }}" alt="Event Image">
+            <!-- Back link (same style as forms) -->
+            <div class="back-link">
+                {% if is_attendee %}
+                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
+                {% else %}
+                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
+                {% endif %}
             </div>
-            {% endif %}
 
-            <!-- Event Title -->
+
+            <!-- Event title -->
             <h1 class="event-title">{{ event.event_title }}</h1>
 
-            <!-- Two Column Layout -->
+            <!-- LEFT COLUMN: details + QR -->
             <div class="event-details-grid">
-
-                <!-- LEFT: EVENT DETAILS -->
                 <div class="event-info">
                     <p><strong>Category:</strong> {{ event.category_name }}</p>
                     <p><strong>Description:</strong> {{ event.description }}</p>
                     <p><strong>Date:</strong> {{ event.event_date }}</p>
                     <p><strong>Location:</strong> {{ event.location }}</p>
-                    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id) }}" class="member-list-btn">
+
+                    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id) }}"
+                        class="member-list-btn">
                         View Member List
                     </a>
                 </div>
 
-                <!-- RIGHT: QR CODE -->
                 <div class="event-qr">
                     {% if event.qr_code_path %}
                     <p><strong>QR Code:</strong></p>
                     <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     {% endif %}
                 </div>
-
             </div>
 
-            <!-- BACK BUTTON -->
-            <div style="margin-top: 2rem;">
-                <a href="{{ url_for('attendee_bp.attendee_homepage') if is_attendee else url_for('organizer_bp.organizer_homepage') }}"
-                    class="back-button">
-                    Back to Events
-                </a>
+            <!-- RIGHT COLUMN: banner image -->
+            {% if event.image_path %}
+            <div class="event-banner">
+                <img src="{{ event.image_path }}" alt="Event Image">
             </div>
+            {% endif %}
 
         </div>
     </main>
 
-    <!-- FOOTER -->
     <footer class="footer">
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
-
-    <!-- ABOUT MODAL -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content about-content">
-            <h2>About EventLinker</h2>
-            <p>
-                EventLinker is an integrated event networking platform designed for organizers and attendees.
-                It allows event creation, QR-based attendee onboarding, profile creation, and seamless
-                networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
-                EventLinker simplifies event management and enhances professional connections.
-            </p>
-            <button class="modal-btn" onclick="closeAboutModal()">Close</button>
-        </div>
-    </div>
-
-    <!-- SCRIPT: About modal + Events dropdown -->
-    <script>
-        // About modal
-        function openAboutModal() {
-            document.getElementById('aboutModal').style.display = 'flex';
-        }
-        function closeAboutModal() {
-            document.getElementById('aboutModal').style.display = 'none';
-        }
-        window.onclick = function(e) {
-            let modal = document.getElementById('aboutModal');
-            if (e.target === modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // Events dropdown
-        const eventsLink = document.getElementById('eventsLink');
-        const eventsSubmenu = document.getElementById('eventsSubmenu');
-
-        eventsLink.addEventListener('click', function(e) {
-            e.preventDefault();
-            eventsSubmenu.classList.toggle('active');
-        });
-
-        window.addEventListener('click', function(e) {
-            if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
-                eventsSubmenu.classList.remove('active');
-            }
-        });
-    </script>
-
 </body>
+
 
 </html>

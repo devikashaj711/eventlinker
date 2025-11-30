@@ -3,72 +3,217 @@
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Event | Event Linker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/event_form.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body class="body-card-login">
+<body>
+    <div class="page-bg"></div>
 
-    <div class="form-card">
-        <div class="logo">
-            <span class="logo-text">Edit Event</span>
-            <small class="logo-tagline">Modify your event details</small>
+    <!-- NAVBAR (fixed) -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Organizer Dashboard</small>
+                </div>
+                <div class="logo-box">
+                </div>
+            </div>
         </div>
 
-        <form action="{{ url_for('organizer_bp.update_event', event_id=event.event_id) }}" method="POST"
-            enctype="multipart/form-data">
+        <nav class="nav-links">
+            <a href="{{ url_for('user_bp.user_profile') }}">
+                <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </nav>
+    </header>
+    <main class="add-event-main">
+        <section class="add-event-card">
+            <!-- LEFT: FORM -->
+            <div class="add-event-left">
 
-            <div class="form-group">
-                <label>Category</label>
-                <select name="category" required>
-                    {% for cat in categories %}
-                    <option value="{{ cat.category_id }}" {% if event.category_id==cat.category_id %}selected{% endif
-                        %}>
-                        {{ cat.category_name }}
-                    </option>
-                    {% endfor %}
-                </select>
+                <!-- Back link -->
+                <div class="back-link">
+                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                        <i class="fa fa-arrow-left"></i> Back to dashboard
+                    </a>
+                </div>
+
+                <h1 class="add-event-title">Edit Event</h1>
+                <p class="add-event-subtitle">
+                    Modify your event details
+                </p>
+
+                <form action="{{ url_for('organizer_bp.update_event', event_id=event.event_id) }}" method="POST"
+                    enctype="multipart/form-data">
+
+                    <!-- CATEGORY (full row) -->
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            {% for cat in categories %}
+                            <option value="{{ cat.category_id }}" {% if event.category_id==cat.category_id %}selected{%
+                                endif %}>
+                                {{ cat.category_name }}
+                            </option>
+                            {% else %}
+                            <option value="" disabled>No categories available</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+
+
+                    <!-- TITLE + DATE/TIME in one row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Event Title</label>
+                            <input type="text" id="title" name="title" value="{{ event.event_title }}" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Event Date & Time</label>
+                            <input type="datetime-local" id="date" name="date"
+                                value="{{ event.event_date|replace(' ', 'T') }}" required>
+                            <small id="dateWarning" class="date-warning" style="display:none;">
+                                ⚠ Event date must be in the future.
+                            </small>
+                        </div>
+                    </div>
+
+
+                    <!-- DESCRIPTION (full row) -->
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3"> {{ event.description }}</textarea>
+                    </div>
+
+
+                    <!-- LOCATION + IMAGE in one row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" value="{{ event.location }}">
+                        </div>
+
+                        <!-- <div class="form-group">
+                            <label for="image_file">Upload New Image (Optional)</label>
+                            <input type="file" id="image_file" name="image_file"
+                                accept="image/png, image/jpeg, image/gif">
+                            <small>Max 16MB · PNG / JPG / JPEG / GIF</small>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="image_file">Upload New Image (Optional)</label>
+                            <input type="file" id="image_file" name="image_file"
+                                accept="image/png, image/jpeg, image/gif">
+                            <small>Max 16MB · PNG / JPG / JPEG / GIF</small>
+
+                            {% if event.image_path %}
+                            {% set image_filename = event.image_path.split('/')[-1] %}
+                            <small class="current-image">
+                                <a href="{{ event.image_path }}" target="_blank" rel="noopener">
+                                    Current image
+                                </a>
+                            </small>
+                            {% else %}
+                            <small class="current-image no-image">
+                                No image uploaded yet.
+                            </small>
+                            {% endif %}
+
+                        </div>
+                    </div>
+
+
+                    <!-- <div class="form-group">
+                        <label>Current Image</label><br>
+                        {% if event.image_path %}
+                        <img src="{{ event.image_path }}" width="180" style="border-radius:8px;">
+                        {% else %}
+                        <p>No image uploaded</p>
+                        {% endif %}
+                    </div> -->
+
+                    <button type="submit" class="form-submit-btn">Save Changes</button>
+                </form>
             </div>
-
-            <div class="form-group">
-                <label>Event Title</label>
-                <input type="text" name="title" value="{{ event.event_title }}" required>
+            <!-- RIGHT: Illustration -->
+            <div class="add-event-right">
+                <img src="{{ url_for('static', filename='images/add-event.png') }}" alt="Create event illustration">
             </div>
+        </section>
+    </main>
 
-            <div class="form-group">
-                <label>Description</label>
-                <textarea name="description" rows="3">{{ event.description }}</textarea>
-            </div>
+    <!-- FOOTER (fixed) -->
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
 
-            <div class="form-group">
-                <label>Date & Time</label>
-                <input type="datetime-local" name="date" value="{{ event.event_date|replace(' ', 'T') }}" required>
-            </div>
-
-            <div class="form-group">
-                <label>Location</label>
-                <input type="text" name="location" value="{{ event.location }}">
-            </div>
-
-            <div class="form-group">
-                <label>Current Image</label><br>
-                {% if event.image_path %}
-                <img src="{{ event.image_path }}" width="180" style="border-radius:8px;">
-                {% else %}
-                <p>No image uploaded</p>
-                {% endif %}
-            </div>
-
-            <div class="form-group">
-                <label>Upload New Image (Optional)</label>
-                <input type="file" name="image_file">
-            </div>
-
-            <button type="submit" class="btn-primary form-submit-btn">Save Changes</button>
-        </form>
+    <!-- ERROR MODAL -->
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <h3>Error</h3>
+            <p id="modalMessage"></p>
+            <button onclick="closeErrorModal()">OK</button>
+        </div>
     </div>
 
+
+    <!-- SCRIPTS: date validation & modal -->
+    <script>
+        const dateInput = document.getElementById("date");
+        const dateWarning = document.getElementById("dateWarning");
+
+        function setMinDate() {
+            const now = new Date();
+            now.setSeconds(0, 0);
+            const iso = now.toISOString().slice(0, 16);
+            dateInput.min = iso;
+        }
+        setMinDate();
+
+        dateInput.addEventListener("input", function () {
+            const selected = new Date(this.value);
+            const now = new Date();
+            if (selected < now) {
+                dateWarning.style.display = "block";
+                this.style.border = "1px solid #ff4d4d";
+            } else {
+                dateWarning.style.display = "none";
+                this.style.border = "1px solid #dedede";
+            }
+        });
+
+        const eventForm = document.querySelector("form");
+        eventForm.addEventListener("submit", function (e) {
+            const selectedDate = new Date(dateInput.value);
+            const now = new Date();
+            if (selectedDate < now) {
+                e.preventDefault();
+                showErrorModal("Event date must be in the future!");
+            }
+        });
+
+        function showErrorModal(msg) {
+            document.getElementById("modalMessage").textContent = msg;
+            document.getElementById("errorModal").style.display = "flex";
+        }
+
+        function closeErrorModal() {
+            document.getElementById("errorModal").style.display = "none";
+        }
+    </script>
 </body>
 
 </html>

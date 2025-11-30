@@ -4,138 +4,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register | Event Linker</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css') }}">
+    <title>Create Event | Event Linker</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/event_form.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body class="body-card-login">
+<body>
+    <div class="page-bg"></div>
 
-    <!-- Form Container -->
-    <div class="form-card">
-
-        <div class="logo">
-            <span class="logo-text">Event Linker</span>
-            <small class="logo-tagline">An Integrated Event Networking Platform</small>
+    <!-- NAVBAR (fixed) -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Organizer Dashboard</small>
+                </div>
+                <div class="logo-box">
+                </div>
+            </div>
         </div>
 
-        <form action="{{ url_for('organizer_bp.save_event') }}" method="POST" enctype="multipart/form-data">
+        <nav class="nav-links">
+            <a href="{{ url_for('user_bp.user_profile') }}">
+                <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </nav>
+    </header>
 
-            <!-- CATEGORY -->
-            <div class="form-group">
-                <label for="category">Category</label>
-                <select id="category" name="category" required>
-                    <option value="" disabled selected>Select your event category</option>
-                    {% for cat in categories %}
-                    <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
-                    {% else %}
-                    <option value="" disabled>No categories available</option>
-                    {% endfor %}
-                </select>
+    <!-- MAIN CONTENT -->
+    <main class="add-event-main">
+        <section class="add-event-card">
+            <!-- LEFT: FORM -->
+            <div class="add-event-left">
+
+                <!-- Back link -->
+                <div class="back-link">
+                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                        <i class="fa fa-arrow-left"></i> Back to dashboard
+                    </a>
+                </div>
+
+                <h1 class="add-event-title">Create a New Event</h1>
+                <p class="add-event-subtitle">
+                    Fill in the details below to publish your next event on EventLinker.
+                </p>
+
+                <form action="{{ url_for('organizer_bp.save_event') }}" method="POST" enctype="multipart/form-data">
+
+                    <!-- CATEGORY (full row) -->
+                    <div class="form-group">
+                        <label for="category">Category</label>
+                        <select id="category" name="category" required>
+                            <option value="" disabled selected>Select your event category</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.category_id }}">{{ cat.category_name }}</option>
+                            {% else %}
+                            <option value="" disabled>No categories available</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <!-- TITLE + DATE/TIME in one row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="title">Event Title</label>
+                            <input type="text" id="title" name="title" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="date">Event Date & Time</label>
+                            <input type="datetime-local" id="date" name="date" required>
+                            <small id="dateWarning" class="date-warning" style="display:none;">
+                                ⚠ Event date must be in the future.
+                            </small>
+                        </div>
+                    </div>
+
+                    <!-- DESCRIPTION (full row) -->
+                    <div class="form-group">
+                        <label for="description">Description</label>
+                        <textarea id="description" name="description" rows="3"
+                            placeholder="Describe your event..."></textarea>
+                    </div>
+
+                    <!-- LOCATION + IMAGE in one row -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input type="text" id="location" name="location" placeholder="Event location">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image_file">Event Image</label>
+                            <input type="file" id="image_file" name="image_file"
+                                accept="image/png, image/jpeg, image/gif">
+                            <small>Max 16MB · PNG / JPG / JPEG / GIF</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="form-submit-btn">Create Event</button>
+                </form>
             </div>
 
-            <!-- TITLE -->
-            <div class="form-group">
-                <label for="title">Event title</label>
-                <input type="title" id="title" name="title" required>
+            <!-- RIGHT: Illustration -->
+            <div class="add-event-right">
+                <img src="{{ url_for('static', filename='images/add-event.png') }}" alt="Create event illustration">
             </div>
+        </section>
+    </main>
 
-            <!-- DESCRIPTION -->
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea id="description" name="description" rows="3" placeholder="Event description..."></textarea>
-            </div>
-
-            <!-- DATE + LIVE VALIDATION -->
-            <div class="form-group">
-                <label for="date">Event Date and Time</label>
-                <input type="datetime-local" id="date" name="date" required>
-                <small id="dateWarning" style="color:#ff8080; display:none; font-size:0.85rem;">
-                    ⚠ Event date must be in the future.
-                </small>
-            </div>
-
-            <!-- LOCATION -->
-            <div class="form-group">
-                <label for="location">Location</label>
-                <input type="text" id="location" name="location" placeholder="location">
-            </div>
-
-            <!-- IMAGE -->
-            <div class="form-group">
-                <label for="image_file">Event Image</label>
-                <input type="file" id="image_file" name="image_file" accept="image/png, image/jpeg, image/gif">
-                <small>Max file size: 16MB. Allowed types: PNG, JPG, JPEG, GIF.</small>
-            </div>
-
-            <button type="submit" class="btn-primary form-submit-btn">Submit</button>
-        </form>
-    </div>
+    <!-- FOOTER (fixed) -->
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
 
     <!-- ERROR MODAL -->
-    <div id="errorModal" class="modal" style="display:none;">
+    <div id="errorModal" class="modal">
         <div class="modal-content">
             <h3>Error</h3>
-            <p id="modalMessage" style="margin-top: 10px;"></p>
-            <button onclick="closeErrorModal()" class="btn-primary" style="margin-top: 15px;">OK</button>
+            <p id="modalMessage"></p>
+            <button onclick="closeErrorModal()">OK</button>
         </div>
     </div>
 
+    <!-- SCRIPTS: date validation & modal -->
+    <script>
+        const dateInput = document.getElementById("date");
+        const dateWarning = document.getElementById("dateWarning");
+
+        function setMinDate() {
+            const now = new Date();
+            now.setSeconds(0, 0);
+            const iso = now.toISOString().slice(0, 16);
+            dateInput.min = iso;
+        }
+        setMinDate();
+
+        dateInput.addEventListener("input", function () {
+            const selected = new Date(this.value);
+            const now = new Date();
+            if (selected < now) {
+                dateWarning.style.display = "block";
+                this.style.border = "1px solid #ff4d4d";
+            } else {
+                dateWarning.style.display = "none";
+                this.style.border = "1px solid #dedede";
+            }
+        });
+
+        const eventForm = document.querySelector("form");
+        eventForm.addEventListener("submit", function (e) {
+            const selectedDate = new Date(dateInput.value);
+            const now = new Date();
+            if (selectedDate < now) {
+                e.preventDefault();
+                showErrorModal("Event date must be in the future!");
+            }
+        });
+
+        function showErrorModal(msg) {
+            document.getElementById("modalMessage").textContent = msg;
+            document.getElementById("errorModal").style.display = "flex";
+        }
+
+        function closeErrorModal() {
+            document.getElementById("errorModal").style.display = "none";
+        }
+    </script>
 </body>
-
-
-<!-- SCRIPT SECTION -->
-<script>
-    // -------------------------------
-    // Disable Past Dates Completely
-    // -------------------------------
-    const dateInput = document.getElementById("date");
-
-    function setMinDate() {
-        const now = new Date();
-        now.setSeconds(0, 0);
-        const iso = now.toISOString().slice(0, 16); // YYYY-MM-DDTHH:MM
-        dateInput.min = iso;
-    }
-    setMinDate();
-
-
-    // -------------------------------
-    // Live Warning Text
-    // -------------------------------
-    const dateWarning = document.getElementById("dateWarning");
-
-    dateInput.addEventListener("input", function () {
-        const selected = new Date(this.value);
-        const now = new Date();
-
-        if (selected < now) {
-            dateWarning.style.display = "block";
-            this.style.border = "1px solid #ff4d4d";
-        } else {
-            dateWarning.style.display = "none";
-            this.style.border = "1px solid rgba(255,255,255,0.15)";
-        }
-    });
-
-
-    // -------------------------------
-    // Prevent Submit if date is past
-    // -------------------------------
-    const eventForm = document.querySelector("form");
-
-    eventForm.addEventListener("submit", function (e) {
-        const selectedDate = new Date(dateInput.value);
-        const now = new Date();
-
-        if (selectedDate < now) {
-            e.preventDefault();
-            showErrorModal("Event date must be in the future!");
-        }
-    });
-
-
-</script>
-
 
 </html>

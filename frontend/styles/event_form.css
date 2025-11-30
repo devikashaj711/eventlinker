@@ -1,0 +1,419 @@
+/* ============ RESET ============ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ============ BODY & BACKGROUND ============ */
+body {
+    font-family: "Poppins", sans-serif;
+    color: #1e1238;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    /* no page scroll on desktop */
+    overflow: hidden;
+
+    /* room for fixed navbar + footer */
+    padding-top: 72px;
+    /* navbar height */
+    padding-bottom: 56px;
+    /* footer height (visual) */
+}
+
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #b8affe, #ffffff);
+}
+
+/* ============ NAVBAR (fixed) ============ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.8rem 3rem;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(88, 69, 177, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #6c4dfc;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.logo-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.logo-tagline {
+    font-size: 0.75rem;
+    color: #736b94;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    font-size: 0.8rem;
+}
+
+.nav-links a {
+    color: #5b4f8b;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links a:hover {
+    color: #6c4dfc;
+    transform: translateY(-1px);
+}
+
+/* ============ MAIN LAYOUT ============ */
+.add-event-main {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    /* card towards top */
+    justify-content: center;
+    padding: 0.8rem 0 4.2rem;
+    /* small top space, extra bottom gap */
+}
+
+/* Card width ~ registration page, but shorter in height */
+.add-event-card {
+    width: 95%;
+    max-width: 1350px;
+    margin: 0 auto 2.6rem;
+    /* pushes card further away from footer */
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(75, 61, 150, 0.18);
+
+    display: flex;
+    gap: 1.7rem;
+    padding: 1.6rem 2.3rem 1.4rem;
+    /* reduced vertical padding */
+    align-items: stretch;
+}
+
+
+/* left = form */
+.add-event-left {
+    flex: 1.1;
+}
+
+/* right = illustration */
+.add-event-right {
+    flex: 0.9;
+    display: flex;
+    align-items: stretch;
+    /* stretch child (image) to full column height */
+    justify-content: center;
+}
+
+/* image fills full height of its column */
+.add-event-right img {
+    height: 100%;
+    /* full column height */
+    width: auto;
+    /* keep aspect ratio */
+    max-width: 100%;
+    object-fit: cover;
+    /* or 'contain' if you prefer no cropping */
+    border-radius: 20px;
+}
+
+/* ============ FORM ============ */
+.back-link {
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+}
+
+.back-link a {
+    text-decoration: none;
+    color: #6c4dfc;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.back-link a:hover {
+    color: #4c32c5;
+}
+
+.back-link i {
+    font-size: 0.9rem;
+}
+
+.add-event-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.add-event-subtitle {
+    font-size: 0.82rem;
+    color: #7b739c;
+    margin-bottom: 0.8rem;
+}
+
+.form-group {
+    margin-bottom: 0.7rem;
+    /* slightly tighter spacing */
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.22rem;
+    color: #302b4a;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"],
+.form-group input[type="datetime-local"],
+.form-group input[type="file"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #c9b9ff;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    background: #fafbff;
+    transition: border 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.form-group select {
+    background-color: #fafbff;
+}
+
+.form-group select option {
+    background-color: #ffffff;
+}
+
+
+/* description box a bit shorter */
+.form-group textarea {
+    min-height: 88px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #6c4dfc;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(108, 77, 252, 0.18);
+}
+
+
+.form-group small {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.75rem;
+    color: #8b85a5;
+}
+
+/* 2-column rows */
+.form-row {
+    display: flex;
+    gap: 1rem;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0.7rem;
+}
+
+/* submit button */
+.form-submit-btn {
+    width: 100%;
+    margin-top: 0.4rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 999px;
+    border: none;
+    background: #6c4dfc;
+    color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(90, 68, 255, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(90, 68, 255, 0.45);
+}
+
+/* warning text */
+.date-warning {
+    color: #ff6b6b;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+
+/* current image css in edit form */
+.current-image {
+    display: inline-block;
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.current-image a {
+    color: #6c4dfc;
+    text-decoration: underline;
+}
+
+.current-image a:hover {
+    color: #4c32c5;
+}
+
+
+
+
+/* ============ FOOTER (fixed) ============ */
+.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.7rem 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #7a719b;
+    background: transparent;
+    /* can change to #fff if you prefer solid bar */
+    z-index: 90;
+}
+
+/* ============ MODAL ============ */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(10, 6, 34, 0.45);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    width: min(430px, 90%);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.6rem 1.4rem;
+    text-align: center;
+    box-shadow: 0 18px 55px rgba(46, 34, 115, 0.4);
+    color: #2a214e;
+}
+
+.modal-content h3 {
+    margin-bottom: 0.9rem;
+}
+
+.modal-content p {
+    font-size: 0.85rem;
+    color: #625b87;
+    margin-bottom: 0.8rem;
+}
+
+.modal-content button {
+    background: #6c4dfc;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 992px) {
+    .navbar {
+        padding-inline: 1.6rem;
+    }
+
+    .add-event-card {
+        gap: 1.4rem;
+        padding: 1.5rem 1.7rem 1.3rem;
+        margin-bottom: 1.8rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        /* allow scroll on very small screens */
+    }
+
+    .navbar {
+        padding: 0.8rem 1.2rem;
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    .add-event-main {
+        padding: 1rem 0.75rem 1.8rem;
+    }
+
+    .add-event-card {
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 1.8rem;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .add-event-right img {
+        width: 70%;
+        max-height: none;
+    }
+}

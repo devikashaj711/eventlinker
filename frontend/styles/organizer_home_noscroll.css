@@ -1,0 +1,569 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* GLOBAL LAYOUT */
+body {
+    font-family: "Poppins", sans-serif;
+    color: #1e1238;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #b8affe, #f2e9ff);
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    /* navbar height */
+    padding-bottom: 56px;
+    /* footer height */
+    overflow: hidden;
+    /* no full-page scroll */
+    font-size: 0.9rem;
+    /* slightly smaller base font */
+}
+
+/* Background overlay (optional) */
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+}
+
+/* NAVBAR – fixed at top */
+.navbar {
+    width: 100%;
+    padding: 0.9rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(88, 69, 177, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #6c4dfc;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.logo-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.logo-tagline {
+    font-size: 0.7rem;
+    color: #736b94;
+}
+
+/* Nav links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    font-size: 0.8rem;
+}
+
+.nav-links a {
+    color: #5b4f8b;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links a:hover {
+    color: #6c4dfc;
+    transform: translateY(-1px);
+}
+
+.profile-icon,
+.logout-link i {
+    font-size: 0.9rem;
+}
+
+/* MAIN LAYOUT – fills remaining viewport between nav & footer */
+.main-layout {
+    flex: 1 1 auto;
+    width: 95%;
+    max-width: 1350px;
+    margin: 0 auto;
+    /* ↓ smaller padding so cards almost touch nav/footer */
+    /* padding: 0.35rem 0 0.4rem; */
+    padding: 0.2rem 0 0.25rem;
+    display: flex;
+    flex-direction: column;
+    /* ↓ reduced gap so the two cards use more height */
+    gap: 0.7rem;
+    height: calc(100vh - 80px - 56px);
+    /* viewport minus nav & footer */
+    overflow: hidden;
+}
+
+/* CARDS */
+.hero-card,
+.events-card {
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(75, 61, 150, 0.18);
+}
+
+/* Fade-in */
+.fade-in {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* HERO – takes half the available height */
+.hero-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 1.8rem;
+    padding: 1.4rem 1.9rem;
+    flex: 1 1 0;
+    /* hero gets ~half height */
+    min-height: 0;
+}
+
+.hero-left h1 {
+    font-size: 1.55rem;
+    margin-bottom: 0.4rem;
+}
+
+.hero-left p {
+    font-size: 0.8rem;
+    color: #6a628a;
+    max-width: 430px;
+    line-height: 1.5;
+}
+
+.hero-actions {
+    margin-top: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    flex-wrap: wrap;
+}
+
+/* Primary purple button */
+.btn-primary {
+    background: #6c4dfc;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 1.4rem;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    box-shadow: 0 8px 20px rgba(90, 68, 255, 0.35);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(90, 68, 255, 0.45);
+}
+
+/* Hero stats */
+.hero-stats {
+    display: flex;
+    gap: 0.7rem;
+}
+
+.stat {
+    background: #f3f0ff;
+    border-radius: 14px;
+    padding: 0.45rem 0.7rem;
+    min-width: 80px;
+}
+
+.stat-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: #7d74a0;
+}
+
+.stat-value {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #432f96;
+}
+
+/* HERO IMAGE */
+.hero-right {
+    flex: 0 0 50%;
+    max-width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-right img {
+    width: 100%;
+    max-width: 340px;
+    border-radius: 20px;
+    object-fit: cover;
+}
+
+/* EVENTS CARD – same height as hero */
+.events-card {
+    flex: 1 1 0;
+    /* same flex as hero → equal height */
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.9rem;
+}
+
+/* Events header (title + Add button) */
+.events-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    flex: 0 0 auto;
+}
+
+.events-header h2 {
+    font-size: 1.05rem;
+}
+
+.events-subtitle {
+    font-size: 0.75rem;
+    color: #7c739c;
+}
+
+/* Secondary button */
+.btn-secondary {
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid #6c4dfc;
+    color: #6c4dfc;
+    background: #f5f3ff;
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: #6c4dfc;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* TABLE CONTAINER – fills remaining space and scrolls */
+.table-container {
+    flex: 1 1 0;
+    /* fill remaining height inside events-card */
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: auto;
+    border-radius: 18px;
+    border: 1px solid #ece7ff;
+    background: #faf9ff;
+}
+
+/* TABLE + STICKY HEADER */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 650px;
+}
+
+.data-table thead {
+    background: linear-gradient(90deg, #6c4dfc, #9b6bff);
+}
+
+.data-table th,
+.data-table td {
+    padding: 0.55rem 0.7rem;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* sticky header cells */
+.data-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: linear-gradient(90deg, #6c4dfc, #9b6bff);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+/* zebra rows */
+.data-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.data-table tbody tr:nth-child(odd) {
+    background: rgba(246, 244, 255, 0.9);
+}
+
+.data-table tbody tr:hover {
+    background: #ece5ff;
+}
+
+/* Actions */
+.actions-cell {
+    text-align: center;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 0.75rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.btn-icon.view {
+    background: #A78BFA;
+}
+
+.btn-icon.edit {
+    background: #7C3AED;
+}
+
+.btn-icon.delete {
+    background: #5B21B6;
+}
+
+.btn-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+}
+
+.delete-form {
+    margin: 0;
+}
+
+/* Empty state */
+.no-events-row {
+    text-align: center;
+}
+
+.no-events {
+    padding: 1.2rem 0.4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    color: #7b729d;
+}
+
+.no-events img {
+    width: 110px;
+    opacity: 0.9;
+}
+
+/* FOOTER – fixed at bottom */
+.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    color: #7a719b;
+    background: transparent;
+    pointer-events: none;
+}
+
+/* MODALS */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(10, 6, 34, 0.45);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    width: min(430px, 90%);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.6rem 1.4rem;
+    text-align: center;
+    box-shadow: 0 18px 55px rgba(46, 34, 115, 0.4);
+    color: #2a214e;
+}
+
+.modal-content h3,
+.modal-content h2 {
+    margin-bottom: 0.9rem;
+    font-size: 1.05rem;
+}
+
+.modal-content p {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #625b87;
+}
+
+.modal-content button,
+.modal-btn {
+    margin-top: 1.1rem;
+    background: #6c4dfc;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+/* 🔹 VIOLET SCROLLBAR FOR TABLE AREA */
+
+/* Chrome / Edge / Safari */
+.table-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.table-container::-webkit-scrollbar-track {
+    background: #e4dcff;
+    border-radius: 999px;
+}
+
+.table-container::-webkit-scrollbar-thumb {
+    background: #7c3aed;
+    border-radius: 999px;
+}
+
+.table-container::-webkit-scrollbar-thumb:hover {
+    background: #5b21b6;
+}
+
+/* Firefox */
+.table-container {
+    scrollbar-width: thin;
+    scrollbar-color: #7c3aed #e4dcff;
+}
+
+/* RESPONSIVE – fall back to normal scroll on small screens */
+@media (max-width: 900px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .footer {
+        position: static;
+        height: auto;
+        padding: 1.1rem 1rem 1.5rem;
+        pointer-events: auto;
+    }
+
+    .main-layout {
+        height: auto;
+        padding-bottom: 1.3rem;
+        gap: 1.2rem;
+    }
+
+    .hero-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .hero-right {
+        max-width: 80%;
+    }
+
+    .events-card {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.8rem 1.4rem;
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        font-size: 0.78rem;
+    }
+
+    .main-layout {
+        width: 94%;
+    }
+
+    .hero-card,
+    .events-card {
+        padding-inline: 1.3rem;
+    }
+
+    .table-container {
+        border-radius: 14px;
+    }
+}

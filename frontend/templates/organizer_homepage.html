@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>EventLinker - Organizer</title>
+    <title>EventLinker - Organizer Dashboard</title>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_homepage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/organizer_home_noscroll.css') }}">
 
     <!-- Fonts / Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
@@ -16,39 +16,90 @@
 
 <body>
 
-    <!-- NAVBAR -->
+    <div class="page-bg"></div>
+
+    <!-- NAVBAR (shared look with registration screen) -->
     <header class="navbar">
-        <div class="logo">
-            <span class="logo-text">Event Linker</span>
-            <small class="logo-tagline">An Integrated Event Networking Platform</small>
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Organizer Dashboard</small>
+                </div>
+                <div class="logo-box">
+                </div>
+            </div>
         </div>
 
         <nav class="nav-links">
             <a href="#" onclick="openAboutModal()">About</a>
-            <a href="#">Organizer</a>
+            <!-- <a href="#">My Events</a> -->
             <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-user fa fa-sign-out"></i>
+            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+                <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
             </a>
         </nav>
     </header>
 
-    <!-- MAIN SECTION -->
-    <main>
-        <section class="data-table-section">
+    <!-- MAIN -->
+    <main class="main-layout">
 
-            <!-- ADD EVENT BUTTON -->
-            <div class="table-header">
-                <a href="{{ url_for('organizer_bp.add_event_page') }}" class="btn-primary" id="add-event-btn">
-                    + Add New Event
-                </a>
+        <!-- HERO SECTION WITH IMAGE -->
+        <section class="hero-card fade-in">
+            <div class="hero-left">
+                <h1>Welcome, {{ organizer_name }} 👋</h1>
+                <p>
+                    Plan, publish and manage your events in one place. Track attendees, share QR codes
+                    and build meaningful connections with EventLinker.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{{ url_for('organizer_bp.add_event_page') }}" class="btn-primary">
+                        <i class="fa fa-plus"></i> Create New Event
+                    </a>
+
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-label">Total Events</span>
+                            <span class="stat-value">{{ events|length }}</span>
+                        </div>
+                        <!-- <div class="stat">
+                            <span class="stat-label">This Month</span>
+                            <span class="stat-value">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div> -->
+                    </div>
+                </div>
             </div>
 
-            <!-- EVENT TABLE -->
+            <!-- Event management photo -->
+            <div class="hero-right">
+                <!-- Put an illustration / photo at this path -->
+                <img src="{{ url_for('static', filename='images/organizer-hero.png') }}"
+                    alt="Event management illustration">
+            </div>
+        </section>
+
+        <!-- EVENTS TABLE CARD -->
+        <section class="events-card fade-in">
+            <div class="events-header">
+                <div>
+                    <h2>Your Events</h2>
+                    <p class="events-subtitle">
+                        View, edit and manage all events you have created.
+                    </p>
+                </div>
+                <!-- <a href="{{ url_for('organizer_bp.add_event_page') }}" class="btn-secondary">
+                    + Add Event
+                </a> -->
+            </div>
+
             <div class="table-container">
                 <table class="data-table">
                     <thead>
@@ -67,7 +118,7 @@
                             <td>{{ event.event_date }}</td>
                             <td>{{ event.location }}</td>
 
-                            <!-- ACTION BUTTONS -->
+                            <!-- ACTION BUTTONS (kept same functionality) -->
                             <td class="actions-cell">
                                 <div class="action-buttons">
 
@@ -96,17 +147,21 @@
                                 </div>
                             </td>
                         </tr>
-
                         {% else %}
                         <!-- When no events -->
-                        <tr>
-                            <td colspan="4">No events found.</td>
+                        <tr class="no-events-row">
+                            <td colspan="4">
+                                <div class="no-events">
+                                    <img src="{{ url_for('static', filename='images/empty-events.png') }}"
+                                        alt="No events illustration">
+                                    <p>No events yet. Click “Add Event” to create your first one!</p>
+                                </div>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
-
         </section>
     </main>
 
@@ -115,7 +170,7 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 
-    <!-- SUCCESS MODAL -->
+    <!-- SUCCESS MODAL (unchanged logic) -->
     <div id="successModal" class="modal">
         <div class="modal-content">
             <h3>Event Added Successfully!</h3>
@@ -130,13 +185,11 @@
             <p>
                 EventLinker is an integrated event networking platform designed for organizers and attendees.
                 It allows event creation, QR-based attendee onboarding, profile creation, and seamless
-                networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
-                EventLinker simplifies event management and enhances professional connections.
+                networking through social links.
             </p>
             <button class="modal-btn" onclick="closeAboutModal()">Close</button>
         </div>
     </div>
-
 
     <!-- JS -->
     <script>
@@ -149,7 +202,6 @@
             const modal = document.getElementById("successModal");
             modal.style.display = "none";
 
-            // Remove ?success=true from the URL
             const newUrl = window.location.origin + window.location.pathname;
             window.history.replaceState({}, document.title, newUrl);
         }
@@ -158,7 +210,6 @@
         if (success === "true") {
             window.onload = () => {
                 showModal();
-                // Remove ?success=true immediately after showing
                 const newUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, newUrl);
             };
@@ -172,16 +223,14 @@
             document.getElementById('aboutModal').style.display = 'none';
         }
 
-        // Close when clicking outside
-        window.onclick = function (e) {
-            let modal = document.getElementById('aboutModal');
-            if (e.target === modal) {
-                modal.style.display = "none";
+        // Close about modal when clicking outside
+        window.addEventListener('click', function (e) {
+            const aboutModal = document.getElementById('aboutModal');
+            if (e.target === aboutModal) {
+                aboutModal.style.display = 'none';
             }
-        }
-
+        });
     </script>
-
 
 </body>
 

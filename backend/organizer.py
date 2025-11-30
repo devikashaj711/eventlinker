@@ -50,9 +50,23 @@ def organizer_homepage():
     conn = get_db_connection()
     cursor = None
     events = []
+    organizer_name = "Organizer"   # fallback
 
     try:
         cursor = conn.cursor(dictionary=True)
+
+        # 🔹 Get organizer name (change table/columns to match your DB)
+        cursor.execute("""
+            SELECT first_name, last_name
+            FROM users
+            WHERE user_id = %s
+        """, (user_id,))
+        user = cursor.fetchone()
+        if user:
+            # use full name or just first_name as you like
+            organizer_name = f"{user['first_name']} {user['last_name']}".strip()
+
+        # 🔹 Get events
         cursor.execute("""
             SELECT event_id, event_title, event_date, location
             FROM event_details
@@ -66,6 +80,7 @@ def organizer_homepage():
     return render_template(
         "organizer_homepage.html",
         events=events,
+        organizer_name=organizer_name,          # ← pass to template
         success=request.args.get("success", "")
     )
 
