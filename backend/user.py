@@ -4,6 +4,13 @@
 
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from database import get_db_connection, close_db_connection
+import random, os
+import smtplib
+from email.mime.text import MIMEText
+import sib_api_v3_sdk
+from sib_api_v3_sdk.rest import ApiException
+
+
 
 user_bp = Blueprint('user_bp', __name__, template_folder='../frontend/templates')
 
@@ -56,57 +63,110 @@ def login_user():
 
     return render_template('login.html')
 
-@user_bp.route('/direct-reset-password', methods=['POST'])
-def direct_reset_password():
-    email = request.form.get('email')
-    new_password = request.form.get('password')
-    confirm_password = request.form.get('confirm_password')
+@user_bp.route('/send-reset-otp', methods=['POST'])
+def send_reset_otp():
+    email = request.form.get("email")
 
-    # Password match check
-    if new_password != confirm_password:
-        flash("Passwords do not match.", "danger")
-        return redirect(url_for('user_bp.login_user'))
-
+    # Check if email exists in DB
     conn = get_db_connection()
-    if not conn:
-        flash("Could not connect to database.", "danger")
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+
+    if not user:
+        flash("Email not found.", "danger")
         return redirect(url_for('user_bp.login_user'))
 
+    # Generate OTP
+    otp = str(random.randint(100000, 999999))
+
+    # Store OTP & email in session
+    session["reset_email"] = email
+    session["reset_otp"] = otp
+
+    subject = "Your EventLinker Password Reset OTP"
+
+    # SEND EMAIL THROUGH BREV0
     try:
-        cursor = conn.cursor()
+        configuration = sib_api_v3_sdk.Configuration()
+        configuration.api_key['api-key'] = os.getenv("BREVO_API_KEY")
 
-        # First check if user exists
-        cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
-        user_exists = cursor.fetchone()
-
-        if not user_exists:
-            flash("No account found with this email.", "danger")
-            close_db_connection(conn, cursor)            
-            return redirect(url_for('user_bp.login_user'))
-
-        # Update the password
-        cursor.execute(
-            "UPDATE users SET password = %s WHERE email = %s",
-            (new_password, email)
+        api_instance = sib_api_v3_sdk.TransactionalEmailsApi(
+            sib_api_v3_sdk.ApiClient(configuration)
         )
 
-        conn.commit()
+        html_content = f"""
+        <h2>Your OTP Code</h2>
+        <p>Your password reset OTP is:</p>
+        <h1 style="font-size:32px; letter-spacing:4px;">{otp}</h1>
+        <p>Do not share this code with anyone.</p>
+        """
 
-        # Check if 1 row was updated
-        if cursor.rowcount == 1:
-            flash("Password updated successfully!", "success")
-        else:
-            flash("Password update failed. Please try again.", "danger")
+        email_data = sib_api_v3_sdk.SendSmtpEmail(
+            to=[{"email": email}],
+            sender={"email": "devikashaj711@gmail.com", "name": "EventLinker"},
+            subject=subject,
+            html_content=html_content
+        )
+
+        api_instance.send_transac_email(email_data)
+
+        flash("OTP sent to your email!", "success")
+        session["open_otp_modal"] = True
 
     except Exception as e:
-        print("Reset password error:", e)
-        flash("Something went wrong. Try again.", "danger")
+        print("Brevo Email Error:", e)
+        flash("Failed to send OTP. Try again later.", "danger")
 
-    finally:
-        close_db_connection(conn, cursor)
+    return redirect(url_for("user_bp.login_user"))
+
+
+@user_bp.route('/verify-reset-otp', methods=['POST'])
+def verify_reset_otp():
+    typed_otp = request.form.get("otp")
+
+    if typed_otp == session.get("reset_otp"):
+        session["otp_verified"] = True
+        session["open_password_modal"] = True
+        flash("OTP verified successfully!", "success")
+    else:
+        flash("Incorrect OTP. Try again.", "danger")
+        session["open_otp_modal"] = True
 
     return redirect(url_for('user_bp.login_user'))
 
+@user_bp.route('/direct-reset-password', methods=['POST'])
+def direct_reset_password():
+    if not session.get("otp_verified"):
+        flash("OTP verification required.", "danger")
+        return redirect(url_for('user_bp.login_user'))
+
+    new_password = request.form.get('password')
+    confirm_password = request.form.get('confirm_password')
+
+    if new_password != confirm_password:
+        flash("Passwords do not match.", "danger")
+        session["open_password_modal"] = True
+        return redirect(url_for('user_bp.login_user'))
+
+    email = session.get("reset_email")
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("UPDATE users SET password=%s WHERE email=%s",
+                   (new_password, email))
+    conn.commit()
+    close_db_connection(conn, cursor)
+
+    # Clean up session
+    session.pop("reset_email", None)
+    session.pop("reset_otp", None)
+    session.pop("otp_verified", None)
+
+    flash("Password updated successfully!", "success")
+
+    return redirect(url_for('user_bp.login_user'))
 
 
 # ------------------------------
