@@ -19,24 +19,31 @@
         </div>
 
         <nav class="nav-links">
-            {% if session.get('user_role_id') == 2 %}
-                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
-                <a href="#" class="profile-link">
-                    <i class="fa fa-user profile-icon"></i>
-                    <span class="profile-text">Profile</span>
-                </a>
-                <a href="#">About</a>
-            {% else %}
-                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
-                <a href="#" class="profile-link">
-                    <i class="fa fa-user profile-icon"></i>
-                    <span class="profile-text">Profile</span>
-                </a>
-                <a href="#">About</a>
-            {% endif %}
+            <a href="#" onclick="openAboutModal()">About</a>
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
+            <a href="#">Similarity</a>
+            <a href="#">Attendee</a>
+
+            <div class="dropdown">
+                <a href="#" id="eventsLink">All Events ▾</a>
+                <div id="eventsSubmenu" class="submenu-vertical">
+                    <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Upcoming</a>
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-user fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
         </nav>
     </header>
 
+    <!-- MAIN CONTENT -->
     <main>
         <div class="member-container">
             <h1 class="title">Registered Members</h1>
@@ -49,7 +56,7 @@
                         <tr>
                             <th>#</th>
                             <th>Name</th>
-                            <th>Email</th>
+                            <th>Connect</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,7 +64,27 @@
                         <tr>
                             <td>{{ loop.index }}</td>
                             <td>{{ m.first_name }} {{ m.last_name }}</td>
-                            <td>{{ m.email }}</td>
+                            <td>
+                                {% set member_id = m.user_id if m.user_id is defined and m.user_id else m.id %}
+                                {% if member_id == session['user_id'] %}
+                                    <span style="color:#aaa; font-size:0.9rem;">You</span>
+                                {% else %}
+                                    <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}" method="POST">
+                                        <input type="hidden" name="receiver_id" value="{{ member_id }}">
+                                        <button class="connect-btn"
+                                                type="submit"
+                                                {% if m.status_id in [1,2] %} disabled {% endif %}>
+                                            {% if m.status_id == 1 %}
+                                                Pending
+                                            {% elif m.status_id == 2 %}
+                                                Accepted
+                                            {% else %}
+                                                Request
+                                            {% endif %}
+                                        </button>
+                                    </form>
+                                {% endif %}
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -73,6 +100,76 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 
-</body>
+    <!-- ABOUT MODAL -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content about-content">
+            <h2>About EventLinker</h2>
+            <p>
+                EventLinker is an integrated event networking platform designed for organizers and attendees.
+                It allows event creation, QR-based attendee onboarding, profile creation, and seamless
+                networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
+                EventLinker simplifies event management and enhances professional connections.
+            </p>
+            <button class="modal-btn" onclick="closeAboutModal()">Close</button>
+        </div>
+    </div>
 
+    <!-- SCRIPT: Connection buttons, About modal, Events dropdown -->
+    <script>
+        // About modal
+        function openAboutModal() {
+            document.getElementById('aboutModal').style.display = 'flex';
+        }
+        function closeAboutModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+        window.onclick = function(e) {
+            let modal = document.getElementById('aboutModal');
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Events dropdown
+        const eventsLink = document.getElementById('eventsLink');
+        const eventsSubmenu = document.getElementById('eventsSubmenu');
+
+        eventsLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            eventsSubmenu.classList.toggle('active');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
+                eventsSubmenu.classList.remove('active');
+            }
+        });
+
+        // Connection buttons
+        document.querySelectorAll('.connection-form').forEach(form => {
+            const button = form.querySelector('button.connect-btn');
+
+            if (!button.disabled) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    button.textContent = 'Pending';
+                    button.disabled = true;
+
+                    const formData = new FormData(form);
+                    fetch(form.action, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => { /* handle response if needed */ })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        button.disabled = false;
+                        button.textContent = 'Request';
+                    });
+                });
+            }
+        });
+    </script>
+
+</body>
 </html>

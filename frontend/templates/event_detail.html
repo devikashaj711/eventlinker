@@ -12,38 +12,37 @@
 
 <body style="color: #fff;">
 
-    <!-- NAVBAR -->
-    <header class="navbar">
-        <div class="logo">
-            <span class="logo-text">Event Linker</span>
-            <small class="logo-tagline">An Integrated Event Networking Platform</small>
+   <header class="navbar">
+    <div class="logo">
+      <span class="logo-text">Event Linker</span>
+      <small class="logo-tagline">An Integrated Event Networking Platform</small>
+    </div>
+
+    <nav class="nav-links">
+      <a href="#" onclick="openAboutModal()">About</a>
+      <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
+      <a href="#">Similarity</a>
+      <a href="#">Attendee</a>
+
+      <!-- Events dropdown -->
+      <div class="dropdown">
+        <a href="#" id="eventsLink">All Events ▾</a>
+        <div id="eventsSubmenu" class="submenu-vertical">
+          <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Upcoming</a>
+          <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
         </div>
+      </div>
 
-        <nav class="nav-links">
-            {% if is_attendee %}
-            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Attendee</a>
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-user fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a>
-            {% else %}
-            <a href="{{ url_for('organizer_bp.organizer_homepage') }}">Organizer</a>
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-user fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a>
-            {% endif %}
-        </nav>
-
-    </header>
+      <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+        <i class="fa fa-user profile-icon"></i>
+        <span class="profile-text">Profile</span>
+      </a>
+      <a href="{{ url_for('user_bp.logout_user') }}">
+        <i class="fa fa-user fa fa-sign-out"></i>
+        <span class="profile-text">Logout</span>
+      </a>
+    </nav>
+  </header>
 
     <main>
         <div class="event-container">
@@ -68,7 +67,7 @@
                     <p><strong>Date:</strong> {{ event.event_date }}</p>
                     <p><strong>Location:</strong> {{ event.location }}</p>
                     <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id) }}" class="member-list-btn">
-                    View Member List
+                        View Member List
                     </a>
                 </div>
 
@@ -88,7 +87,6 @@
                     class="back-button">
                     Back to Events
                 </a>
-
             </div>
 
         </div>
@@ -98,6 +96,52 @@
     <footer class="footer">
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
+
+    <!-- ABOUT MODAL -->
+    <div id="aboutModal" class="modal">
+        <div class="modal-content about-content">
+            <h2>About EventLinker</h2>
+            <p>
+                EventLinker is an integrated event networking platform designed for organizers and attendees.
+                It allows event creation, QR-based attendee onboarding, profile creation, and seamless
+                networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
+                EventLinker simplifies event management and enhances professional connections.
+            </p>
+            <button class="modal-btn" onclick="closeAboutModal()">Close</button>
+        </div>
+    </div>
+
+    <!-- SCRIPT: About modal + Events dropdown -->
+    <script>
+        // About modal
+        function openAboutModal() {
+            document.getElementById('aboutModal').style.display = 'flex';
+        }
+        function closeAboutModal() {
+            document.getElementById('aboutModal').style.display = 'none';
+        }
+        window.onclick = function(e) {
+            let modal = document.getElementById('aboutModal');
+            if (e.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Events dropdown
+        const eventsLink = document.getElementById('eventsLink');
+        const eventsSubmenu = document.getElementById('eventsSubmenu');
+
+        eventsLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            eventsSubmenu.classList.toggle('active');
+        });
+
+        window.addEventListener('click', function(e) {
+            if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
+                eventsSubmenu.classList.remove('active');
+            }
+        });
+    </script>
 
 </body>
 
