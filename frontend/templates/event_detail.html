@@ -108,6 +108,10 @@
 
                 <div class="event-qr">
                     {% if event.qr_code_path %}
+                    {% if is_organizer %}
+                    <p><strong>QR Code:</strong></p>
+                    <img src="{{ event.qr_code_path }}" alt="Event QR Code">
+                    {% else %}
                     <p><strong>QR Code:</strong></p>
                     <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     <p>Scan QR code to register for this event or
@@ -115,8 +119,7 @@
                             click here to join using link
                         </a>.
                     </p>
-                    <!-- <p><strong>QR Code:</strong></p> -->
-                    <!-- <img src="{{ event.qr_code_path }}" alt="Event QR Code"> -->
+                    {% endif %}
                     {% endif %}
                 </div>
                 <div class="event-info">
