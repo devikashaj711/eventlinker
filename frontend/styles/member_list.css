@@ -359,6 +359,35 @@ body {
     scrollbar-color: #7c3aed #e4dcff;
 }
 
+.btn-primary {
+    padding: 0.35rem 1.1rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: #6c4dfc;
+    color: #ffffff;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover Effect */
+.btn-primary:hover {
+    background: #593be6;
+    transform: translateY(-2px);
+    box-shadow: 0px 4px 10px rgba(108, 77, 252, 0.3);
+}
+
+/* Click/Active Effect */
+.btn-primary:active {
+    transform: scale(0.97);
+}
+
+/* Remove underline for <a> tag */
+a .btn-primary {
+    text-decoration: none;
+}
 
 
 /* ============ FOOTER (fixed) ============ */

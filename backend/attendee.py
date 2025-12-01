@@ -468,7 +468,7 @@ def decline_connection():
                 WHERE requester_id = %s AND receiver_id = %s
             """, (datetime.now(), requester_id, user_id))
             conn.commit()
-            flash("Connection declined!", "success")
+            # flash("Connection declined!", "success")
         finally:
             close_db_connection(conn, cursor)
 
