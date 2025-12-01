@@ -116,6 +116,148 @@ body {
     font-size: 0.9rem;
 }
 
+/* ============ NAVBAR DROPDOWN (My Events) ============ */
+
+.nav-links .dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* top-level "My Events ▾" link */
+.nav-links .dropdown>a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #5b4f8b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links .dropdown>a:hover {
+    color: #6c4dfc;
+    transform: translateY(-1px);
+}
+
+/* vertical submenu panel */
+.submenu-vertical {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    min-width: 160px;
+    padding: 0.4rem 0.2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(88, 69, 177, 0.22);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+
+    /* hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+    z-index: 150;
+}
+
+/* submenu items */
+.submenu-vertical a {
+    display: block;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #5b4f8b;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.submenu-vertical a:hover {
+    background: #f3f0ff;
+    color: #6c4dfc;
+}
+
+/* show submenu on hover */
+.nav-links .dropdown:hover .submenu-vertical {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+
+/* ============ NAVBAR ROLE SWITCH DROPDOWN (View as:) ============ */
+
+.role-switch-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: 1.2rem;
+    font-size: 0.8rem;
+}
+
+.role-switch-form label {
+    color: #5b4f8b;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* wrapper so we can draw our own arrow */
+.role-switch-select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* select itself */
+.role-switch-select-wrapper select {
+    border: 1px solid #d6d0ff;
+    border-radius: 999px;
+    padding: 0.25rem 1.8rem 0.25rem 0.8rem;
+    /* extra right space for arrow */
+    font-size: 0.8rem;
+    background: #f7f5ff;
+    color: #5b4f8b;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease,
+        background 0.2s ease, transform 0.15s ease;
+
+    /* hide native arrow */
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+.role-switch-select-wrapper select::-ms-expand {
+    display: none;
+    /* IE / Edge legacy */
+}
+
+/* our custom arrow */
+.role-switch-select-wrapper::after {
+    content: "▾";
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.65rem;
+    pointer-events: none;
+    color: #6c4dfc;
+}
+
+/* hover / focus */
+.role-switch-select-wrapper select:hover {
+    border-color: #b3a3ff;
+    background: #f2efff;
+    transform: translateY(-1px);
+}
+
+.role-switch-select-wrapper select:focus {
+    border-color: #6c4dfc;
+    box-shadow: 0 0 0 2px rgba(108, 77, 252, 0.2);
+}
+
 
 /* MAIN LAYOUT – fills remaining viewport between nav & footer */
 .main-layout {
@@ -570,5 +712,19 @@ body {
 
     .table-container {
         border-radius: 14px;
+    }
+
+    .role-switch-form {
+        margin-left: 0.5rem;
+        gap: 0.3rem;
+    }
+
+    .role-switch-form label {
+        font-size: 0.75rem;
+    }
+
+    .role-switch-select-wrapper select {
+        font-size: 0.75rem;
+        padding: 0.2rem 1.6rem 0.2rem 0.7rem;
     }
 }

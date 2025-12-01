@@ -45,8 +45,15 @@ def attendee_event_details(event_id):
 
 @attendee_bp.route('/attendee_homepage')
 def attendee_homepage():
+
+    # Require login (both organizers and attendees are allowed)
+    if "user_id" not in session:
+        flash("Please log in", "danger")
+        return redirect(url_for('user_bp.login_user'))
+    
     conn = get_db_connection()
     events = []
+    is_organizer = (session.get("user_role_id") == 1)
 
     if conn:
         try:
@@ -56,7 +63,15 @@ def attendee_homepage():
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template('attendee_homepage.html', events=events)
+    is_organizer = (session.get("user_role_id") == 1)
+    active_role = session.get("active_role", "attendee")
+
+    return render_template(
+        'attendee_homepage.html',
+        events=events,
+        is_organizer=is_organizer,
+        active_role=active_role
+    )
 
 
 # ------------------------------

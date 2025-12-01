@@ -45,8 +45,10 @@ def login_user():
 
                     # Redirect by user role
                     if user["user_role_id"] == 1:
+                        session["active_role"] = "organizer"
                         return redirect(url_for('organizer_bp.organizer_homepage'))
                     elif user["user_role_id"] == 2:
+                        session["active_role"] = "attendee"
                         return redirect(url_for('attendee_bp.attendee_homepage'))
                     else:
                         flash("Unknown user role. Contact admin.", "danger")
@@ -62,6 +64,45 @@ def login_user():
                 close_db_connection(conn, cursor)
 
     return render_template('login.html')
+    
+
+
+@user_bp.route('/switch_view', methods=['POST'])
+def switch_view():
+    """
+    Switch the active dashboard view for organizer accounts.
+
+    - Only users with role_id == 1 (organizer) can switch between organizer/attendee.
+    - Pure attendees (role_id == 2) will always stay in attendee view.
+    """
+    if "user_id" not in session:
+        flash("Please log in first.", "danger")
+        return redirect(url_for('user_bp.login_user'))
+
+    selected_role = request.form.get("active_role")
+    real_role = session.get("user_role_id")
+
+    # Determine allowed views based on real role
+    allowed_roles = []
+    if real_role == 1:
+        allowed_roles = ["organizer", "attendee"]
+    elif real_role == 2:
+        allowed_roles = ["attendee"]
+
+    if selected_role not in allowed_roles:
+        flash("Invalid view selected.", "danger")
+        # Fallback to previous or default
+        selected_role = session.get("active_role", "attendee")
+
+    session["active_role"] = selected_role
+
+    # Redirect to the corresponding homepage
+    if selected_role == "organizer":
+        return redirect(url_for('organizer_bp.organizer_homepage'))
+    else:
+        return redirect(url_for('attendee_bp.attendee_homepage'))
+    
+    
 
 @user_bp.route('/send-reset-otp', methods=['POST'])
 def send_reset_otp():
@@ -238,22 +279,28 @@ def user_profile():
     user_role_id = session["user_role_id"]
     print('user_role_id----', user_role_id)
 
-    # is_attendee = false
-    # if "user_role_id" is 2:
-    #     is_attendee=True
-    # else:
-    #     is_attendee=false
+    # Role flags
+    is_organizer = (user_role_id == 1)
+    # Organizer (1) and pure attendee (2) can both act as attendee
+    is_attendee = (user_role_id in (1, 2))
 
-    is_attendee = (user_role_id == 2)
+    # Which dashboard/view is currently active? (controlled by dropdown)
+    active_role = session.get("active_role")
+
+    # Decide where the main profile 'home/back' should go in the navbar
+    profile_home = None
+    if is_organizer and active_role == "attendee":
+        profile_home = "attendee"
+    elif is_organizer:
+        profile_home = "organizer"
+    elif is_attendee:
+        profile_home = "attendee"
 
     conn = get_db_connection()
     user = None
 
     if conn:
         try:
-            # cursor = conn.cursor(dictionary=True)
-            # cursor.execute("SELECT * FROM users WHERE user_id = %s", (user_id,))
-            # user = cursor.fetchone()
             cursor = conn.cursor(dictionary=True)
             query = "SELECT * FROM users WHERE user_id = %s AND user_role_id = %s"
             cursor.execute(query, (session["user_id"], session["user_role_id"]))
@@ -264,7 +311,15 @@ def user_profile():
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("profile.html", user=user, is_attendee=is_attendee)
+    return render_template(
+        "profile.html",
+        user=user,
+        is_attendee=is_attendee,
+        is_organizer=is_organizer,
+        profile_home=profile_home,
+        active_role=active_role
+    )
+
 
 
 # ------------------------

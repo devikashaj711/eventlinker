@@ -34,6 +34,21 @@
 
         <nav class="nav-links">
             <a href="#" onclick="openAboutModal()">About</a>
+
+            <!-- Role switch dropdown (organizer only) -->
+
+            <form method="post" action="{{ url_for('user_bp.switch_view') }}" class="role-switch-form">
+                <label for="active_role">View as:</label>
+
+                <span class="role-switch-select-wrapper">
+                    <select name="active_role" id="active_role" onchange="this.form.submit()">
+                        <option value="organizer" {% if active_role=='organizer' %}selected{% endif %}>Organizer
+                        </option>
+                        <option value="attendee" {% if active_role=='attendee' %}selected{% endif %}>Attendee</option>
+                    </select>
+                </span>
+            </form>
+
             <!-- <a href="#">My Events</a> -->
             <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>

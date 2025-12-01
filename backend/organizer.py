@@ -45,6 +45,9 @@ def require_organizer():
 def organizer_homepage():
     if not require_organizer():
         return redirect(url_for("login_user"))
+    
+    # 🔹 Mark that the user is currently viewing the organizer dashboard
+    session["active_view"] = "organizer"
 
     user_id = session["user_id"]
     conn = get_db_connection()
@@ -77,11 +80,20 @@ def organizer_homepage():
     finally:
         close_db_connection(conn, cursor)
 
+    # Organizer is always true here
+    is_organizer = True
+    # If active_role isn't set yet (e.g., typed URL manually), default to organizer
+    if session.get("active_role") not in ("organizer", "attendee"):
+        session["active_role"] = "organizer"
+    active_role = session.get("active_role", "organizer")
+
     return render_template(
         "organizer_homepage.html",
         events=events,
-        organizer_name=organizer_name,          # ← pass to template
-        success=request.args.get("success", "")
+        organizer_name=organizer_name,
+        success=request.args.get("success", ""),
+        is_organizer=is_organizer,
+        active_role=active_role,
     )
 
 
@@ -194,7 +206,9 @@ def save_event():
 
 
         # Generate QR code
-        qr_data = f"http://127.0.0.1:5000/organizer/event/{event_id}"
+        # qr_data = f"http://127.0.0.1:5000/organizer/event/{event_id}"
+        qr_data = url_for('organizer_bp.view_event', event_id=event_id, _external=True)
+        print('qr_data---', qr_data)
         qr_img = qrcode.make(qr_data)
 
         # Upload QR to S3

@@ -33,12 +33,27 @@
 
     <nav class="nav-links">
       <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
+
+      <!-- Role switch dropdown (only when real role_id == 1) -->
+      {% if is_organizer %}
+      <form method="post" action="{{ url_for('user_bp.switch_view') }}" class="role-switch-form">
+        <label for="active_role">View as:</label>
+
+        <span class="role-switch-select-wrapper">
+          <select name="active_role" id="active_role" onchange="this.form.submit()">
+            <option value="organizer" {% if active_role=='organizer' %}selected{% endif %}>Organizer</option>
+            <option value="attendee" {% if active_role=='attendee' %}selected{% endif %}>Attendee</option>
+          </select>
+        </span>
+      </form>
+      {% endif %}
+
       <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
-    Notifications
-    {% if g.pending_request_count > 0 %}
+        Notifications
+        {% if g.pending_request_count > 0 %}
         <span class="notification-badge">{{ g.pending_request_count }}</span>
-    {% endif %}
-</a>
+        {% endif %}
+      </a>
       <a href="#">Similarity</a>
       <!-- Events dropdown -->
       <div class="dropdown">
@@ -78,13 +93,13 @@
             {{ event.description }}
           </p>
 
-{% if from_registered %}
-<a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id, registered=1) }}">
-{% else %}
-<a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id) }}">
-{% endif %}
-            <button class="btn-primary card-button">View</button>
-          </a>
+          {% if from_registered %}
+          <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id, registered=1) }}">
+            {% else %}
+            <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id) }}">
+              {% endif %}
+              <button class="btn-primary card-button">View</button>
+            </a>
         </div>
       </div>
       {% endfor %}

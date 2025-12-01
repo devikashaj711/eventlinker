@@ -24,10 +24,10 @@
                 <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
                 <div class="logo-text-wrap">
                     <span class="logo-text">EventLinker</span>
-                    {% if is_attendee %}
-                    <small class="logo-tagline">Attendee Dashboard</small>
-                    {% else %}
+                    {% if profile_home == 'organizer' %}
                     <small class="logo-tagline">Organizer Dashboard</small>
+                    {% elif profile_home == 'attendee' %}
+                    <small class="logo-tagline">Attendee Dashboard</small>
                     {% endif %}
                 </div>
                 <div class="logo-box">
@@ -52,12 +52,12 @@
             <div class="profile-left">
                 <!-- Back link (same style as forms) -->
                 <div class="back-link">
-                    {% if is_attendee %}
-                    <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                    {% if profile_home == 'organizer' %}
+                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
                         <i class="fa fa-arrow-left"></i> Back to dashboard
                     </a>
-                    {% else %}
-                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                    {% elif profile_home == 'attendee' %}
+                    <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
                         <i class="fa fa-arrow-left"></i> Back to dashboard
                     </a>
                     {% endif %}
