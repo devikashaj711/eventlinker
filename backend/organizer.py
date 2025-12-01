@@ -207,7 +207,7 @@ def save_event():
 
         # Generate QR code
         # qr_data = f"http://127.0.0.1:5000/organizer/event/{event_id}"
-        qr_data = url_for('attendee_bp.attendee_event_details', event_id=event_id, _external=True)
+        qr_data = url_for('attendee_bp.register_event', event_id=event_id, _external=True)
         print('qr_data---', qr_data)
         qr_img = qrcode.make(qr_data)
 
@@ -383,7 +383,7 @@ def update_event(event_id):
             delete_from_s3(old_qr)
 
         # create new QR
-        qr_data = f"http://127.0.0.1:5000/organizer/event/{event_id}"
+        qr_data = url_for('attendee_bp.register_event', event_id=event_id, _external=True)
         qr_img = qrcode.make(qr_data)
         new_qr_path = upload_qr_to_s3(qr_img)
     else:
