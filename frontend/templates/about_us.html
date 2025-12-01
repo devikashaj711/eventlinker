@@ -34,11 +34,11 @@
             <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
-              </a>
-              <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
                 <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
-              </a>
+            </a>
         </nav>
     </header>
 
@@ -50,9 +50,15 @@
             <div class="about-left">
                 <!-- Back link -->
                 <div class="back-link">
+                    {% if is_organizer %}
+                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                        <i class="fa fa-arrow-left"></i> Back to dashboard
+                    </a>
+                    {% else %}
                     <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
                         <i class="fa fa-arrow-left"></i> Back to dashboard
                     </a>
+                    {% endif %}
                 </div>
 
                 <h1 class="about-title">About EventLinker</h1>
@@ -75,10 +81,12 @@
 
                 <h3 class="section-title">What We Do</h3>
                 <ul class="about-list">
-                    <li><strong>For Organizers:</strong> A centralized dashboard to manage attendees and engagement.</li>
+                    <li><strong>For Organizers:</strong> A centralized dashboard to manage attendees and engagement.
+                    </li>
                     <li><strong>Instant QR Onboarding:</strong> Simple, fast, and efficient check-ins.</li>
                     <li><strong>For Attendees:</strong> A clean, user-friendly way to connect professionally.</li>
-                    <li><strong>Smart Digital Identity:</strong> QR-powered profiles that enable instant networking.</li>
+                    <li><strong>Smart Digital Identity:</strong> QR-powered profiles that enable instant networking.
+                    </li>
                 </ul>
 
                 <h3 class="section-title">Why EventLinker?</h3>

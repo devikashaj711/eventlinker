@@ -178,7 +178,8 @@ def attendee_member_list(event_id):
 
 @attendee_bp.route('/about')
 def about_page():
-    return render_template('about_us.html')
+    is_organizer = (session.get("user_role_id") == 1)
+    return render_template('about_us.html', is_organizer=is_organizer)
 
 @attendee_bp.route('/registered')
 def attendee_registered_events():
