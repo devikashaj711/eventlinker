@@ -320,6 +320,40 @@ def user_profile():
         active_role=active_role
     )
 
+# Edit user details
+@user_bp.route('/profile/update', methods=['POST'])
+def update_profile():
+    if "user_id" not in session:
+        flash("Please log in first.", "danger")
+        return redirect(url_for('user_bp.login_user'))
+
+    bio = request.form.get('bio') or None
+    interests = request.form.get('interests') or None
+
+    conn = get_db_connection()
+    cursor = None
+
+    try:
+        cursor = conn.cursor()
+        cursor.execute(
+            """
+            UPDATE users
+            SET bio = %s,
+                interests = %s
+            WHERE user_id = %s
+            """,
+            (bio, interests, session["user_id"])
+        )
+        conn.commit()
+        flash("Profile updated successfully.", "success")
+    except Exception as e:
+        print("Profile update error:", e)
+        flash("Failed to update profile.", "danger")
+    finally:
+        close_db_connection(conn, cursor)
+
+    # Go back to the profile page to see updated data
+    return redirect(url_for('user_bp.user_profile'))
 
 
 # ------------------------

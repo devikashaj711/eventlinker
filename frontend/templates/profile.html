@@ -69,6 +69,38 @@
                     View and manage your personal details linked with EventLinker.
                 </p>
 
+                <!-- Toggle button for editing -->
+                <button type="button" class="edit-toggle-btn" id="editToggleBtn">
+                    <i class="fa fa-pencil"></i>
+                    Edit bio & interests
+                </button>
+
+                <!-- INLINE EDIT FORM -->
+                <form method="POST" action="{{ url_for('user_bp.update_profile') }}" class="profile-edit-form"
+                    id="profileEditForm">
+                    <div class="form-row">
+                        <label for="bio">Bio</label>
+                        <input type="text" id="bio" name="bio" rows="3" value="{{ user.bio or '' }}"
+                            placeholder="Write a short bio about yourself...">
+                    </div>
+
+                    <div class="form-row">
+                        <label for="interests">Interests</label>
+                        <input type="text" id="interests" name="interests" value="{{ user.interests or '' }}"
+                            placeholder="e.g., AI, Web Dev, Networking">
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="primary-btn">
+                            <i class="fa fa-save"></i> Save changes
+                        </button>
+                        <button type="button" class="secondary-btn" id="cancelEditBtn">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+
+                <!-- READ-ONLY DETAILS -->
                 <div class="profile-details-grid">
                     <p class="profile-row">
                         <strong>Name:</strong>
@@ -137,6 +169,26 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 
+    <!-- Simple JS to toggle the edit form -->
+    <script>
+        const editBtn = document.getElementById('editToggleBtn');
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        const editForm = document.getElementById('profileEditForm');
+
+        if (editBtn && editForm) {
+            editBtn.addEventListener('click', function () {
+                editForm.classList.add('visible');
+                editBtn.style.display = 'none';
+            });
+        }
+
+        if (cancelBtn && editForm) {
+            cancelBtn.addEventListener('click', function () {
+                editForm.classList.remove('visible');
+                editBtn.style.display = 'inline-flex';
+            });
+        }
+    </script>
 </body>
 
 </html>
