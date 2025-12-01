@@ -33,7 +33,12 @@
 
     <nav class="nav-links">
       <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-      <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
+      <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+    Notifications
+    {% if g.pending_request_count > 0 %}
+        <span class="notification-badge">{{ g.pending_request_count }}</span>
+    {% endif %}
+</a>
       <a href="#">Similarity</a>
       <!-- Events dropdown -->
       <div class="dropdown">
@@ -73,7 +78,11 @@
             {{ event.description }}
           </p>
 
-          <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id) }}">
+{% if from_registered %}
+<a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id, registered=1) }}">
+{% else %}
+<a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id) }}">
+{% endif %}
             <button class="btn-primary card-button">View</button>
           </a>
         </div>

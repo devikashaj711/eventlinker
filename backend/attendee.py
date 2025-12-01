@@ -3,16 +3,20 @@ from flask import Blueprint, render_template, session
 from database import get_db_connection, close_db_connection
 
 
-
+from flask import g
 from flask import request, redirect, url_for, flash
 from datetime import datetime
 
 attendee_bp = Blueprint('attendee_bp', __name__)
-
 @attendee_bp.route('/attendee/event/<int:event_id>')
 def attendee_event_details(event_id):
     conn = get_db_connection()
     event = None
+    user_id = session.get('user_id')  # Current logged-in attendee
+
+    # If 'registered=1' is in URL, we came from Registered Events
+    show_member_button = request.args.get("registered", "0") == "1"
+    back_src = "registered" if show_member_button else "homepage"
 
     if conn:
         try:
@@ -30,7 +34,13 @@ def attendee_event_details(event_id):
     if not event:
         return "Event not found", 404
 
-    return render_template("event_detail.html", event=event, is_attendee=True)
+    return render_template(
+        "event_detail.html",
+        event=event,
+        is_attendee=True,
+        show_member_button=show_member_button,
+        back_src=back_src
+    )
 
 
 @attendee_bp.route('/attendee_homepage')
@@ -58,35 +68,36 @@ def attendee_member_list(event_id):
     members = []
     user_id = session.get('user_id')  # current logged-in attendee
 
+    # Default back URL: Event Details page
+    back_url = request.args.get("back", url_for('attendee_bp.attendee_event_details', event_id=event_id))
+
     if conn:
         try:
             cursor = conn.cursor(dictionary=True)
-            # Fetch members and left join with event_connections for this user
             cursor.execute("""
                 SELECT u.user_id, u.first_name, u.last_name, u.email,
                        ec.status_id
                 FROM event_registrations er
                 JOIN users u ON er.user_id = u.user_id
                 LEFT JOIN event_connections ec
-                       ON ec.receiver_id = u.user_id AND ec.requester_id = %s
+                       ON ec.receiver_id = u.user_id 
+                       AND ec.requester_id = %s
                 WHERE er.event_id = %s
+                  AND u.user_role_id = 2
             """, (user_id, event_id))
             members = cursor.fetchall()
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("member_list.html", members=members, event_id=event_id)
+    return render_template("member_list.html", members=members, event_id=event_id, back_url=back_url)
 
 @attendee_bp.route('/about')
 def about_page():
     return render_template('about_us.html')
 
-
-
 @attendee_bp.route('/registered')
 def attendee_registered_events():
     user_id = session.get('user_id')
-
     print("DEBUG: session user_id =", user_id)
 
     if not user_id:
@@ -99,48 +110,42 @@ def attendee_registered_events():
         try:
             cursor = conn.cursor(dictionary=True)
 
-            # Fetch event IDs
+            # Fetch all event IDs for this user
             cursor.execute("""
                 SELECT event_id 
                 FROM event_registrations
                 WHERE user_id = %s
             """, (user_id,))
             rows = cursor.fetchall()
-
             print("DEBUG: event_registrations rows =", rows)
 
             if not rows:
                 print("DEBUG: User has no registered events.")
                 return render_template("attendee_homepage.html", events=[])
 
+            # Extract event IDs
             event_id_list = [row['event_id'] for row in rows]
-
             print("DEBUG: Extracted event_id_list =", event_id_list)
 
-            # Convert list → correct tuple for SQL
-            event_tuple = tuple(event_id_list)
-            if len(event_tuple) == 1:
-                event_tuple = (event_tuple[0],)
-
-            print("DEBUG: SQL tuple =", event_tuple)
-
+            # Prepare placeholders for SQL IN clause
+            placeholders = ','.join(['%s'] * len(event_id_list))
             query = f"""
                 SELECT *
                 FROM event_details
-                WHERE event_id IN {event_tuple}
+                WHERE event_id IN ({placeholders})
                 ORDER BY event_date ASC
             """
-            print("DEBUG: Final SQL Query = ", query)
+            print("DEBUG: Final SQL Query =", query)
 
-            cursor.execute(query)
+            # Execute query safely with parameter list
+            cursor.execute(query, event_id_list)
             events = cursor.fetchall()
-
             print("DEBUG: event_details fetched =", events)
 
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("attendee_homepage.html", events=events)
+    return render_template("attendee_homepage.html", events=events, from_registered=True)
 
 
 
@@ -260,3 +265,25 @@ def accept_connection():
 
     return redirect(request.referrer)
 
+
+@attendee_bp.before_app_request
+def load_pending_requests_count():
+    """Load pending connection request count for logged-in attendee."""
+    user_id = session.get('user_id')
+    g.pending_request_count = 0  # default: no requests
+
+    if user_id:
+        conn = get_db_connection()
+        if conn:
+            try:
+                cursor = conn.cursor(dictionary=True)
+                cursor.execute("""
+                    SELECT COUNT(*) AS pending_count
+                    FROM event_connections
+                    WHERE receiver_id = %s AND status_id = 1
+                """, (user_id,))
+                row = cursor.fetchone()
+                if row:
+                    g.pending_request_count = row['pending_count']
+            finally:
+                close_db_connection(conn, cursor)

@@ -10,13 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-
-
 <body>
-    <!-- soft gradient background, same as add / edit form -->
     <div class="page-bg"></div>
 
-    <!-- NAVBAR (same structure as event_form) -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-left">
             <div class="logo">
@@ -24,21 +21,19 @@
                 <div class="logo-text-wrap">
                     <span class="logo-text">EventLinker</span>
                     {% if is_attendee %}
-                    <small class="logo-tagline">Attendee Dashboard</small>
+                        <small class="logo-tagline">Attendee Dashboard</small>
                     {% else %}
-                    <small class="logo-tagline">Organizer Dashboard</small>
+                        <small class="logo-tagline">Organizer Dashboard</small>
                     {% endif %}
                 </div>
-                <div class="logo-box">
-                </div>
+                <div class="logo-box"></div>
             </div>
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Notifications</a>
             <a href="#">Similarity</a>
 
-            <!-- Events dropdown -->
             <div class="dropdown">
                 <a href="#" id="eventsLink">My Events ▾</a>
                 <div id="eventsSubmenu" class="submenu-vertical">
@@ -58,19 +53,24 @@
     <main>
         <div class="event-container">
 
-            <!-- Back link (same style as forms) -->
+            <!-- Back link -->
             <div class="back-link">
                 {% if is_attendee %}
-                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
-                    <i class="fa fa-arrow-left"></i> Back to dashboard
-                </a>
+                    {% if back_src == 'registered' %}
+                        <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                            <i class="fa fa-arrow-left"></i> Back to My Events
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                            <i class="fa fa-arrow-left"></i> Back to dashboard
+                        </a>
+                    {% endif %}
                 {% else %}
-                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
-                    <i class="fa fa-arrow-left"></i> Back to dashboard
-                </a>
+                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                        <i class="fa fa-arrow-left"></i> Back to dashboard
+                    </a>
                 {% endif %}
             </div>
-
 
             <!-- Event title -->
             <h1 class="event-title">{{ event.event_title }}</h1>
@@ -83,25 +83,30 @@
                     <p><strong>Date:</strong> {{ event.event_date }}</p>
                     <p><strong>Location:</strong> {{ event.location }}</p>
 
-                    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id) }}"
-                        class="member-list-btn">
-                        View Member List
-                    </a>
+                    <!-- Member List button -->
+                    {% if show_member_button %}
+    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id, back=request.full_path) }}"
+       class="member-list-btn">
+       View Member List
+    </a>
+{% endif %}
+
+
                 </div>
 
                 <div class="event-qr">
                     {% if event.qr_code_path %}
-                    <p><strong>QR Code:</strong></p>
-                    <img src="{{ event.qr_code_path }}" alt="Event QR Code">
+                        <p><strong>QR Code:</strong></p>
+                        <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     {% endif %}
                 </div>
             </div>
 
             <!-- RIGHT COLUMN: banner image -->
             {% if event.image_path %}
-            <div class="event-banner">
-                <img src="{{ event.image_path }}" alt="Event Image">
-            </div>
+                <div class="event-banner">
+                    <img src="{{ event.image_path }}" alt="Event Image">
+                </div>
             {% endif %}
 
         </div>
@@ -111,6 +116,4 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 </body>
-
-
 </html>
