@@ -37,9 +37,9 @@
 
         <nav class="nav-links">
             <a href="{{ url_for('user_bp.user_profile') }}"
-   class="{% if request.endpoint == 'user_bp.user_profile' %}active{% endif %}">
-    <i class="fa fa-user"></i> Profile
-</a>
+                class="{% if request.endpoint == 'user_bp.user_profile' %}active{% endif %}">
+                <i class="fa fa-user"></i> Profile
+            </a>
 
             <a href="{{ url_for('user_bp.logout_user') }}">
                 <i class="fa fa-sign-out"></i> Logout
@@ -81,15 +81,29 @@
                 <form method="POST" action="{{ url_for('user_bp.update_profile') }}" class="profile-edit-form"
                     id="profileEditForm">
                     <div class="form-row">
-                        <label for="bio">Bio</label>
-                        <input type="text" id="bio" name="bio" rows="3" value="{{ user.bio or '' }}"
-                            placeholder="Write a short bio about yourself...">
+                        <div class="form-group">
+                            <label for="bio">Bio</label>
+                            <input type="text" id="bio" name="bio" rows="3" value="{{ user.bio or '' }}"
+                                placeholder="Write a short bio about yourself...">
+                        </div>
+                        <div class="form-group">
+                            <label for="interests">Interests</label>
+                            <input type="text" id="interests" name="interests" value="{{ user.interests or '' }}"
+                                placeholder="e.g., AI, Web Dev, Networking">
+                        </div>
                     </div>
 
                     <div class="form-row">
-                        <label for="interests">Interests</label>
-                        <input type="text" id="interests" name="interests" value="{{ user.interests or '' }}"
-                            placeholder="e.g., AI, Web Dev, Networking">
+                        <div class="form-group">
+                            <label for="instalink">Instagram Link</label>
+                            <input type="url" id="instalink" name="instalink" value="{{ user.insta_link or '' }}"
+                                placeholder="https://example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="linkedinlink">LinkedIn Link</label>
+                            <input type="url" id="linkedinlink" name="linkedinlink"
+                                value="{{ user.linkedin_link or '' }}" placeholder="https://example.com">
+                        </div>
                     </div>
 
                     <div class="form-actions">
@@ -171,6 +185,20 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 
+    <!-- SUCCESS MODAL (unchanged logic) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div id="successModal" class="modal">
+        {% for category, message in messages %}
+        <div class="modal-content">
+            <h3>{{ message }}</h3>
+            <button onclick="closeModal()">OK</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- Simple JS to toggle the edit form -->
     <script>
         const editBtn = document.getElementById('editToggleBtn');
@@ -189,6 +217,28 @@
                 editForm.classList.remove('visible');
                 editBtn.style.display = 'inline-flex';
             });
+        }
+
+        function showModal() {
+            const modal = document.getElementById("successModal");
+            modal.style.display = "flex";
+        }
+
+        function closeModal() {
+            const modal = document.getElementById("successModal");
+            modal.style.display = "none";
+
+            const newUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, newUrl);
+        }
+
+        const success = "{{ success | default('') }}";
+        if (success === "true") {
+            window.onload = () => {
+                showModal();
+                const newUrl = window.location.origin + window.location.pathname;
+                window.history.replaceState({}, document.title, newUrl);
+            };
         }
     </script>
 </body>

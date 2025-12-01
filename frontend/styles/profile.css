@@ -100,8 +100,10 @@ body {
     color: #6c4dfc;
     transform: translateY(-1px);
 }
+
 .nav-links a.active {
-    color: #b988dc;       /* green text or any color */
+    color: #b988dc;
+    /* green text or any color */
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
@@ -118,23 +120,28 @@ body {
 
 /* white card, same feel as add / view event */
 .profile-card {
-    width: 95%;
-    max-width: 1200px;
+    width: 98%;
+    /* make card fill more of the page */
+    max-width: 1320px;
+    /* a bit wider on large screens */
     background: #ffffff;
     border-radius: 26px;
     box-shadow: 0 24px 60px rgba(58, 35, 120, 0.18);
     display: flex;
     gap: 2.5rem;
-    padding: 2.25rem 2.75rem;
+    padding: 2rem 2rem;
     align-items: stretch;
 }
 
-/* left column */
+
+/* LEFT = 60%, RIGHT = 40% on desktop */
 .profile-left {
-    flex: 1.1;
+    flex: 0 0 60%;
+    max-width: 60%;
     display: flex;
     flex-direction: column;
 }
+
 
 /* ============ BACK LINK ============ */
 .back-link {
@@ -216,7 +223,8 @@ body {
 /* ============ RIGHT COLUMN (AVATAR + ILLUSTRATION) ============ */
 
 .profile-right {
-    flex: 0.9;
+    flex: 0 0 40%;
+    max-width: 40%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -301,7 +309,6 @@ body {
     border: 1px solid #e0dafc;
     display: none;
     flex-direction: column;
-    gap: 0.8rem;
     gap: 0.5rem;
     margin-bottom: 0.2rem;
 }
@@ -312,9 +319,15 @@ body {
 
 .profile-edit-form .form-row {
     display: flex;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+
+.profile-edit-form .form-group {
+    flex: 1;
+    display: flex;
     flex-direction: column;
     gap: 0.3rem;
-    font-size: 0.85rem;
 }
 
 .profile-edit-form label {
@@ -322,15 +335,16 @@ body {
     color: #51408a;
 }
 
+/* ✅ note the commas */
 .profile-edit-form textarea,
-.profile-edit-form input[type="text"] {
+.profile-edit-form input[type="text"],
+.profile-edit-form input[type="url"] {
     border-radius: 10px;
     border: 1px solid #d6d0ff;
     padding: 0.5rem 0.7rem;
     font-family: "Poppins", sans-serif;
     font-size: 0.85rem;
     resize: vertical;
-    /* min-height: 60px; */
     outline: none;
     background: #ffffff;
     transition:
@@ -340,7 +354,8 @@ body {
 }
 
 .profile-edit-form textarea:focus,
-.profile-edit-form input[type="text"]:focus {
+.profile-edit-form input[type="text"]:focus,
+.profile-edit-form input[type="url"]:focus {
     border-color: #6c4dfc;
     box-shadow: 0 0 0 2px rgba(108, 77, 252, 0.2);
 }
@@ -350,6 +365,7 @@ body {
     gap: 0.6rem;
     margin-top: 0.3rem;
 }
+
 
 .primary-btn {
     background: #6c4dfc;
@@ -375,7 +391,93 @@ body {
 }
 
 
+/* Flash message wrapper */
+.flash-wrapper {
+    width: 100%;
+    margin-bottom: 20px;
+}
 
+/* Flash box design */
+.flash-box {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 14px;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.3px;
+}
+
+/* SUCCESS (greenish, soft) */
+.flash-box.success {
+    background: rgba(34, 197, 94, 0.15);
+    /* #22C55E light */
+    color: #166534;
+    /* dark green */
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+/* ERROR (reddish, soft) */
+.flash-box.danger {
+    background: rgba(239, 68, 68, 0.15);
+    /* #EF4444 light */
+    color: #7F1D1D;
+    /* dark red */
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* TEXT inside box */
+.flash-text {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* MODALS */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(10, 6, 34, 0.45);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.modal-content {
+    width: min(430px, 90%);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 1.6rem 1.4rem;
+    text-align: center;
+    box-shadow: 0 18px 55px rgba(46, 34, 115, 0.4);
+    color: #2a214e;
+}
+
+.modal-content h3,
+.modal-content h2 {
+    margin-bottom: 0.9rem;
+    font-size: 1.05rem;
+}
+
+.modal-content p {
+    font-size: 0.8rem;
+    line-height: 1.45;
+    color: #625b87;
+}
+
+.modal-content button,
+.modal-btn {
+    margin-top: 1.1rem;
+    background: #6c4dfc;
+    color: #ffffff;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
 
 /* ================================
    FOOTER (FIXED)
