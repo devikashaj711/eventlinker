@@ -79,8 +79,8 @@
                             <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}" method="POST">
                                 <input type="hidden" name="receiver_id" value="{{ member_id }}">
                                 <button class="connect-btn" type="submit" {% if m.status_id in [1,2,3] %} disabled {% endif %}>
-                                    {% if m.status_id == 1 %} Pending
-                                    {% elif m.status_id == 2 %} Accepted
+                                    {% if m.status_id == 2 %} Pending
+                                    {% elif m.status_id == 1 %} Accepted
                                     {% elif m.status_id == 3 %} Declined
                                     {% else %} Request
                                     {% endif %}

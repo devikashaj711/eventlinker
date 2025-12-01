@@ -337,6 +337,8 @@ def update_profile():
 
     bio = request.form.get('bio') or None
     interests = request.form.get('interests') or None
+    instalink = request.form.get('instalink') or None
+    linkedinlink = request.form.get('linkedinlink') or None
 
     conn = get_db_connection()
     cursor = None
@@ -347,10 +349,12 @@ def update_profile():
             """
             UPDATE users
             SET bio = %s,
-                interests = %s
+                interests = %s,
+                insta_link = %s,
+                linkedin_link = %s
             WHERE user_id = %s
             """,
-            (bio, interests, session["user_id"])
+            (bio, interests, instalink, linkedinlink, session["user_id"])
         )
         conn.commit()
         flash("Profile updated successfully.", "success")
