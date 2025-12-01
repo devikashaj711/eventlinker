@@ -27,17 +27,51 @@
 
     <nav class="nav-links">
       <a href="{{ url_for('attendee_bp.attendee_homepage') }}" class="{% if not from_registered %}active{% endif %}">Dashboard</a>
-      <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">My Connections</a>
+      <!-- MY EVENTS DROPDOWN -->
+      <div class="dropdown">
+        <a href="#" id="eventsLink">My Events ▾</a>
+
+        <div class="submenu-vertical" id="eventsSubmenu">
+            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+              Registered Events
+            </a>
+
+            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                My Connections
+            </a>
+
+            <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+              Suggested Events
+          </a>
+        </div>
+      </div>
+
       <a href="{{ url_for('attendee_bp.attendee_connections') }}">
         Notifications
         {% if g.pending_request_count > 0 %}
         <span class="notification-badge">{{ g.pending_request_count }}</span>
         {% endif %}
       </a>
-      <a href="{{ url_for('attendee_bp.attendee_registered_events') }}" class="{% if from_registered %}active{% endif %}">My Events</a>
-      <a href="{{ url_for('user_bp.user_profile') }}">Profile</a>
+      <!-- <a href="{{ url_for('user_bp.user_profile') }}">Profile</a>
       <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-      <a href="{{ url_for('user_bp.logout_user') }}">Logout</a>
+      <a href="{{ url_for('user_bp.logout_user') }}">Logout</a> -->
+      <div class="profile-dropdown-wrapper">
+        <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+            <i class="fa fa-user"></i>
+        </div>
+    
+        <div id="profileDropdown" class="profile-dropdown-menu">
+            <a href="{{ url_for('user_bp.user_profile') }}">
+                <i class="fa fa-user"></i> Profile
+            </a>
+            <a href="{{ url_for('attendee_bp.about_page') }}">
+                <i class="fa fa-info-circle"></i> About Us
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}">
+                <i class="fa fa-sign-out"></i> Logout
+            </a>
+        </div>
+    </div>
     </nav>
   </header>
 
@@ -72,6 +106,27 @@
   <footer class="footer">
     <p>© 2025 EventLinker. All rights reserved.</p>
   </footer>
+
+  <script>
+    function toggleProfileDropdown() {
+        const menu = document.getElementById("profileDropdown");
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    // Close dropdown if clicking outside
+    document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("profileDropdown");
+        const btn = document.querySelector(".profile-icon-btn");
+
+        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    document.getElementById('eventsLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    });
+  </script>
 
 </body>
 </html>
