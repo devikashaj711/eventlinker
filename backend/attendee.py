@@ -291,7 +291,7 @@ def send_connection_request():
                     INSERT INTO event_connections
                     (requester_id, receiver_id, status_id, created_date, modified_date)
                     VALUES (%s, %s, %s, %s, %s)
-                """, (requester_id, receiver_id, 1, datetime.now(), datetime.now()))
+                """, (requester_id, receiver_id, 2, datetime.now(), datetime.now()))
 
                 conn.commit()
                 flash("Connection request sent!", "success")
@@ -323,7 +323,7 @@ def attendee_connections():
                 SELECT ec.requester_id, ec.status_id, u.first_name, u.last_name
                 FROM event_connections ec
                 JOIN users u ON ec.requester_id = u.user_id
-                WHERE ec.receiver_id = %s AND ec.status_id = 1
+                WHERE ec.receiver_id = %s AND ec.status_id = 2
             """, (user_id,))
             requests = cursor.fetchall()
         finally:
@@ -349,7 +349,7 @@ def accept_connection():
             cursor = conn.cursor()
             cursor.execute("""
                 UPDATE event_connections
-                SET status_id = 2, modified_date = %s
+                SET status_id = 1, modified_date = %s
                 WHERE requester_id = %s AND receiver_id = %s
             """, (datetime.now(), requester_id, user_id))
             conn.commit()
@@ -374,7 +374,7 @@ def load_pending_requests_count():
                 cursor.execute("""
                     SELECT COUNT(*) AS pending_count
                     FROM event_connections
-                    WHERE receiver_id = %s AND status_id = 1
+                    WHERE receiver_id = %s AND status_id = 2
                 """, (user_id,))
                 row = cursor.fetchone()
                 if row:
@@ -413,7 +413,7 @@ def attendee_my_connections():
                         ELSE ec.requester_id
                     END
                 WHERE (ec.requester_id = %s OR ec.receiver_id = %s)
-                  AND ec.status_id = 2
+                  AND ec.status_id = 1
             """, (user_id, user_id, user_id, user_id))
 
             connections = cursor.fetchall()

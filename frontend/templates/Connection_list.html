@@ -87,8 +87,8 @@
     <!-- Accept Form -->
     <form class="connection-form" action="{{ url_for('attendee_bp.accept_connection') }}" method="POST" style="display:inline-block;">
         <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
-        <button class="connect-btn" type="submit" {% if r.status_id==2 %} disabled {% endif %}>
-            {% if r.status_id == 1 %}
+        <button class="connect-btn" type="submit" {% if r.status_id==1 %} disabled {% endif %}>
+            {% if r.status_id == 2 %}
             Accept
             {% else %}
             Accepted
