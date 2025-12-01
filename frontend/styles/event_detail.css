@@ -272,6 +272,22 @@ main {
     box-shadow: 0 8px 24px rgba(90, 68, 255, 0.25);
 }
 
+/* current image css in edit form */
+.current-image {
+    display: inline-block;
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.current-image a {
+    color: #6c4dfc;
+    text-decoration: underline;
+}
+
+.current-image a:hover {
+    color: #4c32c5;
+}
+
 /* View Member List button */
 .member-list-btn {
     margin-top: 0.8rem;

@@ -34,9 +34,9 @@
                 <div class="logo-text-wrap">
                     <span class="logo-text">EventLinker</span>
                     {% if is_attendee %}
-                        <small class="logo-tagline">Attendee Dashboard</small>
+                    <small class="logo-tagline">Attendee Dashboard</small>
                     {% else %}
-                        <small class="logo-tagline">Organizer Dashboard</small>
+                    <small class="logo-tagline">Organizer Dashboard</small>
                     {% endif %}
                 </div>
                 <div class="logo-box"></div>
@@ -69,19 +69,19 @@
             <!-- Back link -->
             <div class="back-link">
                 {% if is_attendee %}
-                    {% if back_src == 'registered' %}
-                        <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
-                            <i class="fa fa-arrow-left"></i> Back to My Events
-                        </a>
-                    {% else %}
-                        <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
-                            <i class="fa fa-arrow-left"></i> Back to dashboard
-                        </a>
-                    {% endif %}
+                {% if back_src == 'registered' %}
+                <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                    <i class="fa fa-arrow-left"></i> Back to My Events
+                </a>
                 {% else %}
-                    <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
-                        <i class="fa fa-arrow-left"></i> Back to dashboard
-                    </a>
+                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
+                {% endif %}
+                {% else %}
+                <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
                 {% endif %}
             </div>
 
@@ -98,12 +98,11 @@
 
                     <!-- Member List button -->
                     {% if show_member_button %}
-    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id, back=request.full_path) }}"
-       class="member-list-btn">
-       View Member List
-    </a>
-{% endif %}
-
+                    <a href="{{ url_for('attendee_bp.attendee_member_list', event_id=event.event_id, back=request.full_path) }}"
+                        class="member-list-btn">
+                        View Member List
+                    </a>
+                    {% endif %}
 
                 </div>
 
@@ -112,15 +111,28 @@
                         <p><strong>QR Code:</strong></p>
                         <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                         <p>Scan QR code to register for this event</p>
+                    <p><strong>QR Code:</strong></p>
+                    <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     {% endif %}
                 </div>
+                <div class="event-info">
+                    {% if is_organizer and event.qr_code_path %}
+                    {% set qr_filename = event.qr_code_path.split('/')[-1] %}
+                    <small class="current-image">
+                        <a href="{{ event.qr_code_path }}" download="{{ qr_filename }}">
+                            Download QR Code
+                        </a>
+                    </small>
+                    {% endif %}
+                </div>
+
             </div>
 
             <!-- RIGHT COLUMN: banner image -->
             {% if event.image_path %}
-                <div class="event-banner">
-                    <img src="{{ event.image_path }}" alt="Event Image">
-                </div>
+            <div class="event-banner">
+                <img src="{{ event.image_path }}" alt="Event Image">
+            </div>
             {% endif %}
 
         </div>
@@ -143,4 +155,5 @@
       
 
 </body>
+
 </html>
