@@ -33,6 +33,7 @@ def attendee_event_details(event_id):
                 FROM event_details e
                 LEFT JOIN event_category c ON e.category_id = c.category_id
                 WHERE e.event_id = %s
+                ORDER BY e.modified_date DESC;
             """, (event_id,))
             event = cursor.fetchone()
         finally:
@@ -446,6 +447,8 @@ def view_user(user_id):
     role_name = "Organizer" if user['user_role_id'] == 1 else "Attendee"
 
     return render_template("user_detail.html", user=user, role_name=role_name)
+
+
 @attendee_bp.route('/decline_connection', methods=['POST'])
 def decline_connection():
     user_id = session.get('user_id')

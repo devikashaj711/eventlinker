@@ -266,11 +266,12 @@ def view_event(event_id):
     # Fetch event & category
     cursor.execute("""
         SELECT e.event_id, e.event_title, e.description, e.event_date, 
-               e.location, e.image_path, e.qr_code_path,
-               c.category_name
+       e.location, e.image_path, e.qr_code_path,
+       c.category_name
         FROM event_details e
         LEFT JOIN event_category c ON e.category_id = c.category_id
         WHERE e.event_id = %s AND e.created_by = %s
+        ORDER BY e.modified_date DESC;
     """, (event_id, session["user_id"]))
 
     event = cursor.fetchone()
