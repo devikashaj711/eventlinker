@@ -1,0 +1,463 @@
+/* ========== RESET ========== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ========== BODY & BACKGROUND ========== */
+/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
+
+/* body padding should match navbar height */
+body {
+    font-family: "Poppins", sans-serif;
+    color: #1e1238;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #b8affe, #f2e9ff);
+    display: flex;
+    flex-direction: column;
+    padding-top: 80px;
+    padding-bottom: 56px;
+    font-size: 0.9rem;
+
+    /* no page scroll on desktop */
+    overflow: hidden;
+}
+
+/* gradient bg layer */
+.page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #b8affe, #ffffff);
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    padding: 0.9rem 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(88, 69, 177, 0.15);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+/* left side: logo + tagline */
+.nav-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #6c4dfc;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    overflow: hidden;
+}
+
+.logo-text-wrap {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.logo-tagline {
+    font-size: 0.7rem;
+    color: #736b94;
+}
+
+/* right side links */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.4rem;
+    font-size: 0.8rem;
+}
+
+.nav-links a {
+    color: #5b4f8b;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links a:hover {
+    color: #6c4dfc;
+    transform: translateY(-1px);
+}
+
+.profile-icon,
+.logout-link i {
+    font-size: 0.9rem;
+}
+
+/* ============ NAVBAR DROPDOWN (My Events) ============ */
+
+.nav-links .dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+/* top-level "My Events ▾" link */
+.nav-links .dropdown>a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #5b4f8b;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.nav-links .dropdown>a:hover {
+    color: #6c4dfc;
+    transform: translateY(-1px);
+}
+
+/* vertical submenu panel */
+.submenu-vertical {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    min-width: 160px;
+    padding: 0.4rem 0.2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(88, 69, 177, 0.22);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+
+    /* hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+    z-index: 150;
+}
+
+/* submenu items */
+.submenu-vertical a {
+    display: block;
+    padding: 0.45rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    color: #5b4f8b;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.submenu-vertical a:hover {
+    background: #f3f0ff;
+    color: #6c4dfc;
+}
+
+/* show submenu on hover */
+.nav-links .dropdown:hover .submenu-vertical {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.nav-links a.active {
+    color: #b988dc;       /* green text or any color */
+    font-weight: 700;
+    border-bottom: 2px solid #b988dc;
+}
+
+/* =========================
+   CONNECTION LIST LAYOUT
+   (card + table styling to match organizer home)
+   ==========================*/
+
+/* Main card container */
+.member-container {
+    /* match overall card look from hero/events cards */
+    width: 95%;
+    max-width: 1350px;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding: 1.6rem 2.3rem 1.4rem;
+    background: #ffffff;
+    border-radius: 24px;
+    box-shadow: 0 16px 40px rgba(75, 61, 150, 0.18);
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    /* keep it nicely inside nav + footer area */
+    min-height: calc(100vh - 80px - 56px - 1.5rem);
+}
+
+
+/* ============ BACK LINK ============ */
+.back-link {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    margin-bottom: 0.2rem;
+    font-size: 0.8rem;
+}
+
+.back-link a {
+    text-decoration: none;
+    color: #6c4dfc;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.back-link a:hover {
+    color: #4c32c5;
+}
+
+.back-link i {
+    font-size: 0.9rem;
+}
+
+
+/* Heading + empty text */
+.title {
+    font-size: 1.3rem;
+    margin-bottom: 0.2rem;
+}
+
+.empty-msg {
+    font-size: 0.85rem;
+    color: #7c739c;
+}
+
+/* Wrap table so we can give it a soft background like events table */
+.member-table-wrapper {
+    flex: 1 1 auto;
+    min-height: 0;
+    border-radius: 18px;
+    border: 1px solid #ece7ff;
+    background: #faf9ff;
+    overflow-y: auto;
+    overflow-x: auto;
+    margin-top: 0.4rem;
+}
+
+/* Make sure the existing table sits inside wrapper if you add it later */
+.member-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 500px;
+    font-size: 0.8rem;
+}
+
+/* Gradient header like organizer events table */
+.member-table thead {
+    background: linear-gradient(90deg, #6c4dfc, #9b6bff);
+}
+
+.member-table th,
+.member-table td {
+    padding: 0.55rem 0.9rem;
+    text-align: left;
+}
+
+/* Header cells */
+.member-table thead th {
+    color: #ffffff;
+    font-weight: 600;
+    text-align: left;
+}
+
+/* Zebra striping + hover */
+.member-table tbody tr:nth-child(even) {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.member-table tbody tr:nth-child(odd) {
+    background: rgba(246, 244, 255, 0.9);
+}
+
+.member-table tbody tr:hover {
+    background: #ece5ff;
+}
+
+/* Center “Action” column like organizer actions */
+.member-table th:nth-child(3),
+.member-table td:nth-child(3) {
+    text-align: center;
+}
+
+/* Connection button – keep existing look but align with purple theme */
+.connect-btn {
+    padding: 0.35rem 1.1rem;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    background: #6c4dfc;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.connect-btn:hover:not(:disabled) {
+    background: #5b3af0;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(90, 68, 255, 0.35);
+}
+
+.connect-btn:disabled {
+    background: #a5a1d6;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* Optional: violet scrollbar just for the member table area */
+.member-table-wrapper::-webkit-scrollbar {
+    width: 8px;
+}
+
+.member-table-wrapper::-webkit-scrollbar-track {
+    background: #e4dcff;
+    border-radius: 999px;
+}
+
+.member-table-wrapper::-webkit-scrollbar-thumb {
+    background: #7c3aed;
+    border-radius: 999px;
+}
+
+.member-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #5b21b6;
+}
+
+.member-table-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: #7c3aed #e4dcff;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 20px;         /* adjust size */
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: transform 0.2s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+    transform: scale(1.2);  /* simple hover effect */
+}
+
+.icon-btn:disabled {
+    color: #ccc;             /* gray out disabled */
+    cursor: not-allowed;
+}
+
+.actions {
+    display: flex;
+    gap: 15px;               /* space between check/cross */
+    align-items: center;
+    padding-left: 50px;      /* horizontal padding */
+}
+
+
+
+
+/* ============ FOOTER (fixed) ============ */
+.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.7rem 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #7a719b;
+    background: transparent;
+    z-index: 90;
+}
+
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+        /* allow scroll on phones */
+    }
+
+    .navbar {
+        padding: 0.8rem 1.2rem;
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+    }
+
+    main {
+        padding: 1rem 0.75rem 1.8rem;
+    }
+
+    .member-container {
+        width: 100%;
+        padding: 1.3rem 1.5rem;
+        overflow-x: auto;
+        /* horizontal scroll if table is wide */
+    }
+
+    .title {
+        font-size: 1.3rem;
+    }
+
+    .member-table {
+        font-size: 0.8rem;
+        min-width: 480px;
+        /* keeps columns readable, container scrolls */
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding-inline: 1rem;
+    }
+
+    .logo-text {
+        font-size: 1.1rem;
+    }
+
+    .nav-links {
+        gap: 1rem;
+        font-size: 0.75rem;
+    }
+
+    .member-table th,
+    .member-table td {
+        padding: 0.5rem 0.6rem;
+    }
+}

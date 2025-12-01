@@ -33,12 +33,8 @@
             </a>
             <a href="#">Similarity</a>
 
-            <div class="dropdown">
-                <a href="#" id="eventsLink">My Events ▾</a>
-                <div id="eventsSubmenu" class="submenu-vertical">
-                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
-                </div>
-            </div>
+                 <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
+
 
             <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>

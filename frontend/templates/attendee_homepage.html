@@ -58,12 +58,7 @@
       </a>
       <a href="#">Similarity</a>
       <!-- Events dropdown -->
-      <div class="dropdown">
-        <a href="#" id="eventsLink">My Events ▾</a>
-        <div id="eventsSubmenu" class="submenu-vertical">
-          <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
-        </div>
-      </div>
+     <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
       <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
         <i class="fa fa-user profile-icon"></i>
         <span class="profile-text">Profile</span>
@@ -145,19 +140,10 @@
     const eventsLink = document.getElementById('eventsLink');
     const eventsSubmenu = document.getElementById('eventsSubmenu');
 
-    eventsLink.addEventListener('click', function (e) {
-      e.preventDefault();
-      eventsSubmenu.classList.toggle('active');
-    });
-
-    window.addEventListener('click', function (e) {
-      if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
-        eventsSubmenu.classList.remove('active');
-      }
-    });
-
-
-  </script>
+    document.getElementById('eventsLink').addEventListener('click', function(e) {
+    e.preventDefault(); // ← this would stop navigation
+});
+ </script>
 </body>
 
 </html>

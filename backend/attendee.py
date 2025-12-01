@@ -158,10 +158,9 @@ def about_page():
 @attendee_bp.route('/registered')
 def attendee_registered_events():
     user_id = session.get('user_id')
-    print("DEBUG: session user_id =", user_id)
-
     if not user_id:
-        return "User not logged in", 401
+        flash("Please log in", "danger")
+        return redirect(url_for('user_bp.login_user'))
 
     conn = get_db_connection()
     events = []
@@ -169,45 +168,33 @@ def attendee_registered_events():
     if conn:
         try:
             cursor = conn.cursor(dictionary=True)
-
-            # Fetch all event IDs for this user
             cursor.execute("""
                 SELECT event_id 
                 FROM event_registrations
                 WHERE user_id = %s
             """, (user_id,))
             rows = cursor.fetchall()
-            print("DEBUG: event_registrations rows =", rows)
 
-            if not rows:
-                print("DEBUG: User has no registered events.")
-                return render_template("attendee_homepage.html", events=[])
-
-            # Extract event IDs
-            event_id_list = [row['event_id'] for row in rows]
-            print("DEBUG: Extracted event_id_list =", event_id_list)
-
-            # Prepare placeholders for SQL IN clause
-            placeholders = ','.join(['%s'] * len(event_id_list))
-            query = f"""
-                SELECT *
-                FROM event_details
-                WHERE event_id IN ({placeholders})
-                ORDER BY event_date ASC
-            """
-            print("DEBUG: Final SQL Query =", query)
-
-            # Execute query safely with parameter list
-            cursor.execute(query, event_id_list)
-            events = cursor.fetchall()
-            print("DEBUG: event_details fetched =", events)
-
+            if rows:
+                event_id_list = [row['event_id'] for row in rows]
+                placeholders = ','.join(['%s'] * len(event_id_list))
+                query = f"""
+                    SELECT e.*, c.category_name
+                    FROM event_details e
+                    LEFT JOIN event_category c ON e.category_id = c.category_id
+                    WHERE e.event_id IN ({placeholders})
+                    ORDER BY event_date ASC
+                """
+                cursor.execute(query, event_id_list)
+                events = cursor.fetchall()
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("attendee_homepage.html", events=events, from_registered=True)
-
-
+    return render_template(
+        "attendee_registered_events.html",
+        events=events,
+        from_registered=True
+    )
 
 
 @attendee_bp.route('/send_connection_request', methods=['POST'])
