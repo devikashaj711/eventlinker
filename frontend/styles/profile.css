@@ -495,6 +495,110 @@ body {
     background: transparent;
     z-index: 90;
 }
+ /* -------- PROFILE DROPDOWN -------- */
+ .profile-dropdown-wrapper {
+    position: relative;
+  }
+  
+  .profile-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5b4f8b;
+    font-size: 1rem;
+    transition: 0.2s ease;
+  }
+  
+  .profile-icon-btn:hover {
+    background: #e7e1ff;
+    color: #6c4dfc;
+  }
+  
+  /* Dropdown menu */
+  .profile-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
+    padding: 0.5rem 0;
+    width: 160px;
+  
+    display: none; /* hidden by default */
+    flex-direction: column;
+    z-index: 200;
+  }
+  
+  .profile-dropdown-menu a {
+    padding: 0.55rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #5b4f8b;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+  
+  .profile-dropdown-menu a:hover {
+    background: #f3f0ff;
+    color: #6c4dfc;
+  }
+  /* ---------------- MY EVENTS DROPDOWN ---------------- */
+
+.dropdown {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.submenu-vertical {
+    position: absolute;
+    top: 130%;
+    right: 0;
+    min-width: 160px;
+    padding: 0.4rem 0.2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(88, 69, 177, 0.22);
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+
+    /* HIDDEN BY DEFAULT */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(6px);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+
+    z-index: 150;
+}
+
+.nav-links .dropdown:hover .submenu-vertical {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.submenu-vertical a {
+    padding: 0.55rem 0.9rem;
+    text-decoration: none;
+    color: #5b4f8b;
+    font-size: 0.8rem;
+    border-radius: 8px;
+}
+
+.submenu-vertical a:hover {
+    background: #f3f0ff;
+    color: #6c4dfc;
+}
 
 /* ================================
    RESPONSIVE
@@ -543,4 +647,7 @@ body {
     .profile-card {
         padding: 1.4rem 1.1rem 1.6rem;
     }
+
+   
+
 }

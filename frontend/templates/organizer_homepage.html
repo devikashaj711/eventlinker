@@ -33,7 +33,7 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
+            <!-- <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a> -->
 
             <!-- Role switch dropdown (organizer only) -->
 
@@ -50,14 +50,31 @@
             </form>
 
             <!-- <a href="#">My Events</a> -->
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+            <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
             <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
                 <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
-            </a>
+            </a> -->
+            <div class="profile-dropdown-wrapper">
+                <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+                    <i class="fa fa-user"></i>
+                </div>
+            
+                <div id="profileDropdown" class="profile-dropdown-menu">
+                    <a href="{{ url_for('user_bp.user_profile') }}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                    <a href="{{ url_for('attendee_bp.about_page') }}">
+                        <i class="fa fa-info-circle"></i> About Us
+                    </a>
+                    <a href="{{ url_for('user_bp.logout_user') }}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -238,6 +255,25 @@
                 aboutModal.style.display = 'none';
             }
         });
+
+        function toggleProfileDropdown() {
+        const menu = document.getElementById("profileDropdown");
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    // Close dropdown if clicking outside
+    document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("profileDropdown");
+        const btn = document.querySelector(".profile-icon-btn");
+
+        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    document.getElementById('eventsLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    });
     </script>
 
 </body>

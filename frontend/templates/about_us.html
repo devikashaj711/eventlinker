@@ -29,16 +29,57 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
-            <a href="{{ url_for('attendee_bp.attendee_connections') }}">Connections</a>
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
+
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}"
+               class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
+                Dashboard
             </a>
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
+        
+            <!-- MY EVENTS DROPDOWN -->
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
+        
+                <div class="submenu-vertical" id="eventsSubmenu">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                        Registered Events
+                    </a>
+        
+                    <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                        My Connections
+                    </a>
+        
+                    <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+                        Suggested Events
+                    </a>
+                </div>
+            </div>
+        
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                    <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
             </a>
+        
+            <!-- PROFILE DROPDOWN -->
+            <div class="profile-dropdown-wrapper">
+                <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+                    <i class="fa fa-user"></i>
+                </div>
+        
+                <div id="profileDropdown" class="profile-dropdown-menu">
+                    <a href="{{ url_for('user_bp.user_profile') }}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                    <a href="{{ url_for('attendee_bp.about_page') }}">
+                        <i class="fa fa-info-circle"></i> About Us
+                    </a>
+                    <a href="{{ url_for('user_bp.logout_user') }}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
+        
         </nav>
     </header>
 
@@ -112,6 +153,26 @@
 
         </section>
     </main>
+    <script>
+        function toggleProfileDropdown() {
+        const menu = document.getElementById("profileDropdown");
+        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+    }
+
+    // Close dropdown if clicking outside
+    document.addEventListener("click", function (event) {
+        const dropdown = document.getElementById("profileDropdown");
+        const btn = document.querySelector(".profile-icon-btn");
+
+        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+            dropdown.style.display = "none";
+        }
+    });
+
+    document.getElementById('eventsLink').addEventListener('click', function (e) {
+    e.preventDefault();
+    });
+    </script>
 
     <!-- FOOTER
     <footer class="footer">
