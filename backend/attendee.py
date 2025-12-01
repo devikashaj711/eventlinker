@@ -42,6 +42,51 @@ def attendee_event_details(event_id):
         back_src=back_src
     )
 
+@attendee_bp.route('/register_event/<int:event_id>')
+def register_event(event_id):
+    user_id = session.get("user_id")
+
+    # If not logged in → redirect to login
+    if not user_id:
+        session["redirect_after_login"] = url_for(
+            'attendee_bp.register_event', event_id=event_id
+        )
+        flash("Please log in to register for the event", "info")
+        return redirect(url_for('user_bp.login_user'))
+
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+
+            # Check if already registered
+            cursor.execute("""
+                SELECT registration_id 
+                FROM event_registrations 
+                WHERE user_id = %s AND event_id = %s
+            """, (user_id, event_id))
+            existing = cursor.fetchone()
+
+            if existing:
+                flash("You are already registered for this event!", "warning")
+            else:
+                # Register the attendee
+                cursor.execute("""
+                    INSERT INTO event_registrations (event_id, user_id, created_date)
+                    VALUES (%s, %s, NOW())
+                """, (event_id, user_id))
+                conn.commit()
+                flash("Successfully registered for the event!", "success")
+
+        finally:
+            close_db_connection(conn, cursor)
+
+    # Redirect to that event’s details
+    return redirect(
+        url_for('attendee_bp.attendee_event_details', event_id=event_id, registered=1)
+    )
+
+
 
 @attendee_bp.route('/attendee_homepage')
 def attendee_homepage():

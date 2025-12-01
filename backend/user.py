@@ -37,11 +37,19 @@ def login_user():
                 user = cursor.fetchone()
 
                 if user:
-                    flash("Login successful! Welcome back.", "success")
+                    # flash("Login successful! Welcome back.", "success")
 
-                    # Save session
                     session["user_id"] = user["user_id"]
                     session["user_role_id"] = user["user_role_id"]
+
+                    # --------------------------------------
+                    # STEP 2: Handle redirect after QR login
+                    # --------------------------------------
+                    if "redirect_after_login" in session:
+                        next_url = session.pop("redirect_after_login")
+                        return redirect(next_url)
+                    # --------------------------------------
+
 
                     # Redirect by user role
                     if user["user_role_id"] == 1:

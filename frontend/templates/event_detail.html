@@ -11,6 +11,19 @@
 </head>
 
 <body>
+
+    <!-- FLASH MESSAGES -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+                <div class="flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <!-- END FLASH MESSAGES -->
+
     <div class="page-bg"></div>
 
     <!-- NAVBAR -->
@@ -95,6 +108,9 @@
 
                 <div class="event-qr">
                     {% if event.qr_code_path %}
+                        <p><strong>QR Code:</strong></p>
+                        <img src="{{ event.qr_code_path }}" alt="Event QR Code">
+                        <p>Scan QR code to register for this event</p>
                     <p><strong>QR Code:</strong></p>
                     <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     {% endif %}
@@ -125,6 +141,19 @@
     <footer class="footer">
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Auto-hide flash messages after 2.5 seconds
+        setTimeout(function () {
+          const flashBox = document.querySelector('.flash-messages');
+          if (flashBox) {
+            flashBox.classList.add('fade-out');
+            setTimeout(() => flashBox.remove(), 600); // remove from DOM after animation
+          }
+        }, 2500);
+      </script>
+      
+
 </body>
 
 </html>
