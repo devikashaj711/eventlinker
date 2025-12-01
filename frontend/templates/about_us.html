@@ -50,11 +50,11 @@
             <div class="about-left">
                 <!-- Back link -->
                 <div class="back-link">
-                    {% if is_organizer %}
+                    {% if profile_home == 'organizer' %}
                     <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
                         <i class="fa fa-arrow-left"></i> Back to dashboard
                     </a>
-                    {% else %}
+                    {% elif profile_home == 'attendee' %}
                     <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
                         <i class="fa fa-arrow-left"></i> Back to dashboard
                     </a>

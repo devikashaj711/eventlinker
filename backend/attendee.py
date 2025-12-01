@@ -178,8 +178,28 @@ def attendee_member_list(event_id):
 
 @attendee_bp.route('/about')
 def about_page():
-    is_organizer = (session.get("user_role_id") == 1)
-    return render_template('about_us.html', is_organizer=is_organizer)
+    user_role_id = session["user_role_id"]
+    is_organizer = (user_role_id == 1)
+    # Organizer (1) and pure attendee (2) can both act as attendee
+    is_attendee = (user_role_id in (1, 2))
+
+    # Which dashboard/view is currently active? (controlled by dropdown)
+    active_role = session.get("active_role")
+
+    # Decide where the main profile 'home/back' should go in the navbar
+    profile_home = None
+    if is_organizer and active_role == "attendee":
+        profile_home = "attendee"
+    elif is_organizer:
+        profile_home = "organizer"
+    elif is_attendee:
+        profile_home = "attendee"
+        
+    return render_template('about_us.html', 
+            is_attendee=is_attendee,
+            is_organizer=is_organizer,
+            profile_home=profile_home,
+            active_role=active_role)
 
 @attendee_bp.route('/registered')
 def attendee_registered_events():
