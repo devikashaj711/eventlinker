@@ -29,7 +29,17 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Notifications</a>
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
+            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">My Connections</a>
+
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}"
+            id="connections"
+            class="{% if request.endpoint == 'attendee_bp.attendee_connections' %}active{% endif %}">
+            Notifications
+            {% if g.pending_request_count > 0 %}
+            <span class="notification-badge">{{ g.pending_request_count }}</span>
+            {% endif %}
+            </a>
             <a href="#">Similarity</a>
             <!-- Events dropdown -->
             <div class="dropdown">
@@ -38,11 +48,11 @@
                     <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
                 </div>
             </div>
-
             <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
+            <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
             <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
                 <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>

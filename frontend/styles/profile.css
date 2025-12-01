@@ -100,7 +100,11 @@ body {
     color: #6c4dfc;
     transform: translateY(-1px);
 }
-
+.nav-links a.active {
+    color: #b988dc;       /* green text or any color */
+    font-weight: 700;
+    border-bottom: 2px solid #b988dc;
+}
 
 /* ============ PROFILE MAIN LAYOUT ============ */
 
