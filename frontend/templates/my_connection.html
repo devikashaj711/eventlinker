@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>My Connections | Event Linker</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/member_list.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="page-bg"></div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Attendee Dashboard</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
+            </a>
+            <a href="#">Similarity</a>
+
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
+                <div id="eventsSubmenu" class="submenu-vertical">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+                <i class="fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="member-container">
+
+            <!-- Back link -->
+            <div class="back-link">
+                <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to dashboard
+                </a>
+            </div>
+
+            <h1 class="title">My Connections</h1>
+
+            {% if connections|length == 0 %}
+            <p class="empty-msg">You have no connections yet.</p>
+            {% else %}
+            <table class="member-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for c in connections %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ c.first_name }} {{ c.last_name }}</td>
+                        <td>
+    <a href="{{ url_for('attendee_bp.view_user', user_id=c.connected_user_id) }}">
+        <button class="btn-primary">View</button>
+    </a>
+</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const eventsLink = document.getElementById('eventsLink');
+        const eventsSubmenu = document.getElementById('eventsSubmenu');
+
+        eventsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            eventsSubmenu.classList.toggle('active');
+        });
+
+        window.addEventListener('click', function (e) {
+            if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
+                eventsSubmenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

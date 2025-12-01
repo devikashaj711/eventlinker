@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Details | Event Linker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/member_list.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+    <div class="page-bg"></div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+                <div class="logo-text-wrap">
+                    <span class="logo-text">EventLinker</span>
+                    <small class="logo-tagline">Attendee Dashboard</small>
+                </div>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
+            </a>
+            <a href="#">Similarity</a>
+
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
+                <div id="eventsSubmenu" class="submenu-vertical">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+            </a>
+            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+                <i class="fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+            </a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="member-container">
+            <div class="back-link">
+                <a href="{{ request.referrer or url_for('attendee_bp.attendee_homepage') }}">
+                    <i class="fa fa-arrow-left"></i> Back to connections
+                </a>
+            </div>
+
+            <h1 class="title">User Details</h1>
+
+            {% if user %}
+            <table class="member-table">
+                <tr>
+                    <th>First Name</th>
+                    <td>{{ user.first_name }}</td>
+                </tr>
+                <tr>
+                    <th>Last Name</th>
+                    <td>{{ user.last_name }}</td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <th>Role</th>
+                    <td>{{ role_name }}</td>
+                </tr>
+                <tr>
+                    <th>Instagram</th>
+                    <td>{{ user.instagram or "N/A" }}</td>
+                </tr>
+                <tr>
+                    <th>LinkedIn</th>
+                    <td>{{ user.linkedin_link or "N/A" }}</td>
+                </tr>
+                <tr>
+                    <th>Interest</th>
+                    <td>{{ user.interest or "N/A" }}</td>
+                </tr>
+            </table>
+            {% else %}
+            <p class="empty-msg">User details not available.</p>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 EventLinker. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const eventsLink = document.getElementById('eventsLink');
+        const eventsSubmenu = document.getElementById('eventsSubmenu');
+
+        eventsLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            eventsSubmenu.classList.toggle('active');
+        });
+
+        window.addEventListener('click', function (e) {
+            if (!eventsLink.contains(e.target) && !eventsSubmenu.contains(e.target)) {
+                eventsSubmenu.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+
+</html>

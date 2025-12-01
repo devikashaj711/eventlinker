@@ -347,3 +347,69 @@ def load_pending_requests_count():
                     g.pending_request_count = row['pending_count']
             finally:
                 close_db_connection(conn, cursor)
+                
+                
+@attendee_bp.route('/my-connections')
+def attendee_my_connections():
+    user_id = session.get('user_id')
+
+    if not user_id:
+        return redirect(url_for('user_bp.login_user'))
+
+    conn = get_db_connection()
+    connections = []
+
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+
+            # Fetch all connected users (status = 2) where current user is either requester or receiver
+            cursor.execute("""
+                SELECT 
+                    CASE 
+                        WHEN ec.requester_id = %s THEN ec.receiver_id
+                        ELSE ec.requester_id
+                    END AS connected_user_id,
+                    u.first_name,
+                    u.last_name
+                FROM event_connections ec
+                JOIN users u 
+                    ON u.user_id = CASE 
+                        WHEN ec.requester_id = %s THEN ec.receiver_id
+                        ELSE ec.requester_id
+                    END
+                WHERE (ec.requester_id = %s OR ec.receiver_id = %s)
+                  AND ec.status_id = 2
+            """, (user_id, user_id, user_id, user_id))
+
+            connections = cursor.fetchall()
+
+        finally:
+            close_db_connection(conn, cursor)
+
+    return render_template("my_connection.html", connections=connections)
+@attendee_bp.route('/user/<int:user_id>')
+def view_user(user_id):
+    conn = get_db_connection()
+    user = None
+
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("""
+                SELECT user_id, first_name, last_name, email, user_role_id,
+                       insta_link, linkedin_link, interests
+                FROM users
+                WHERE user_id = %s
+            """, (user_id,))
+            user = cursor.fetchone()
+        finally:
+            close_db_connection(conn, cursor)
+
+    if not user:
+        return "User not found", 404
+
+    # Determine role name
+    role_name = "Organizer" if user['user_role_id'] == 1 else "Attendee"
+
+    return render_template("user_detail.html", user=user, role_name=role_name)
