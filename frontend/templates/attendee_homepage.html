@@ -32,13 +32,15 @@
     </div>
 
     <nav class="nav-links">
-      <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
+      <a href="{{ url_for('attendee_bp.attendee_homepage') }}"
+   class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
+   Dashboard
+</a>
 
       <!-- Role switch dropdown (only when real role_id == 1) -->
       {% if is_organizer %}
       <form method="post" action="{{ url_for('user_bp.switch_view') }}" class="role-switch-form">
         <label for="active_role">View as:</label>
-
         <span class="role-switch-select-wrapper">
           <select name="active_role" id="active_role" onchange="this.form.submit()">
             <option value="organizer" {% if active_role=='organizer' %}selected{% endif %}>Organizer</option>
@@ -47,8 +49,7 @@
         </span>
       </form>
       {% endif %}
-<a href="{{ url_for('attendee_bp.attendee_my_connections') }}">My Connections</a>
-
+      <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">My Connections</a>
       <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
         Notifications
         {% if g.pending_request_count > 0 %}
@@ -63,11 +64,11 @@
           <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered</a>
         </div>
       </div>
-
       <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
         <i class="fa fa-user profile-icon"></i>
         <span class="profile-text">Profile</span>
       </a>
+      <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
       <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
         <i class="fa fa-sign-out"></i>
         <span class="profile-text">Logout</span>
@@ -77,7 +78,6 @@
 
   <section class="event-cards-section">
     <div class="card-container">
-
       {% for event in events %}
       <div class="card">
         <img src="{{ event.image_path }}" alt="{{ event.event_title }}" class="card-image">
@@ -89,11 +89,9 @@
             <i class="fa fa-calendar"></i> {{ event.event_date }} |
             <i class="fa fa-map-marker"></i> {{ event.location }}
           </p>
-
           <p class="card-description">
             {{ event.description }}
           </p>
-
           {% if from_registered %}
           <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id, registered=1) }}">
             {% else %}
@@ -104,16 +102,13 @@
         </div>
       </div>
       {% endfor %}
-
       {% if events|length == 0 %}
       <p style="text-align:center; padding:20px; font-size:1.1rem;">
         No events available at the moment.
       </p>
       {% endif %}
-
     </div>
   </section>
-
   <footer class="footer">
     <p>© 2025 EventLinker. All rights reserved.</p>
   </footer>

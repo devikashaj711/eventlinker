@@ -441,6 +441,11 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 10px 28px rgba(108, 77, 252, 0.45);
 }
+.nav-links a.active {
+    color: #b988dc;       /* green text or any color */
+    font-weight: 700;
+    border-bottom: 2px solid #b988dc;
+}
 
 /* ========== FOOTER (fixed) ========== */
 .footer {

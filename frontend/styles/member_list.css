@@ -186,7 +186,11 @@ body {
     transform: translateY(0);
 }
 
-
+.nav-links a.active {
+    color: #b988dc;       /* green text or any color */
+    font-weight: 700;
+    border-bottom: 2px solid #b988dc;
+}
 
 /* =========================
    CONNECTION LIST LAYOUT

@@ -26,6 +26,11 @@
         </div>
 
         <nav class="nav-links">
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
+            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}"
+   class="{% if request.endpoint == 'attendee_bp.attendee_my_connections' %}active{% endif %}">
+   My Connections
+</a>
             <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
                 Notifications
                 {% if g.pending_request_count > 0 %}
@@ -45,6 +50,8 @@
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
             </a>
+            <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
+
             <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
                 <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
