@@ -33,9 +33,9 @@
 
     <nav class="nav-links">
       <a href="{{ url_for('attendee_bp.attendee_homepage') }}"
-   class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
-   Dashboard
-</a>
+        class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
+        Dashboard
+      </a>
 
       <!-- Role switch dropdown (only when real role_id == 1) -->
       {% if is_organizer %}
@@ -56,9 +56,9 @@
         <span class="notification-badge">{{ g.pending_request_count }}</span>
         {% endif %}
       </a>
-      <a href="#">Similarity</a>
+      <a href="{{ url_for('attendee_bp.attendee_similarity') }}">Similarity</a>
       <!-- Events dropdown -->
-     <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
+      <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
       <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
         <i class="fa fa-user profile-icon"></i>
         <span class="profile-text">Profile</span>
@@ -140,10 +140,10 @@
     const eventsLink = document.getElementById('eventsLink');
     const eventsSubmenu = document.getElementById('eventsSubmenu');
 
-    document.getElementById('eventsLink').addEventListener('click', function(e) {
-    e.preventDefault(); // ← this would stop navigation
-});
- </script>
+    document.getElementById('eventsLink').addEventListener('click', function (e) {
+      e.preventDefault(); // ← this would stop navigation
+    });
+  </script>
 </body>
 
 </html>

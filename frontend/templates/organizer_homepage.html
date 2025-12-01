@@ -186,25 +186,18 @@
     </footer>
 
     <!-- SUCCESS MODAL (unchanged logic) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
     <div id="successModal" class="modal">
+        {% for category, message in messages %}
         <div class="modal-content">
-            <h3>Event Added Successfully!</h3>
+            <h3>{{ message }}</h3>
             <button onclick="closeModal()">OK</button>
         </div>
+        {% endfor %}
     </div>
-
-    <!-- ABOUT MODAL -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content about-content">
-            <h2>About Event Linker</h2>
-            <p>
-                EventLinker is an integrated event networking platform designed for organizers and attendees.
-                It allows event creation, QR-based attendee onboarding, profile creation, and seamless
-                networking through social links.
-            </p>
-            <button class="modal-btn" onclick="closeAboutModal()">Close</button>
-        </div>
-    </div>
+    {% endif %}
+    {% endwith %}
 
     <!-- JS -->
     <script>

@@ -15,11 +15,11 @@
     <!-- FLASH MESSAGES -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-        <div class="flash-messages">
-            {% for category, message in messages %}
-                <div class="flash-{{ category }}">{{ message }}</div>
-            {% endfor %}
-        </div>
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
     {% endif %}
     {% endwith %}
     <!-- END FLASH MESSAGES -->
@@ -48,10 +48,10 @@
             <a href="#">Similarity</a>
 
 
-<a href="{{ url_for('attendee_bp.attendee_registered_events') }}"
-   class="{% if from_registered %}active{% endif %}">
-   My Events
-</a>
+            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}"
+                class="{% if from_registered %}active{% endif %}">
+                My Events
+            </a>
 
 
             <a href="{{ url_for('user_bp.user_profile') }}">
@@ -108,9 +108,13 @@
 
                 <div class="event-qr">
                     {% if event.qr_code_path %}
-                        <p><strong>QR Code:</strong></p>
-                        <img src="{{ event.qr_code_path }}" alt="Event QR Code">
-                        <p>Scan QR code to register for this event</p>
+                    <p><strong>QR Code:</strong></p>
+                    <img src="{{ event.qr_code_path }}" alt="Event QR Code">
+                    <p>Scan QR code to register for this event or
+                        <a href="{{ url_for('attendee_bp.register_event', event_id=event.event_id) }}">
+                            click here to join using link
+                        </a>.
+                    </p>
                     <!-- <p><strong>QR Code:</strong></p> -->
                     <!-- <img src="{{ event.qr_code_path }}" alt="Event QR Code"> -->
                     {% endif %}
@@ -145,14 +149,14 @@
     <script>
         // Auto-hide flash messages after 2.5 seconds
         setTimeout(function () {
-          const flashBox = document.querySelector('.flash-messages');
-          if (flashBox) {
-            flashBox.classList.add('fade-out');
-            setTimeout(() => flashBox.remove(), 600); // remove from DOM after animation
-          }
+            const flashBox = document.querySelector('.flash-messages');
+            if (flashBox) {
+                flashBox.classList.add('fade-out');
+                setTimeout(() => flashBox.remove(), 600); // remove from DOM after animation
+            }
         }, 2500);
-      </script>
-      
+    </script>
+
 
 </body>
 

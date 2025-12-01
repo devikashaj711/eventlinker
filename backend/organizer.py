@@ -13,6 +13,8 @@ from database import get_db_connection, close_db_connection
 import qrcode
 from storage import upload_file_to_s3, upload_qr_to_s3, delete_from_s3
 
+#AI Similarity
+from ai_utils import embed_text, embedding_to_json
 
 # -------------------------------------
 #  Blueprint Setup
@@ -185,18 +187,22 @@ def save_event():
     try:
         cursor = conn.cursor()
 
+        # Build an AI embedding for this event (title + description)
+        event_text = f"{title}\n{description or ''}".strip()
+        event_embedding_vec = embed_text(event_text)
+        event_embedding_json = embedding_to_json(event_embedding_vec)
 
-        # Insert event WITHOUT QR first
+        # Insert event WITHOUT QR first (now including embeddings)
         insert_sql = """
             INSERT INTO event_details 
             (category_id, event_title, description, event_date, location, 
-             image_path, qr_code_path, created_by, is_active, created_date)
-            VALUES (%s,%s,%s,%s,%s,%s,'qr_codes/sample.png',%s,1,NOW())
+            image_path, qr_code_path, created_by, is_active, created_date, embedding)
+            VALUES (%s,%s,%s,%s,%s,%s,'qr_codes/sample.png',%s,1,NOW(),%s)
         """
 
         cursor.execute(insert_sql, (
-            category_id, title, description, event_date,
-            location, image_path, user_id
+        category_id, title, description, event_date,
+        location, image_path, user_id, event_embedding_json
         ))
 
         conn.commit()
@@ -222,8 +228,8 @@ def save_event():
 
         # Update event record with QR URL
         cursor.execute(
-            "UPDATE event_details SET qr_code_path=%s WHERE event_id=%s",
-            (qr_path, event_id)
+            "UPDATE event_details SET qr_code_path=%s, qr_link=%s WHERE event_id=%s",
+            (qr_path, qr_data, event_id)
         )
         conn.commit()
 
@@ -238,6 +244,7 @@ def save_event():
         close_db_connection(conn, cursor)
 
     return redirect(url_for("organizer_bp.organizer_homepage", success="true"))
+
 
 
 
@@ -341,7 +348,7 @@ def update_event(event_id):
 
     # Fetch existing event
     cursor.execute("""
-        SELECT image_path, qr_code_path, event_date
+        SELECT image_path, qr_code_path, qr_link, event_date
         FROM event_details
         WHERE event_id=%s AND created_by=%s
     """, (event_id, session["user_id"]))
@@ -355,6 +362,7 @@ def update_event(event_id):
 
     old_image = event["image_path"]
     old_qr = event["qr_code_path"]
+    old_qr_link = event["qr_link"]
     old_date = event["event_date"]
 
 
@@ -392,6 +400,8 @@ def update_event(event_id):
         new_qr_path = upload_qr_to_s3(qr_img)
     else:
         new_qr_path = old_qr
+        qr_data = old_qr_link
+
 
 
     # Update Event in DB
@@ -404,11 +414,12 @@ def update_event(event_id):
             location=%s,
             image_path=%s,
             qr_code_path=%s,
+            qr_link=%s,
             modified_date=NOW()
         WHERE event_id=%s AND created_by=%s
     """, (
         category_id, title, description, new_event_date, location,
-        new_image_path, new_qr_path, event_id, session["user_id"]
+        new_image_path, new_qr_path, qr_data, event_id, session["user_id"]
     ))
 
     conn.commit()

@@ -7,7 +7,14 @@ from flask import g
 from flask import request, redirect, url_for, flash
 from datetime import datetime
 
+# AI Similarity
+import json
+import numpy as np
+from ai_utils import embed_text, json_to_embedding, cosine_sim
+
 attendee_bp = Blueprint('attendee_bp', __name__)
+
+
 @attendee_bp.route('/attendee/event/<int:event_id>')
 def attendee_event_details(event_id):
     conn = get_db_connection()
@@ -442,3 +449,107 @@ def decline_connection():
             close_db_connection(conn, cursor)
 
     return ('', 204)  # Empty response for AJAX
+
+
+@attendee_bp.route("/similarity")
+def attendee_similarity():
+    # 1) Auth + handle organizer-as-attendee
+    if "user_id" not in session:
+        flash("Please log in first.", "danger")
+        return redirect(url_for("user_bp.login_user"))
+
+    user_id = session["user_id"]
+    user_role_id = session.get("user_role_id")
+    active_role = session.get("active_role")
+
+    # Organizer hitting this? Treat it as attendee view.
+    if user_role_id == 1 and active_role != "attendee":
+        session["active_role"] = "attendee"
+        active_role = "attendee"
+
+    if user_role_id not in (1, 2):
+        flash("You are not allowed to access this page.", "danger")
+        return redirect(url_for("user_bp.user_profile"))
+
+    # 2) Pull user profile + registrations + upcoming events with embeddings
+    conn = get_db_connection()
+    user = None
+    events = []
+    registered_event_ids = set()
+
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+
+            # User profile
+            cursor.execute("""
+                SELECT bio, interests
+                FROM users
+                WHERE user_id = %s
+            """, (user_id,))
+            user = cursor.fetchone() or {}
+
+            bio = user.get("bio") or ""
+            interests = user.get("interests") or ""
+            query_text = (bio + "\n" + interests).strip()
+            if not query_text:
+                query_text = "events I might like"
+
+            # Already registered events
+            cursor.execute("""
+                SELECT event_id
+                FROM event_registrations
+                WHERE user_id = %s
+            """, (user_id,))
+            rows = cursor.fetchall()
+            registered_event_ids = {r["event_id"] for r in rows}
+
+            # Upcoming active events + embeddings
+            cursor.execute("""
+                SELECT event_id, event_title, description, event_date,
+                       location, image_path, embedding
+                FROM event_details
+                WHERE is_active = 1
+                  AND event_date >= NOW()
+            """)
+            events = cursor.fetchall()
+        finally:
+            close_db_connection(conn, cursor)
+
+    if not events:
+        return render_template("similarity.html",
+                               recommended_events=[])
+
+    # 3) Build QUERY embedding ONCE from profile text
+    query_embedding = embed_text(query_text)
+
+    # 4) Compute similarity using stored event embeddings
+    scored_events = []
+    for e in events:
+        # Skip events user is already registered for
+        if e["event_id"] in registered_event_ids:
+            continue
+
+        raw_emb = e.get("embedding")
+        if not raw_emb:
+            continue  # no embedding stored, skip
+
+        try:
+            event_emb = json_to_embedding(raw_emb)
+        except Exception as ex:
+            print(f"Error parsing embeddings for event {e['event_id']}: {ex}")
+            continue
+
+        score = cosine_sim(query_embedding, event_emb)
+        e_with_score = dict(e)
+        e_with_score["similarity_score"] = score
+        scored_events.append(e_with_score)
+
+    # 5) Sort & take top N
+    scored_events.sort(key=lambda x: x["similarity_score"], reverse=True)
+    top_events = scored_events[:10]
+
+    return render_template(
+        "similarity.html",
+        recommended_events=top_events
+    )
