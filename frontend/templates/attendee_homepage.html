@@ -32,7 +32,7 @@
     </div>
 
     <nav class="nav-links">
-      <a href="#" onclick="openAboutModal()">About</a>
+      <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
       <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Connections</a>
       <a href="#">Similarity</a>
       <!-- Events dropdown -->
@@ -93,7 +93,7 @@
     <p>© 2025 EventLinker. All rights reserved.</p>
   </footer>
 
-  <!-- ABOUT MODAL -->
+  <!-- ABOUT MODAL
   <div id="aboutModal" class="modal">
     <div class="modal-content about-content">
       <h2>About EventLinker</h2>
@@ -105,22 +105,22 @@
       </p>
       <button class="modal-btn" onclick="closeAboutModal()">Close</button>
     </div>
-  </div>
+  </div> -->
 
   <script>
     // About modal
-    function openAboutModal() {
-      document.getElementById('aboutModal').style.display = 'flex';
-    }
-    function closeAboutModal() {
-      document.getElementById('aboutModal').style.display = 'none';
-    }
-    window.onclick = function (e) {
-      let modal = document.getElementById('aboutModal');
-      if (e.target === modal) {
-        modal.style.display = "none";
-      }
-    }
+    // function openAboutModal() {
+    //   document.getElementById('aboutModal').style.display = 'flex';
+    // }
+    // function closeAboutModal() {
+    //   document.getElementById('aboutModal').style.display = 'none';
+    // }
+    // window.onclick = function (e) {
+    //   let modal = document.getElementById('aboutModal');
+    //   if (e.target === modal) {
+    //     modal.style.display = "none";
+    //   }
+    // }
 
     const eventsLink = document.getElementById('eventsLink');
     const eventsSubmenu = document.getElementById('eventsSubmenu');

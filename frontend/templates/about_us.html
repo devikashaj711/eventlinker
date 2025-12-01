@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About EventLinker</title>
+
+    <!-- Shared layout CSS (navbar, footer, background, spacing) -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/about_us.css') }}">
+
+    <!-- Fonts / Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="page-bg"></div>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
+            <div class="logo-text-wrap">
+                <span class="logo-text">EventLinker</span>
+                <small class="logo-tagline">About Us</small>
+            </div>
+        </div>
+
+        <nav class="nav-links">
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}">Connections</a>
+            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
+                <i class="fa fa-user profile-icon"></i>
+                <span class="profile-text">Profile</span>
+              </a>
+              <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
+                <i class="fa fa-sign-out"></i>
+                <span class="profile-text">Logout</span>
+              </a>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="about-main">
+        <section class="about-card">
+
+            <!-- LEFT COLUMN -->
+            <div class="about-left">
+                <!-- Back link -->
+                <div class="back-link">
+                    <a href="{{ url_for('attendee_bp.attendee_homepage') }}">
+                        <i class="fa fa-arrow-left"></i> Back to dashboard
+                    </a>
+                </div>
+
+                <h1 class="about-title">About EventLinker</h1>
+                <!-- <p class="about-subtitle">
+                    EventLinker is built to make event networking effortless.
+                </p> -->
+
+                <p class="about-text">
+                    <strong>EventLinker</strong> is an integrated event-networking platform designed to transform how
+                    attendees connect, interact, and engage during events. Built with simplicity, speed, and real-time
+                    connectivity at its core, EventLinker helps organizers create seamless event experiences while
+                    empowering attendees to build meaningful professional and social connections.
+                </p>
+
+                <!-- <h3 class="section-title">Our Mission</h3>
+                <p class="about-text">
+                    To make event interactions smoother, smarter, and more memorable by providing a modern digital platform where
+                    connections happen naturally — with just a scan.
+                </p> -->
+
+                <h3 class="section-title">What We Do</h3>
+                <ul class="about-list">
+                    <li><strong>For Organizers:</strong> A centralized dashboard to manage attendees and engagement.</li>
+                    <li><strong>Instant QR Onboarding:</strong> Simple, fast, and efficient check-ins.</li>
+                    <li><strong>For Attendees:</strong> A clean, user-friendly way to connect professionally.</li>
+                    <li><strong>Smart Digital Identity:</strong> QR-powered profiles that enable instant networking.</li>
+                </ul>
+
+                <h3 class="section-title">Why EventLinker?</h3>
+                <ul class="about-list">
+                    <li>Simple & fast onboarding</li>
+                    <li>Smart networking tools</li>
+                    <li>Organized event flow</li>
+                    <li>Modern, professional UI</li>
+                </ul>
+
+                <!-- <h3 class="section-title">Our Vision</h3>
+                <p class="about-text">
+                    To become the go-to digital companion for events of every scale — from university gatherings to corporate
+                    conferences — and redefine how people network in physical venues.
+                </p> -->
+            </div>
+
+            <!-- RIGHT COLUMN: Illustration -->
+            <div class="about-right">
+                <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" alt="Event illustration"
+                    class="about-image">
+            </div>
+
+        </section>
+    </main>
+
+    <!-- FOOTER
+    <footer class="footer">
+        © 2025 EventLinker. All rights reserved.
+    </footer> -->
+
+</body>
+
+</html>
