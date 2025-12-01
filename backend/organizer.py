@@ -248,6 +248,10 @@ def save_event():
 def view_event(event_id):
     if not require_organizer():
         return redirect(url_for("login_user"))
+    
+
+    is_organizer = (session.get("user_role_id") == 1)
+    print('organizer in view event organizer page--', is_organizer)
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -270,7 +274,7 @@ def view_event(event_id):
         flash("Event not found.", "danger")
         return redirect(url_for("organizer_bp.organizer_homepage"))
 
-    return render_template("event_detail.html", event=event)
+    return render_template("event_detail.html", event=event, is_organizer=is_organizer)
 
 
 

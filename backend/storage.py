@@ -51,15 +51,20 @@ def upload_qr_to_s3(qr_img, folder="qr_codes"):
     qr_img.save(buffer, format="PNG")
     buffer.seek(0)
 
-    key = f"{folder}/{uuid.uuid4().hex}.png"
+    # key = f"{folder}/{uuid.uuid4().hex}.png"
+    filename = f"{uuid.uuid4().hex}.png"
+    key = f"{folder}/{filename}"
 
     s3.upload_fileobj(
         buffer,
         BUCKET,
         key,
-        ExtraArgs={'ContentType': 'image/png'}
+        ExtraArgs={
+            "ContentType": "image/png",
+            "ContentDisposition": f'attachment; filename="{filename}"'
+        }
+        # ExtraArgs={'ContentType': 'image/png'}
     )
-
     return f"https://{BUCKET}.s3.{REGION}.amazonaws.com/{key}"
 
 
