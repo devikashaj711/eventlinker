@@ -77,7 +77,9 @@ def attendee_member_list(event_id):
 
     return render_template("member_list.html", members=members, event_id=event_id)
 
-
+@attendee_bp.route('/about')
+def about_page():
+    return render_template('about_us.html')
 
 
 
