@@ -84,18 +84,27 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ r.first_name }} {{ r.last_name }}</td>
                         <td>
-                            <form class="connection-form" action="{{ url_for('attendee_bp.accept_connection') }}"
-                                method="POST">
-                                <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
-                                <button class="connect-btn" type="submit" {% if r.status_id==2 %} disabled {% endif %}>
-                                    {% if r.status_id == 1 %}
-                                    Accept
-                                    {% else %}
-                                    Accepted
-                                    {% endif %}
-                                </button>
-                            </form>
-                        </td>
+    <!-- Accept Form -->
+    <form class="connection-form" action="{{ url_for('attendee_bp.accept_connection') }}" method="POST" style="display:inline-block;">
+        <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
+        <button class="connect-btn" type="submit" {% if r.status_id==2 %} disabled {% endif %}>
+            {% if r.status_id == 1 %}
+            Accept
+            {% else %}
+            Accepted
+            {% endif %}
+        </button>
+    </form>
+
+    <!-- Decline Form -->
+    <form class="connection-form decline-form" action="{{ url_for('attendee_bp.decline_connection') }}" method="POST" style="display:inline-block; margin-left: 5px;">
+        <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
+        <button class="connect-btn decline-btn" type="submit">
+            Decline
+        </button>
+    </form>
+</td>
+
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -111,32 +120,42 @@
 
     <!-- SCRIPT: Update button text and disable on click -->
     <script>
-        document.querySelectorAll('.connection-form').forEach(form => {
-            form.addEventListener('submit', function (e) {
-                e.preventDefault(); // prevent normal form submission
+    document.querySelectorAll('.connection-form').forEach(form => {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // prevent normal form submission
 
-                const button = form.querySelector('button.connect-btn');
-                button.textContent = 'Accepted'; // update text
-                button.disabled = true; // disable button
+            const button = form.querySelector('button');
+            const isDecline = form.classList.contains('decline-form');
 
-                // Send form data via fetch (AJAX)
-                const formData = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => {
-                        // Optionally handle server response
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        // Revert if error
-                        button.disabled = false;
-                        button.textContent = 'Accept';
-                    });
+            button.textContent = isDecline ? 'Declined' : 'Accepted';
+            button.disabled = true;
+
+            // Disable the other button in the same row
+            if (!isDecline) {
+                const declineBtn = form.parentElement.querySelector('.decline-btn');
+                if (declineBtn) declineBtn.disabled = true;
+            } else {
+                const acceptBtn = form.parentElement.querySelector('.connect-btn:not(.decline-btn)');
+                if (acceptBtn) acceptBtn.disabled = true;
+            }
+
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                // Optionally handle server response
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                button.disabled = false;
+                button.textContent = isDecline ? 'Decline' : 'Accept';
             });
         });
-    </script>
+    });
+</script>
+
 
 </body>
 

@@ -122,6 +122,9 @@ def attendee_homepage():
 # ------------------------------
 # Member list page
 # ------------------------------
+# ------------------------------
+# Member list page
+# ------------------------------
 @attendee_bp.route('/attendee/event/<int:event_id>/members')
 def attendee_member_list(event_id):
     conn = get_db_connection()
@@ -129,27 +132,42 @@ def attendee_member_list(event_id):
     user_id = session.get('user_id')  # current logged-in attendee
 
     # Default back URL: Event Details page
-    back_url = request.args.get("back", url_for('attendee_bp.attendee_event_details', event_id=event_id))
+    back_url = request.args.get(
+        "back",
+        url_for('attendee_bp.attendee_event_details', event_id=event_id)
+    )
 
     if conn:
         try:
             cursor = conn.cursor(dictionary=True)
             cursor.execute("""
                 SELECT u.user_id, u.first_name, u.last_name, u.email,
-                       ec.status_id
+                       ec.status_id,
+                       CASE
+                           WHEN ec.requester_id = %s THEN 'sent'
+                           WHEN ec.receiver_id = %s THEN 'received'
+                           ELSE NULL
+                       END AS connection_direction
                 FROM event_registrations er
                 JOIN users u ON er.user_id = u.user_id
                 LEFT JOIN event_connections ec
-                       ON ec.receiver_id = u.user_id 
-                       AND ec.requester_id = %s
+                       ON ( (ec.receiver_id = u.user_id AND ec.requester_id = %s)
+                            OR
+                            (ec.requester_id = u.user_id AND ec.receiver_id = %s) )
                 WHERE er.event_id = %s
                   AND u.user_role_id = 2
-            """, (user_id, event_id))
+            """, (user_id, user_id, user_id, user_id, event_id))
             members = cursor.fetchall()
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("member_list.html", members=members, event_id=event_id, back_url=back_url)
+    return render_template(
+        "member_list.html",
+        members=members,
+        event_id=event_id,
+        back_url=back_url
+    )
+
 
 @attendee_bp.route('/about')
 def about_page():
@@ -400,3 +418,27 @@ def view_user(user_id):
     role_name = "Organizer" if user['user_role_id'] == 1 else "Attendee"
 
     return render_template("user_detail.html", user=user, role_name=role_name)
+@attendee_bp.route('/decline_connection', methods=['POST'])
+def decline_connection():
+    user_id = session.get('user_id')
+    requester_id = request.form.get('requester_id')
+
+    if not user_id or not requester_id:
+        flash("Invalid request", "danger")
+        return redirect(request.referrer)
+
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE event_connections
+                SET status_id = 3, modified_date = %s
+                WHERE requester_id = %s AND receiver_id = %s
+            """, (datetime.now(), requester_id, user_id))
+            conn.commit()
+            flash("Connection declined!", "success")
+        finally:
+            close_db_connection(conn, cursor)
+
+    return ('', 204)  # Empty response for AJAX
