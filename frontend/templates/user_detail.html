@@ -97,15 +97,15 @@
                     <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                    <th>BIo</th>
-                    <td>{{ bio }}</td>
+                    <th>Bio</th>
+                    <td>{{ user.bio }}</td>
                 </tr>
                 <tr>
                     <th>Instagram</th>
                     <td>
-                        {% if user.instagram %}
-                        <a href="{{ user.instagram }}" target="_blank" style="color:#5b4b9a; text-decoration:none;">
-                            {{ user.instagram }}
+                        {% if user.insta_link %}
+                        <a href="{{ user.insta_link }}" target="_blank" style="color:#5b4b9a; text-decoration:none;">
+                            {{ user.insta_link }}
                         </a>
                         {% else %}
                         N/A
@@ -128,7 +128,7 @@
                 </tr>
                 <tr>
                     <th>Interest</th>
-                    <td>{{ user.interest or "N/A" }}</td>
+                    <td>{{ user.interests or "N/A" }}</td>
                 </tr>
             </table>
             {% else %}
