@@ -8,6 +8,9 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css') }}">
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -30,7 +33,7 @@
         <small class="logo-tagline">An Integrated Event Networking Platform</small>
       </div> -->
 
-      <form action="/register_user" method="POST">
+      <form action="/register_user" method="POST" onsubmit="return validateForm()">
 
         <div class="form-group">
           <label for="role">I am an</label>
@@ -104,6 +107,38 @@
     </div>
 
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+      const passwordInput = document.getElementById("password");
+
+      // Password validation rules
+      function isValidPassword(pw) {
+        return (
+          /.{8,}/.test(pw) &&        // 8+ characters
+          /[A-Z]/.test(pw) &&        // uppercase
+          /[a-z]/.test(pw) &&        // lowercase
+          /\d/.test(pw) &&           // number
+          /[^A-Za-z0-9]/.test(pw)    // special character
+        );
+      }
+
+      // Validate on input (live)
+      passwordInput.addEventListener("input", function () {
+        const pw = passwordInput.value;
+
+        if (!isValidPassword(pw)) {
+          passwordInput.setCustomValidity(
+            "Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and special character."
+          );
+        } else {
+          passwordInput.setCustomValidity(""); // Clear error
+        }
+      });
+
+    });
+  </script>
 
 </body>
 

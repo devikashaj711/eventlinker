@@ -10,6 +10,8 @@ from email.mime.text import MIMEText
 import sib_api_v3_sdk
 from sib_api_v3_sdk.rest import ApiException
 
+from ai_utils import generate_embedding
+import json
 
 
 user_bp = Blueprint('user_bp', __name__, template_folder='../frontend/templates')
@@ -237,10 +239,20 @@ def register_user():
     last_name = request.form.get('last-name')
     email = request.form.get('email')
     password = request.form.get('password')
-    bio = request.form.get('bio')
-    interests = request.form.get('interest')
+    bio = request.form.get('bio') or ""
+    interests = request.form.get('interest') or ""
     insta_link = request.form.get('instalink')
     linkedin_link = request.form.get('linkedinlink')
+
+    # -----------------------------
+    # 1️⃣ CREATE USER EMBEDDING
+    # -----------------------------
+    full_text = f"{bio}. {interests}"
+    try:
+        user_embedding = generate_embedding(full_text)
+    except Exception as e:
+        print("Embedding error:", e)
+        user_embedding = None  # allow registration without embedding
 
     conn = get_db_connection()
     if conn:
@@ -249,14 +261,19 @@ def register_user():
 
             user_role_id = 1 if role == 'organizer' else 2
 
+            # -----------------------------
+            # 2️⃣ INSERT WITH EMBEDDING COLUMN
+            # -----------------------------
             query = """
                 INSERT INTO users 
-                (user_role_id, email, password, first_name, last_name, bio, interests, insta_link, linkedin_link, created_date)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
+                (user_role_id, email, password, first_name, last_name, bio, interests, 
+                 insta_link, linkedin_link, embedding, created_date)
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, NOW())
             """
             values = (
                 user_role_id, email, password, first_name,
-                last_name, bio, interests, insta_link, linkedin_link
+                last_name, bio, interests, insta_link, linkedin_link,
+                json.dumps(user_embedding)
             )
 
             cursor.execute(query, values)
@@ -272,6 +289,7 @@ def register_user():
             close_db_connection(conn, cursor)
 
     return redirect(url_for('user_bp.login_user'))
+
 
 
 @user_bp.route('/profile')
@@ -319,26 +337,37 @@ def user_profile():
         finally:
             close_db_connection(conn, cursor)
 
+    success = request.args.get('success', '')
     return render_template(
         "profile.html",
         user=user,
         is_attendee=is_attendee,
         is_organizer=is_organizer,
         profile_home=profile_home,
-        active_role=active_role
+        active_role=active_role,
+        success=success
     )
 
 # Edit user details
+
 @user_bp.route('/profile/update', methods=['POST'])
 def update_profile():
     if "user_id" not in session:
         flash("Please log in first.", "danger")
         return redirect(url_for('user_bp.login_user'))
 
-    bio = request.form.get('bio') or None
-    interests = request.form.get('interests') or None
+    bio = request.form.get('bio') or ""
+    interests = request.form.get('interests') or ""
     instalink = request.form.get('instalink') or None
     linkedinlink = request.form.get('linkedinlink') or None
+
+    # 1️⃣ Recreate user embedding from updated bio + interests
+    full_text = f"{bio}. {interests}"
+    try:
+        new_embedding = generate_embedding(full_text)
+    except Exception as e:
+        print("Embedding regeneration error:", e)
+        new_embedding = None
 
     conn = get_db_connection()
     cursor = None
@@ -351,21 +380,25 @@ def update_profile():
             SET bio = %s,
                 interests = %s,
                 insta_link = %s,
-                linkedin_link = %s
+                linkedin_link = %s,
+                embedding = %s
             WHERE user_id = %s
             """,
-            (bio, interests, instalink, linkedinlink, session["user_id"])
+            (bio, interests, instalink, linkedinlink,
+             json.dumps(new_embedding),
+             session["user_id"])
         )
         conn.commit()
         flash("Profile updated successfully.", "success")
+
     except Exception as e:
         print("Profile update error:", e)
         flash("Failed to update profile.", "danger")
     finally:
         close_db_connection(conn, cursor)
 
-    # Go back to the profile page to see updated data
     return redirect(url_for('user_bp.user_profile'))
+
 
 
 # ------------------------

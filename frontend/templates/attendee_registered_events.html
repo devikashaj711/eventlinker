@@ -32,7 +32,14 @@
         class="{% if not from_registered %}active{% endif %}">Dashboard</a>
       <!-- MY EVENTS DROPDOWN -->
       <div class="dropdown">
-        <a href="#" id="eventsLink">My Events ▾</a>
+        <!-- <a href="#" id="eventsLink">My Events ▾</a> -->
+        <a href="#" id="eventsLink" class="{% if request.endpoint in [
+        'attendee_bp.attendee_registered_events',
+        'attendee_bp.attendee_my_connections',
+        'attendee_bp.attendee_similarity'
+        ] %}active{% endif %}">
+          My Events ▾
+        </a>
 
         <div class="submenu-vertical" id="eventsSubmenu">
           <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
@@ -106,7 +113,7 @@
             <form class="unregister-form" method="POST" action="{{ url_for('attendee_bp.unregister_event') }}"
               style="display:inline-block;">
               <input type="hidden" name="event_id" value="{{ event.event_id }}">
-              <button type="submit" class="btn-unregister">Unregister</button>
+              <button type="submit" class="btn-unregister">Leave</button>
             </form>
 
           </div>

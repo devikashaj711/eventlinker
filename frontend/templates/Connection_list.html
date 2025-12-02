@@ -31,23 +31,23 @@
         <nav class="nav-links">
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
             <!-- MY EVENTS DROPDOWN -->
-      <div class="dropdown">
-        <a href="#" id="eventsLink">My Events ▾</a>
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
 
-        <div class="submenu-vertical" id="eventsSubmenu">
-            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
-                Registered Events
-            </a>
+                <div class="submenu-vertical" id="eventsSubmenu">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                        Registered Events
+                    </a>
 
-            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
-                My Connections
-            </a>
+                    <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                        My Connections
+                    </a>
 
-            <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
-                Suggested Events
-            </a>
-        </div>
-      </div>
+                    <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+                        Suggested Events
+                    </a>
+                </div>
+            </div>
 
             <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
@@ -58,19 +58,18 @@
                 <i class="fa fa-sign-out"></i>
                 <span class="profile-text">Logout</span>
             </a> -->
-            <a href="{{ url_for('attendee_bp.attendee_connections') }}"
-            id="connections"
-            class="{% if request.endpoint == 'attendee_bp.attendee_connections' %}active{% endif %}">
-            Notifications
-            {% if g.pending_request_count > 0 %}
-            <span class="notification-badge">{{ g.pending_request_count }}</span>
-            {% endif %}
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections"
+                class="{% if request.endpoint == 'attendee_bp.attendee_connections' %}active{% endif %}">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
             </a>
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
                     <i class="fa fa-user"></i>
                 </div>
-            
+
                 <div id="profileDropdown" class="profile-dropdown-menu">
                     <a href="{{ url_for('user_bp.user_profile') }}">
                         <i class="fa fa-user"></i> Profile
@@ -114,26 +113,29 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ r.first_name }} {{ r.last_name }}</td>
                         <td>
-    <!-- Accept Form -->
-    <form class="connection-form" action="{{ url_for('attendee_bp.accept_connection') }}" method="POST" style="display:inline-block;">
-        <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
-        <button class="connect-btn" type="submit" {% if r.status_id==1 %} disabled {% endif %}>
-            {% if r.status_id == 2 %}
-            Accept
-            {% else %}
-            Accepted
-            {% endif %}
-        </button>
-    </form>
+                            <!-- Accept Form -->
+                            <form class="connection-form" action="{{ url_for('attendee_bp.accept_connection') }}"
+                                method="POST" style="display:inline-block;">
+                                <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
+                                <button class="connect-btn" type="submit" {% if r.status_id==1 %} disabled {% endif %}>
+                                    {% if r.status_id == 2 %}
+                                    Accept
+                                    {% else %}
+                                    Accepted
+                                    {% endif %}
+                                </button>
+                            </form>
 
-    <!-- Decline Form -->
-    <form class="connection-form decline-form" action="{{ url_for('attendee_bp.decline_connection') }}" method="POST" style="display:inline-block; margin-left: 5px;">
-        <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
-        <button class="connect-btn decline-btn" type="submit">
-            Decline
-        </button>
-    </form>
-</td>
+                            <!-- Decline Form -->
+                            <form class="connection-form decline-form"
+                                action="{{ url_for('attendee_bp.decline_connection') }}" method="POST"
+                                style="display:inline-block; margin-left: 5px;">
+                                <input type="hidden" name="requester_id" value="{{ r.requester_id }}">
+                                <button class="connect-btn decline-btn" type="submit">
+                                    Decline
+                                </button>
+                            </form>
+                        </td>
 
                     </tr>
                     {% endfor %}
@@ -150,58 +152,61 @@
 
     <!-- SCRIPT: Update button text and disable on click -->
     <script>
-    document.querySelectorAll('.connection-form').forEach(form => {
-        form.addEventListener('submit', function (e) {
-            e.preventDefault(); // prevent normal form submission
+        document.querySelectorAll('.connection-form').forEach(form => {
+            form.addEventListener('submit', function (e) {
+                e.preventDefault(); // prevent normal form submission
 
-            const button = form.querySelector('button');
-            const isDecline = form.classList.contains('decline-form');
+                const button = form.querySelector('button');
+                const isDecline = form.classList.contains('decline-form');
 
-            button.textContent = isDecline ? 'Declined' : 'Accepted';
-            button.disabled = true;
+                button.textContent = isDecline ? 'Declined' : 'Accepted';
+                button.disabled = true;
 
-            // Disable the other button in the same row
-            if (!isDecline) {
-                const declineBtn = form.parentElement.querySelector('.decline-btn');
-                if (declineBtn) declineBtn.disabled = true;
-            } else {
-                const acceptBtn = form.parentElement.querySelector('.connect-btn:not(.decline-btn)');
-                if (acceptBtn) acceptBtn.disabled = true;
-            }
+                // Disable the other button in the same row
+                if (!isDecline) {
+                    const declineBtn = form.parentElement.querySelector('.decline-btn');
+                    if (declineBtn) declineBtn.disabled = true;
+                } else {
+                    const acceptBtn = form.parentElement.querySelector('.connect-btn:not(.decline-btn)');
+                    if (acceptBtn) acceptBtn.disabled = true;
+                }
 
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => {
-                // Optionally handle server response
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                button.disabled = false;
-                button.textContent = isDecline ? 'Decline' : 'Accept';
+                const formData = new FormData(form);
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            // ⭐ Refresh page to update UI dynamically
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        button.disabled = false;
+                        button.textContent = isDecline ? 'Decline' : 'Accept';
+                    });
             });
         });
-    });
-    function toggleProfileDropdown() {
-        const menu = document.getElementById("profileDropdown");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    // Close dropdown if clicking outside
-    document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("profileDropdown");
-        const btn = document.querySelector(".profile-icon-btn");
-
-        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.style.display = "none";
+        function toggleProfileDropdown() {
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
         }
-    });
-    document.getElementById('eventsLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    });
-</script>
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
+    </script>
 
 
 </body>

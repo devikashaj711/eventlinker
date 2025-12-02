@@ -28,35 +28,42 @@
         <nav class="nav-links">
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
             <!-- MY EVENTS DROPDOWN -->
-      <div class="dropdown">
-        <a href="#" id="eventsLink">My Events ▾</a>
+            <div class="dropdown">
+                <!-- <a href="#" id="eventsLink">My Events ▾</a> -->
+                <a href="#" id="eventsLink" class="{% if request.endpoint in [
+                    'attendee_bp.attendee_registered_events',
+                    'attendee_bp.attendee_my_connections',
+                    'attendee_bp.attendee_similarity'
+                    ] %}active{% endif %}">
+                    My Events ▾
+                </a>
 
-        <div class="submenu-vertical" id="eventsSubmenu">
+                <div class="submenu-vertical" id="eventsSubmenu">
 
-            <!-- <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                    <!-- <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
                 My Connections
             </a> -->
 
-            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
-                Registered Events
-            </a>
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                        Registered Events
+                    </a>
 
-            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
-                My Connections
-            </a>
+                    <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                        My Connections
+                    </a>
 
-            <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
-                Suggested Events
-            </a>
-        </div>
-      </div>
+                    <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+                        Suggested Events
+                    </a>
+                </div>
+            </div>
 
-                <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
-                    Notifications
-                    {% if g.pending_request_count > 0 %}
-                    <span class="notification-badge">{{ g.pending_request_count }}</span>
-                    {% endif %}
-                </a>
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
+            </a>
             <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
                 <i class="fa fa-user profile-icon"></i>
                 <span class="profile-text">Profile</span>
@@ -72,7 +79,7 @@
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
                     <i class="fa fa-user"></i>
                 </div>
-            
+
                 <div id="profileDropdown" class="profile-dropdown-menu">
                     <a href="{{ url_for('user_bp.user_profile') }}">
                         <i class="fa fa-user"></i> Profile
@@ -117,10 +124,10 @@
                         <td>{{ loop.index }}</td>
                         <td>{{ c.first_name }} {{ c.last_name }}</td>
                         <td>
-    <a href="{{ url_for('attendee_bp.view_user', user_id=c.connected_user_id) }}">
-        <button class="btn-primary">View</button>
-    </a>
-</td>
+                            <a href="{{ url_for('attendee_bp.view_user', user_id=c.connected_user_id) }}">
+                                <button class="btn-primary">View</button>
+                            </a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -148,22 +155,23 @@
             }
         });
         function toggleProfileDropdown() {
-        const menu = document.getElementById("profileDropdown");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    // Close dropdown if clicking outside
-    document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("profileDropdown");
-        const btn = document.querySelector(".profile-icon-btn");
-
-        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.style.display = "none";
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
         }
-    });
-    document.getElementById('eventsLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    });
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
     </script>
 </body>
+
 </html>

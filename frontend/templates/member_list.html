@@ -6,6 +6,7 @@
     <title>Event Members | Event Linker</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/member_list.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -26,20 +27,51 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">Notifications</a>
-            <a href="#">Similarity</a>
+            <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
+            <!-- MY EVENTS DROPDOWN -->
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
 
-                 <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
+                <div class="submenu-vertical" id="eventsSubmenu">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                        Registered Events
+                    </a>
 
+                    <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                        My Connections
+                    </a>
 
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
+                    <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+                        Suggested Events
+                    </a>
+                </div>
+            </div>
+
+            <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
+                Notifications
+                {% if g.pending_request_count > 0 %}
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
+                {% endif %}
             </a>
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a>
+
+            <div class="profile-dropdown-wrapper">
+                <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+                    <i class="fa fa-user"></i>
+                </div>
+
+                <div id="profileDropdown" class="profile-dropdown-menu">
+                    <a href="{{ url_for('user_bp.user_profile') }}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                    <a href="{{ url_for('attendee_bp.about_page') }}">
+                        <i class="fa fa-info-circle"></i> About Us
+                    </a>
+                    <a href="{{ url_for('user_bp.logout_user') }}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
+
         </nav>
     </header>
 
@@ -76,9 +108,11 @@
                             {% if member_id == session['user_id'] %}
                             <span style="color:#aaa; font-size:0.9rem;">You</span>
                             {% else %}
-                            <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}" method="POST">
+                            <form class="connection-form" action="{{ url_for('attendee_bp.send_connection_request') }}"
+                                method="POST">
                                 <input type="hidden" name="receiver_id" value="{{ member_id }}">
-                                <button class="connect-btn" type="submit" {% if m.status_id in [1,2,3] %} disabled {% endif %}>
+                                <button class="connect-btn" type="submit" {% if m.status_id in [1,2,3] %} disabled {%
+                                    endif %}>
                                     {% if m.status_id == 2 %} Pending
                                     {% elif m.status_id == 1 %} Accepted
                                     {% elif m.status_id == 3 %} Declined
@@ -99,5 +133,28 @@
     <footer class="footer">
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
+
+    <script>
+        function toggleProfileDropdown() {
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
+
+    </script>
 </body>
+
 </html>

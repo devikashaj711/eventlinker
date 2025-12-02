@@ -14,12 +14,13 @@ body {
     flex-direction: column;
 
     /* no page scroll on desktop */
-    overflow: hidden;
+    /* overflow : hidden; */
+    overflow-x: hidden;
 
     /* space for fixed navbar + footer */
     padding-top: 72px;
     /* navbar height */
-    padding-bottom: 56px;
+    /* padding-bottom: 56px; */
     /* footer height */
 }
 
@@ -335,7 +336,7 @@ main {
 
 /* ============ FOOTER (fixed) ============ */
 .footer {
-    position: fixed;
+    /* position: fixed; */
     left: 0;
     right: 0;
     bottom: 0;
@@ -389,15 +390,24 @@ main {
     font-family: "Poppins", sans-serif;
     animation: fadeInSlide 0.5s ease-out;
 }
+
 .nav-links a.active {
-    color: #b988dc;       /* green text or any color */
+    color: #b988dc;
+    /* green text or any color */
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
 
 @keyframes fadeInSlide {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Auto-hide animation */
@@ -410,11 +420,80 @@ main {
 .qr-hint {
     margin-top: 12px;
     font-size: 0.95rem;
-    color: #6a65d8;  /* EventLinker purple shade */
+    color: #6a65d8;
+    /* EventLinker purple shade */
     text-align: center;
     font-weight: 500;
 }
 
+/* -------- PROFILE DROPDOWN -------- */
+.profile-dropdown-wrapper {
+    position: relative;
+}
+
+.profile-icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f0ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #5b4f8b;
+    font-size: 1rem;
+    transition: 0.2s ease;
+}
+
+.profile-icon-btn:hover {
+    background: #e7e1ff;
+    color: #6c4dfc;
+}
+
+/* Dropdown menu */
+.profile-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
+    padding: 0.5rem 0;
+    width: 160px;
+
+    display: none;
+    /* hidden by default */
+    flex-direction: column;
+    z-index: 200;
+}
+
+.profile-dropdown-menu a {
+    padding: 0.55rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: #5b4f8b;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.profile-dropdown-menu a:hover {
+    background: #f3f0ff;
+    color: #6c4dfc;
+}
+
+
+.notification-badge {
+    background: #ff4b4b;
+    /* 🔴 Change this to any color */
+    color: white;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    border-radius: 50%;
+    font-weight: 600;
+    margin-left: 4px;
+}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 992px) {

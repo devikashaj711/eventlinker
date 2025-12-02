@@ -18,7 +18,7 @@
 
     <div class="page-bg"></div>
 
-    <!-- NAVBAR (shared look with registration screen) -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-left">
             <div class="logo">
@@ -27,19 +27,13 @@
                     <span class="logo-text">EventLinker</span>
                     <small class="logo-tagline">Organizer Dashboard</small>
                 </div>
-                <div class="logo-box">
-                </div>
             </div>
         </div>
 
         <nav class="nav-links">
-            <!-- <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a> -->
-
-            <!-- Role switch dropdown (organizer only) -->
 
             <form method="post" action="{{ url_for('user_bp.switch_view') }}" class="role-switch-form">
                 <label for="active_role">View as:</label>
-
                 <span class="role-switch-select-wrapper">
                     <select name="active_role" id="active_role" onchange="this.form.submit()">
                         <option value="organizer" {% if active_role=='organizer' %}selected{% endif %}>Organizer
@@ -49,20 +43,11 @@
                 </span>
             </form>
 
-            <!-- <a href="#">My Events</a> -->
-            <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a> -->
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
                     <i class="fa fa-user"></i>
                 </div>
-            
+
                 <div id="profileDropdown" class="profile-dropdown-menu">
                     <a href="{{ url_for('user_bp.user_profile') }}">
                         <i class="fa fa-user"></i> Profile
@@ -81,14 +66,12 @@
     <!-- MAIN -->
     <main class="main-layout">
 
-        <!-- HERO SECTION WITH IMAGE -->
+        <!-- HERO -->
         <section class="hero-card fade-in">
             <div class="hero-left">
                 <h1>Welcome, {{ organizer_name }} 👋</h1>
-                <p>
-                    Plan, publish and manage your events in one place. Track attendees, share QR codes
-                    and build meaningful connections with EventLinker.
-                </p>
+                <p>Plan, publish and manage your events in one place. Track attendees, share QR codes and build
+                    meaningful connections with EventLinker.</p>
 
                 <div class="hero-actions">
                     <a href="{{ url_for('organizer_bp.add_event_page') }}" class="btn-primary">
@@ -100,36 +83,23 @@
                             <span class="stat-label">Total Events</span>
                             <span class="stat-value">{{ events|length }}</span>
                         </div>
-                        <!-- <div class="stat">
-                            <span class="stat-label">This Month</span>
-                            <span class="stat-value">
-                                <i class="fa fa-calendar"></i>
-                            </span>
-                        </div> -->
                     </div>
                 </div>
             </div>
 
-            <!-- Event management photo -->
             <div class="hero-right">
-                <!-- Put an illustration / photo at this path -->
                 <img src="{{ url_for('static', filename='images/organizer-hero.png') }}"
                     alt="Event management illustration">
             </div>
         </section>
 
-        <!-- EVENTS TABLE CARD -->
+        <!-- EVENTS TABLE -->
         <section class="events-card fade-in">
             <div class="events-header">
                 <div>
                     <h2>Your Events</h2>
-                    <p class="events-subtitle">
-                        View, edit and manage all events you have created.
-                    </p>
+                    <p class="events-subtitle">View, edit and manage all events you have created.</p>
                 </div>
-                <!-- <a href="{{ url_for('organizer_bp.add_event_page') }}" class="btn-secondary">
-                    + Add Event
-                </a> -->
             </div>
 
             <div class="table-container">
@@ -150,26 +120,23 @@
                             <td>{{ event.event_date }}</td>
                             <td>{{ event.location }}</td>
 
-                            <!-- ACTION BUTTONS (kept same functionality) -->
                             <td class="actions-cell">
                                 <div class="action-buttons">
 
-                                    <!-- View -->
                                     <a href="{{ url_for('organizer_bp.view_event', event_id=event.event_id) }}"
                                         class="btn-icon view" title="View Event">
                                         <i class="fa fa-eye"></i>
                                     </a>
 
-                                    <!-- Edit -->
                                     <a href="{{ url_for('organizer_bp.edit_event', event_id=event.event_id) }}"
                                         class="btn-icon edit" title="Edit Event">
                                         <i class="fa fa-edit"></i>
                                     </a>
 
-                                    <!-- Delete -->
+                                    <!-- DELETE WITH CUSTOM MODAL -->
                                     <form action="{{ url_for('organizer_bp.delete_event', event_id=event.event_id) }}"
                                         method="POST" class="delete-form"
-                                        onsubmit="return confirm('Are you sure you want to delete this event?');">
+                                        onsubmit="event.preventDefault(); openDeleteModal(this);">
 
                                         <button type="submit" class="btn-icon delete" title="Delete Event">
                                             <i class="fa fa-trash-o"></i>
@@ -179,8 +146,8 @@
                                 </div>
                             </td>
                         </tr>
+
                         {% else %}
-                        <!-- When no events -->
                         <tr class="no-events-row">
                             <td colspan="4">
                                 <div class="no-events">
@@ -202,7 +169,7 @@
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
 
-    <!-- SUCCESS MODAL (unchanged logic) -->
+    <!-- SUCCESS MODAL -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
     <div id="successModal" class="modal">
@@ -216,8 +183,43 @@
     {% endif %}
     {% endwith %}
 
-    <!-- JS -->
+    <!-- DELETE CONFIRMATION MODAL -->
+    <div id="deleteConfirmModal" class="modal delete-modal">
+        <div class="modal-content delete-modal-content">
+            <h3>Delete Event?</h3>
+            <p>Are you sure you want to delete this event?</p>
+
+            <div class="delete-modal-buttons">
+                <button class="cancel-btn" onclick="closeDeleteModal()">Cancel</button>
+                <button class="delete-btn" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JS (Placed at bottom so no null errors occur) -->
     <script>
+        /* DELETE MODAL LOGIC */
+        let deleteFormRef = null;
+
+        function openDeleteModal(formRef) {
+            deleteFormRef = formRef;
+            document.getElementById("deleteConfirmModal").style.display = "flex";
+        }
+
+        function closeDeleteModal() {
+            document.getElementById("deleteConfirmModal").style.display = "none";
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const btn = document.getElementById("confirmDeleteBtn");
+            btn.addEventListener("click", function () {
+                if (deleteFormRef) {
+                    deleteFormRef.submit();
+                }
+            });
+        });
+
+        /* SUCCESS MODAL */
         function showModal() {
             const modal = document.getElementById("successModal");
             modal.style.display = "flex";
@@ -226,54 +228,30 @@
         function closeModal() {
             const modal = document.getElementById("successModal");
             modal.style.display = "none";
-
             const newUrl = window.location.origin + window.location.pathname;
             window.history.replaceState({}, document.title, newUrl);
         }
 
         const success = "{{ success | default('') }}";
         if (success === "true") {
-            window.onload = () => {
-                showModal();
-                const newUrl = window.location.origin + window.location.pathname;
-                window.history.replaceState({}, document.title, newUrl);
-            };
+            window.onload = showModal;
         }
 
-        function openAboutModal() {
-            document.getElementById('aboutModal').style.display = 'flex';
+        /* PROFILE DROPDOWN */
+        function toggleProfileDropdown() {
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
         }
 
-        function closeAboutModal() {
-            document.getElementById('aboutModal').style.display = 'none';
-        }
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
 
-        // Close about modal when clicking outside
-        window.addEventListener('click', function (e) {
-            const aboutModal = document.getElementById('aboutModal');
-            if (e.target === aboutModal) {
-                aboutModal.style.display = 'none';
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
             }
         });
 
-        function toggleProfileDropdown() {
-        const menu = document.getElementById("profileDropdown");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    // Close dropdown if clicking outside
-    document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("profileDropdown");
-        const btn = document.querySelector(".profile-icon-btn");
-
-        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.style.display = "none";
-        }
-    });
-
-    document.getElementById('eventsLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    });
     </script>
 
 </body>

@@ -14,7 +14,8 @@ import qrcode
 from storage import upload_file_to_s3, upload_qr_to_s3, delete_from_s3
 
 #AI Similarity
-from ai_utils import embed_text, embedding_to_json
+import json
+from ai_utils import generate_embedding
 
 # -------------------------------------
 #  Blueprint Setup
@@ -187,22 +188,30 @@ def save_event():
     try:
         cursor = conn.cursor()
 
-        # Build an AI embedding for this event (title + description)
-        event_text = f"{title}\n{description or ''}".strip()
-        event_embedding_vec = embed_text(event_text)
-        event_embedding_json = embedding_to_json(event_embedding_vec)
+        # ---------------------------------------------
+        # 1️⃣ CREATE EVENT EMBEDDING
+        # ---------------------------------------------
+        embed_text = f"{title}. {description}. {location}"
+        try:
+            event_embedding = generate_embedding(embed_text)
+        except Exception as e:
+            print("Embedding generation error:", e)
+            event_embedding = None
 
-        # Insert event WITHOUT QR first (now including embeddings)
+        # ---------------------------------------------
+        # 2️⃣ INSERT EVENT WITH EMBEDDING COLUMN
+        # ---------------------------------------------
         insert_sql = """
             INSERT INTO event_details 
             (category_id, event_title, description, event_date, location, 
-            image_path, qr_code_path, created_by, is_active, created_date, embedding)
+             image_path, qr_code_path, created_by, is_active, created_date, embedding)
             VALUES (%s,%s,%s,%s,%s,%s,'qr_codes/sample.png',%s,1,NOW(),%s)
         """
 
         cursor.execute(insert_sql, (
-        category_id, title, description, event_date,
-        location, image_path, user_id, event_embedding_json
+            category_id, title, description, event_date,
+            location, image_path, user_id,
+            json.dumps(event_embedding)      # <–– NEW
         ))
 
         conn.commit()

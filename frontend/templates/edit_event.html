@@ -30,12 +30,23 @@
         </div>
 
         <nav class="nav-links">
-            <a href="{{ url_for('user_bp.user_profile') }}">
-                <i class="fa fa-user"></i> Profile
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-sign-out"></i> Logout
-            </a>
+            <div class="profile-dropdown-wrapper">
+                <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+                    <i class="fa fa-user"></i>
+                </div>
+
+                <div id="profileDropdown" class="profile-dropdown-menu">
+                    <a href="{{ url_for('user_bp.user_profile') }}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                    <a href="{{ url_for('attendee_bp.about_page') }}">
+                        <i class="fa fa-info-circle"></i> About Us
+                    </a>
+                    <a href="{{ url_for('user_bp.logout_user') }}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
         </nav>
     </header>
     <main class="add-event-main">
@@ -96,7 +107,8 @@
                     <!-- DESCRIPTION (full row) -->
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea id="description" name="description" rows="3"> {{ event.description }}</textarea>
+                        <textarea id="description" name="description" rows="3"
+                            required> {{ event.description }}</textarea>
                     </div>
 
 
@@ -104,7 +116,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="location">Location</label>
-                            <input type="text" id="location" name="location" value="{{ event.location }}">
+                            <input type="text" id="location" name="location" value="{{ event.location }}" required>
                         </div>
 
                         <!-- <div class="form-group">
@@ -213,6 +225,25 @@
         function closeErrorModal() {
             document.getElementById("errorModal").style.display = "none";
         }
+
+        function toggleProfileDropdown() {
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
     </script>
 </body>
 

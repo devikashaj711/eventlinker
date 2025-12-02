@@ -25,25 +25,50 @@
         </div>
 
         <nav class="nav-links">
+            <!-- MY EVENTS DROPDOWN -->
+            <div class="dropdown">
+                <a href="#" id="eventsLink">My Events ▾</a>
+
+                <div class="submenu-vertical" id="eventsSubmenu">
+                    <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
+                        Registered Events
+                    </a>
+
+                    <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
+                        My Connections
+                    </a>
+
+                    <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
+                        Suggested Events
+                    </a>
+                </div>
+            </div>
+
             <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
                 Notifications
                 {% if g.pending_request_count > 0 %}
                 <span class="notification-badge">{{ g.pending_request_count }}</span>
                 {% endif %}
             </a>
-            <a href="#">Similarity</a>
 
-                 <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">My Events</a>
+            <div class="profile-dropdown-wrapper">
+                <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
+                    <i class="fa fa-user"></i>
+                </div>
 
+                <div id="profileDropdown" class="profile-dropdown-menu">
+                    <a href="{{ url_for('user_bp.user_profile') }}">
+                        <i class="fa fa-user"></i> Profile
+                    </a>
+                    <a href="{{ url_for('attendee_bp.about_page') }}">
+                        <i class="fa fa-info-circle"></i> About Us
+                    </a>
+                    <a href="{{ url_for('user_bp.logout_user') }}">
+                        <i class="fa fa-sign-out"></i> Logout
+                    </a>
+                </div>
+            </div>
 
-            <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a>
         </nav>
     </header>
 
@@ -72,16 +97,34 @@
                     <td>{{ user.email }}</td>
                 </tr>
                 <tr>
-                    <th>Role</th>
-                    <td>{{ role_name }}</td>
+                    <th>BIo</th>
+                    <td>{{ bio }}</td>
                 </tr>
                 <tr>
                     <th>Instagram</th>
-                    <td>{{ user.instagram or "N/A" }}</td>
+                    <td>
+                        {% if user.instagram %}
+                        <a href="{{ user.instagram }}" target="_blank" style="color:#5b4b9a; text-decoration:none;">
+                            {{ user.instagram }}
+                        </a>
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+
                 </tr>
                 <tr>
                     <th>LinkedIn</th>
-                    <td>{{ user.linkedin_link or "N/A" }}</td>
+                    <td>
+                        {% if user.linkedin_link %}
+                        <a href="{{ user.linkedin_link }}" target="_blank" style="color:#5b4b9a; text-decoration:none;">
+                            {{ user.linkedin_link }}
+                        </a>
+                        {% else %}
+                        N/A
+                        {% endif %}
+                    </td>
+
                 </tr>
                 <tr>
                     <th>Interest</th>
@@ -112,6 +155,26 @@
                 eventsSubmenu.classList.remove('active');
             }
         });
+
+        function toggleProfileDropdown() {
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+        }
+
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
+
     </script>
 </body>
 

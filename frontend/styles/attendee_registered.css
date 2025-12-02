@@ -437,14 +437,14 @@ body {
 
 /* Unregister button style */
 .card-buttons .btn-unregister {
-  background: linear-gradient(90deg, #ff5c5c, #ff8282);
+  background: linear-gradient(90deg, #6a46a3, #6029b7);
   color: #fff;
   border: none;
 }
 
 .card-buttons .btn-unregister:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 30px rgba(255, 92, 92, 0.45);
+  box-shadow: 0 12px 30px #6029b7;
   filter: brightness(1.05);
 }
 
@@ -492,6 +492,18 @@ body {
 
 .modal-content button:hover {
   background-color: #3b3186;
+}
+
+
+.notification-badge {
+  background: #ff4b4b;
+  /* 🔴 Change this to any color */
+  color: white;
+  padding: 2px 8px;
+  font-size: 0.7rem;
+  border-radius: 50%;
+  font-weight: 600;
+  margin-left: 4px;
 }
 
 /* Smooth Animation */

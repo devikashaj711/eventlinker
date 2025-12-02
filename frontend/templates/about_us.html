@@ -10,7 +10,7 @@
 
     <!-- Fonts / Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
@@ -24,49 +24,54 @@
             <img src="{{ url_for('static', filename='images/event-linker-logo.png') }}" class="logo-icon">
             <div class="logo-text-wrap">
                 <span class="logo-text">EventLinker</span>
-                <small class="logo-tagline">About Us</small>
+                {% if profile_home == 'organizer' %}
+                <small class="logo-tagline">Organizer Dashboard</small>
+                {% elif profile_home == 'attendee' %}
+                <small class="logo-tagline">Attendee Dashboard</small>
+                {% endif %}
             </div>
         </div>
 
         <nav class="nav-links">
 
+            {% if profile_home == 'attendee' %}
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}"
-               class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
+                class="{% if request.endpoint == 'attendee_bp.attendee_homepage' %}active{% endif %}">
                 Dashboard
             </a>
-        
+
             <!-- MY EVENTS DROPDOWN -->
             <div class="dropdown">
                 <a href="#" id="eventsLink">My Events ▾</a>
-        
+
                 <div class="submenu-vertical" id="eventsSubmenu">
                     <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
                         Registered Events
                     </a>
-        
+
                     <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
                         My Connections
                     </a>
-        
+
                     <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
                         Suggested Events
                     </a>
                 </div>
             </div>
-        
+
             <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections">
                 Notifications
                 {% if g.pending_request_count > 0 %}
-                    <span class="notification-badge">{{ g.pending_request_count }}</span>
+                <span class="notification-badge">{{ g.pending_request_count }}</span>
                 {% endif %}
             </a>
-        
+            {% endif %}
             <!-- PROFILE DROPDOWN -->
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
                     <i class="fa fa-user"></i>
                 </div>
-        
+
                 <div id="profileDropdown" class="profile-dropdown-menu">
                     <a href="{{ url_for('user_bp.user_profile') }}">
                         <i class="fa fa-user"></i> Profile
@@ -79,7 +84,7 @@
                     </a>
                 </div>
             </div>
-        
+
         </nav>
     </header>
 
@@ -155,23 +160,23 @@
     </main>
     <script>
         function toggleProfileDropdown() {
-        const menu = document.getElementById("profileDropdown");
-        menu.style.display = menu.style.display === "flex" ? "none" : "flex";
-    }
-
-    // Close dropdown if clicking outside
-    document.addEventListener("click", function (event) {
-        const dropdown = document.getElementById("profileDropdown");
-        const btn = document.querySelector(".profile-icon-btn");
-
-        if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
-            dropdown.style.display = "none";
+            const menu = document.getElementById("profileDropdown");
+            menu.style.display = menu.style.display === "flex" ? "none" : "flex";
         }
-    });
 
-    document.getElementById('eventsLink').addEventListener('click', function (e) {
-    e.preventDefault();
-    });
+        // Close dropdown if clicking outside
+        document.addEventListener("click", function (event) {
+            const dropdown = document.getElementById("profileDropdown");
+            const btn = document.querySelector(".profile-icon-btn");
+
+            if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
+                dropdown.style.display = "none";
+            }
+        });
+
+        document.getElementById('eventsLink').addEventListener('click', function (e) {
+            e.preventDefault();
+        });
     </script>
 
     <!-- FOOTER
