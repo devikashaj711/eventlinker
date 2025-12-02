@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>My Events | EventLinker</title>
 
-  <link rel="stylesheet" href="{{ url_for('static', filename='styles/attendee_homepage.css') }}" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/attendee_registered.css') }}" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -30,19 +30,10 @@
       <!-- MY EVENTS DROPDOWN -->
       <div class="dropdown">
         <a href="#" id="eventsLink">My Events ▾</a>
-
         <div class="submenu-vertical" id="eventsSubmenu">
-            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
-              Registered Events
-            </a>
-
-            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
-                My Connections
-            </a>
-
-            <a href="{{ url_for('attendee_bp.attendee_similarity') }}">
-              Suggested Events
-          </a>
+            <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">Registered Events</a>
+            <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">My Connections</a>
+            <a href="{{ url_for('attendee_bp.attendee_similarity') }}">Suggested Events</a>
         </div>
       </div>
 
@@ -52,56 +43,58 @@
         <span class="notification-badge">{{ g.pending_request_count }}</span>
         {% endif %}
       </a>
-      <!-- <a href="{{ url_for('user_bp.user_profile') }}">Profile</a>
-      <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-      <a href="{{ url_for('user_bp.logout_user') }}">Logout</a> -->
+
       <div class="profile-dropdown-wrapper">
         <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
             <i class="fa fa-user"></i>
         </div>
-    
         <div id="profileDropdown" class="profile-dropdown-menu">
-            <a href="{{ url_for('user_bp.user_profile') }}">
-                <i class="fa fa-user"></i> Profile
-            </a>
-            <a href="{{ url_for('attendee_bp.about_page') }}">
-                <i class="fa fa-info-circle"></i> About Us
-            </a>
-            <a href="{{ url_for('user_bp.logout_user') }}">
-                <i class="fa fa-sign-out"></i> Logout
-            </a>
+            <a href="{{ url_for('user_bp.user_profile') }}"><i class="fa fa-user"></i> Profile</a>
+            <a href="{{ url_for('attendee_bp.about_page') }}"><i class="fa fa-info-circle"></i> About Us</a>
+            <a href="{{ url_for('user_bp.logout_user') }}"><i class="fa fa-sign-out"></i> Logout</a>
         </div>
     </div>
     </nav>
   </header>
 
   <!-- EVENTS GRID -->
-  <section class="event-cards-section">
-    <div class="card-container">
-      {% if events %}
-        {% for event in events %}
-        <div class="card">
-          <img src="{{ event.image_path }}" alt="{{ event.event_title }}" class="card-image">
-          <div class="card-content">
-            <h3 class="card-title">{{ event.event_title }}</h3>
-            <p class="card-meta">
-              <i class="fa fa-calendar"></i> {{ event.event_date }} |
-              <i class="fa fa-map-marker"></i> {{ event.location }}
-            </p>
-            <p class="card-description">{{ event.description }}</p>
+<section class="event-cards-section">
+  <div class="card-container">
+    {% if events %}
+      {% for event in events %}
+      <div class="card" data-event-id="{{ event.event_id }}">
+        <img src="{{ event.image_path }}" alt="{{ event.event_title }}" class="card-image">
+        <div class="card-content">
+          <h3 class="card-title">{{ event.event_title }}</h3>
+          <p class="card-meta">
+            <i class="fa fa-calendar"></i> {{ event.event_date }} |
+            <i class="fa fa-map-marker"></i> {{ event.location }}
+          </p>
+          <p class="card-description">{{ event.description }}</p>
+
+          <!-- Buttons container -->
+          <div class="card-buttons">
+            <!-- View Button -->
             <a href="{{ url_for('attendee_bp.attendee_event_details', event_id=event.event_id, registered=1) }}">
-              <button class="btn-primary card-button">View</button>
+              <button class="btn-primary">View</button>
             </a>
+
+            <!-- Unregister Button -->
+            <form class="unregister-form" method="POST" style="display:inline-block;">
+              <input type="hidden" name="event_id" value="{{ event.event_id }}">
+              <button type="submit" class="btn-unregister">Unregister</button>
+            </form>
           </div>
         </div>
-        {% endfor %}
-      {% else %}
-        <p style="text-align:center; padding:20px; font-size:1.1rem;">
-          You have not registered for any events yet.
-        </p>
-      {% endif %}
-    </div>
-  </section>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p style="text-align:center; padding:20px; font-size:1.1rem;">
+        You have not registered for any events yet.
+      </p>
+    {% endif %}
+  </div>
+</section>
 
   <footer class="footer">
     <p>© 2025 EventLinker. All rights reserved.</p>
@@ -113,18 +106,42 @@
         menu.style.display = menu.style.display === "flex" ? "none" : "flex";
     }
 
-    // Close dropdown if clicking outside
     document.addEventListener("click", function (event) {
         const dropdown = document.getElementById("profileDropdown");
         const btn = document.querySelector(".profile-icon-btn");
-
         if (!dropdown.contains(event.target) && !btn.contains(event.target)) {
             dropdown.style.display = "none";
         }
     });
 
     document.getElementById('eventsLink').addEventListener('click', function (e) {
-    e.preventDefault();
+        e.preventDefault();
+    });
+
+    // ---------------------------
+    // AJAX for Unregister
+    // ---------------------------
+    document.querySelectorAll('.unregister-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            fetch('{{ url_for("attendee_bp.unregister_event") }}', {
+                method: 'POST',
+                body: formData,
+                headers: {'X-Requested-With': 'XMLHttpRequest'}
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    // Remove the card dynamically
+                    const card = form.closest('.card');
+                    card.remove();
+                } else {
+                    alert('Failed to unregister. Please try again.');
+                }
+            })
+            .catch(err => console.error(err));
+        });
     });
   </script>
 
