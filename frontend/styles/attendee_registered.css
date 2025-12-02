@@ -375,9 +375,69 @@ body {
   filter: brightness(1.03);
 }
 
-.card-button {
-  width: 100%;
+/* ========== REGISTERED EVENTS BUTTONS ========== */
+.card-buttons {
+  display: flex;
+  gap: 12px; /* space between buttons */
+  margin-top: 12px;
 }
+
+.card-buttons a,
+.card-buttons form {
+  flex: 1; /* both buttons take equal width */
+}
+
+.card-buttons button {
+  width: 100%;
+  padding: 0.6rem 0;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+/* View button style */
+.card-buttons .btn-primary {
+  background: linear-gradient(90deg, #6c4dfc, #b46bff);
+  color: #fff;
+  border: none;
+}
+
+.card-buttons .btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(108, 77, 252, 0.45);
+  filter: brightness(1.03);
+}
+
+/* Unregister button style */
+.card-buttons .btn-unregister {
+  background: linear-gradient(90deg, #ff5c5c, #ff8282);
+  color: #fff;
+  border: none;
+}
+
+.card-buttons .btn-unregister:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(255, 92, 92, 0.45);
+  filter: brightness(1.05);
+}
+
+/* Responsive: stack buttons on small screens */
+@media (max-width: 600px) {
+  .card-buttons {
+    flex-direction: column;
+  }
+}
+
+
+/* Responsive: stack buttons on small screens */
+@media (max-width: 600px) {
+  .card-buttons {
+    flex-direction: column;
+  }
+}
+
 
 /* message when there are no events */
 .event-cards-section p {
@@ -441,24 +501,10 @@ body {
   transform: translateY(-1px);
   box-shadow: 0 10px 28px rgba(108, 77, 252, 0.45);
 }
-
 .nav-links a.active {
-  color: #b988dc;
-  /* green text or any color */
-  font-weight: 700;
-  border-bottom: 2px solid #b988dc;
-}
-
-
-.notification-badge {
-  background: #ff4b4b;
-  /* 🔴 Change this to any color */
-  color: white;
-  padding: 2px 8px;
-  font-size: 0.7rem;
-  border-radius: 50%;
-  font-weight: 600;
-  margin-left: 4px;
+    color: #b988dc;       /* green text or any color */
+    font-weight: 700;
+    border-bottom: 2px solid #b988dc;
 }
 
 /* ========== FOOTER (fixed) ========== */
@@ -510,8 +556,7 @@ body {
   padding: 0.5rem 0;
   width: 160px;
 
-  display: none;
-  /* hidden by default */
+  display: none; /* hidden by default */
   flex-direction: column;
   z-index: 200;
 }
