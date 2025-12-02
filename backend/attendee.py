@@ -593,13 +593,15 @@ def unregister_event():
     conn = get_db_connection()
     try:
         cursor = conn.cursor()
-        # Correct table name
         cursor.execute("""
             DELETE FROM event_registrations
             WHERE user_id = %s AND event_id = %s
         """, (user_id, event_id))
         conn.commit()
-        flash("You have successfully unregistered from the event.", "success")
+
+        # ⭐ This is the ONLY success message you need
+        flash("Unregistered from the event successfully", "success")
+
     except Exception as e:
         conn.rollback()
         flash("Failed to unregister. Please try again.", "error")
@@ -608,9 +610,5 @@ def unregister_event():
         cursor.close()
         conn.close()
 
-    # Redirect or return JSON for AJAX
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        # Front-end will handle removal dynamically
-        return {"status": "success", "event_id": event_id}
+    return redirect(url_for('attendee_bp.attendee_registered_events', from_registered=1))
 
-    return redirect(url_for('attendee_bp.attendee_registered_events'))

@@ -298,6 +298,29 @@ body {
   justify-items: stretch;
 }
 
+/* Perfect center for empty state */
+.norecord-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  text-align: center;
+  z-index: 1;
+}
+
+
+.norecord-container p {
+  font-size: 1.2rem;
+  color: #4f467e;
+}
+
+
 /* card fills its grid cell */
 .card {
   background: #ffffff;
@@ -378,13 +401,15 @@ body {
 /* ========== REGISTERED EVENTS BUTTONS ========== */
 .card-buttons {
   display: flex;
-  gap: 12px; /* space between buttons */
+  gap: 12px;
+  /* space between buttons */
   margin-top: 12px;
 }
 
 .card-buttons a,
 .card-buttons form {
-  flex: 1; /* both buttons take equal width */
+  flex: 1;
+  /* both buttons take equal width */
 }
 
 .card-buttons button {
@@ -423,6 +448,66 @@ body {
   filter: brightness(1.05);
 }
 
+/* Modal Background */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(241 241 241 / 90%);
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* Modal Box */
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 14px;
+  text-align: center;
+  width: 360px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content h3 {
+  margin-bottom: 1.2rem;
+  font-size: 1.2rem;
+  color: #4b3fa7;
+}
+
+.modal-content button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  background-color: #4b3fa7;
+  color: white;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.modal-content button:hover {
+  background-color: #3b3186;
+}
+
+/* Smooth Animation */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
 /* Responsive: stack buttons on small screens */
 @media (max-width: 600px) {
   .card-buttons {
@@ -444,67 +529,57 @@ body {
   color: #4f467e;
 }
 
-/* ========== ABOUT MODAL ========== */
+/* MODALS */
 .modal {
   display: none;
   position: fixed;
   inset: 0;
-  background-color: rgba(18, 8, 63, 0.45);
-  backdrop-filter: blur(4px);
+  background-color: rgba(10, 6, 34, 0.45);
   justify-content: center;
   align-items: center;
-  z-index: 120;
+  z-index: 999;
 }
 
-/* modal box */
 .modal-content {
-  width: 52%;
-  max-width: 700px;
-  padding: 2rem 2.4rem;
-  border-radius: 22px;
+  width: min(430px, 90%);
   background: #ffffff;
-  box-shadow: 0 22px 80px rgba(38, 22, 92, 0.42);
-  color: #1e1238;
-  text-align: left;
-  border: 1px solid #ece7ff;
+  border-radius: 20px;
+  padding: 1.6rem 1.4rem;
+  text-align: center;
+  box-shadow: 0 18px 55px rgba(46, 34, 115, 0.4);
+  color: #2a214e;
 }
 
-/* optional tighter style for about text */
-.about-content h2 {
-  font-size: 1.5rem;
-  margin-bottom: 0.8rem;
-  color: #26194d;
+.modal-content h3,
+.modal-content h2 {
+  margin-bottom: 0.9rem;
+  font-size: 1.05rem;
 }
 
-.about-content p {
-  font-size: 0.95rem;
-  color: #554c7d;
+.modal-content p {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #625b87;
 }
 
-/* modal close button */
-.modal-btn,
-.modal-content button {
-  margin-top: 1.4rem;
-  background: linear-gradient(90deg, #6c4dfc, #b46bff);
+.modal-content button,
+.modal-btn {
+  margin-top: 1.1rem;
+  background: #6c4dfc;
+  color: #ffffff;
   border: none;
-  padding: 0.65rem 1.6rem;
+  padding: 0.5rem 1.2rem;
   border-radius: 999px;
-  color: #fff;
   cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
 
-.modal-btn:hover,
-.modal-content button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px rgba(108, 77, 252, 0.45);
-}
 .nav-links a.active {
-    color: #b988dc;       /* green text or any color */
-    font-weight: 700;
-    border-bottom: 2px solid #b988dc;
+  color: #b988dc;
+  /* green text or any color */
+  font-weight: 700;
+  border-bottom: 2px solid #b988dc;
 }
 
 /* ========== FOOTER (fixed) ========== */
@@ -556,7 +631,8 @@ body {
   padding: 0.5rem 0;
   width: 160px;
 
-  display: none; /* hidden by default */
+  display: none;
+  /* hidden by default */
   flex-direction: column;
   z-index: 200;
 }
