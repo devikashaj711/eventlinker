@@ -6,9 +6,6 @@
 }
 
 /* ========== BODY & BACKGROUND ========== */
-/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
-
-/* body padding should match navbar height */
 body {
     font-family: "Poppins", sans-serif;
     color: #1e1238;
@@ -19,12 +16,9 @@ body {
     padding-top: 80px;
     padding-bottom: 56px;
     font-size: 0.9rem;
-
-    /* no page scroll on desktop */
     overflow: hidden;
 }
 
-/* gradient bg layer */
 .page-bg {
     position: fixed;
     inset: 0;
@@ -124,7 +118,6 @@ body {
     align-items: center;
 }
 
-/* top-level "My Events ▾" link */
 .nav-links .dropdown>a {
     display: inline-flex;
     align-items: center;
@@ -153,8 +146,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-
-    /* hidden by default */
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
@@ -188,19 +179,12 @@ body {
 
 .nav-links a.active {
     color: #b988dc;
-    /* green text or any color */
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
 
-/* =========================
-   CONNECTION LIST LAYOUT
-   (card + table styling to match organizer home)
-   ==========================*/
-
 /* Main card container */
 .member-container {
-    /* match overall card look from hero/events cards */
     width: 95%;
     max-width: 1350px;
     margin: 0 auto;
@@ -212,7 +196,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
-    /* keep it nicely inside nav + footer area */
     min-height: calc(100vh - 80px - 56px - 1.5rem);
 }
 
@@ -241,7 +224,6 @@ body {
 .back-link i {
     font-size: 0.9rem;
 }
-
 
 /* Heading + empty text */
 .title {
@@ -441,9 +423,7 @@ a .btn-primary {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -466,7 +446,6 @@ a .btn-primary {
 
 .notification-badge {
     background: #ff4b4b;
-    /* 🔴 Change this to any color */
     color: white;
     padding: 2px 8px;
     font-size: 0.7rem;
@@ -478,7 +457,6 @@ a .btn-primary {
 @media (max-width: 768px) {
     body {
         overflow-y: auto;
-        /* allow scroll on phones */
     }
 
     .navbar {
@@ -501,7 +479,6 @@ a .btn-primary {
         width: 100%;
         padding: 1.3rem 1.5rem;
         overflow-x: auto;
-        /* horizontal scroll if table is wide */
     }
 
     .title {
@@ -511,7 +488,6 @@ a .btn-primary {
     .member-table {
         font-size: 0.8rem;
         min-width: 480px;
-        /* keeps columns readable, container scrolls */
     }
 }
 

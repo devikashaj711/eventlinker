@@ -12,15 +12,9 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
-    /* no page scroll on desktop */
     overflow: hidden;
-
-    /* room for fixed navbar + footer */
     padding-top: 72px;
-    /* navbar height */
     padding-bottom: 56px;
-    /* footer height (visual) */
 }
 
 .page-bg {
@@ -105,10 +99,8 @@ body {
     flex: 1;
     display: flex;
     align-items: flex-start;
-    /* card towards top */
     justify-content: center;
     padding: 0.8rem 0 4.2rem;
-    /* small top space, extra bottom gap */
 }
 
 /* Card width ~ registration page, but shorter in height */
@@ -116,42 +108,33 @@ body {
     width: 95%;
     max-width: 1350px;
     margin: 0 auto 2.6rem;
-    /* pushes card further away from footer */
     background: #ffffff;
     border-radius: 24px;
     box-shadow: 0 16px 40px rgba(75, 61, 150, 0.18);
-
     display: flex;
     gap: 1.7rem;
     padding: 1.6rem 2.3rem 1.4rem;
-    /* reduced vertical padding */
     align-items: stretch;
 }
-
 
 /* left = form */
 .add-event-left {
     flex: 1.1;
 }
 
-/* right = illustration */
 .add-event-right {
     flex: 0.9;
     display: flex;
     align-items: stretch;
-    /* stretch child (image) to full column height */
     justify-content: center;
 }
 
 /* image fills full height of its column */
 .add-event-right img {
     height: 100%;
-    /* full column height */
     width: auto;
-    /* keep aspect ratio */
     max-width: 100%;
     object-fit: cover;
-    /* or 'contain' if you prefer no cropping */
     border-radius: 20px;
 }
 
@@ -192,7 +175,6 @@ body {
 
 .form-group {
     margin-bottom: 0.7rem;
-    /* slightly tighter spacing */
 }
 
 .form-group label {
@@ -229,7 +211,6 @@ body {
     background-color: #ffffff;
 }
 
-
 /* description box a bit shorter */
 .form-group textarea {
     min-height: 88px;
@@ -242,7 +223,6 @@ body {
     background: #ffffff;
     box-shadow: 0 0 0 3px rgba(108, 77, 252, 0.18);
 }
-
 
 .form-group small {
     display: block;
@@ -290,7 +270,6 @@ body {
     margin-top: 0.2rem;
 }
 
-
 /* current image css in edit form */
 .current-image {
     display: inline-block;
@@ -307,10 +286,7 @@ body {
     color: #4c32c5;
 }
 
-
-
-
-/* ============ FOOTER (fixed) ============ */
+/* ============ FOOTER ============ */
 .footer {
     position: fixed;
     left: 0;
@@ -321,7 +297,6 @@ body {
     font-size: 0.8rem;
     color: #7a719b;
     background: transparent;
-    /* can change to #fff if you prefer solid bar */
     z-index: 90;
 }
 
@@ -367,8 +342,6 @@ body {
     font-weight: 500;
 }
 
-
-
 /* -------- PROFILE DROPDOWN -------- */
 .profile-dropdown-wrapper {
     position: relative;
@@ -403,9 +376,7 @@ body {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -443,7 +414,6 @@ body {
 @media (max-width: 768px) {
     body {
         overflow-y: auto;
-        /* allow scroll on very small screens */
     }
 
     .navbar {

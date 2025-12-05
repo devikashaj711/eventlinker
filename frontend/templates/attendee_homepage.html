@@ -17,7 +17,7 @@
 
   <div class="page-bg"></div>
 
-  <!-- NAVBAR (shared look with registration screen) -->
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="nav-left">
       <div class="logo">
@@ -49,6 +49,7 @@
         </span>
       </form>
       {% endif %}
+
       <!-- MY EVENTS DROPDOWN -->
       <div class="dropdown">
         <a href="#" id="eventsLink">My Events ▾</a>
@@ -74,15 +75,6 @@
         <span class="notification-badge">{{ g.pending_request_count }}</span>
         {% endif %}
       </a>
-      <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-        <i class="fa fa-user profile-icon"></i>
-        <span class="profile-text">Profile</span>
-      </a>
-      <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-      <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-        <i class="fa fa-sign-out"></i>
-        <span class="profile-text">Logout</span>
-      </a> -->
 
       <div class="profile-dropdown-wrapper">
         <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
@@ -142,43 +134,7 @@
     <p>© 2025 EventLinker. All rights reserved.</p>
   </footer>
 
-  <!-- ABOUT MODAL
-  <div id="aboutModal" class="modal">
-    <div class="modal-content about-content">
-      <h2>About EventLinker</h2>
-      <p>
-        EventLinker is an integrated event networking platform designed for organizers and attendees.
-        It allows event creation, QR-based attendee onboarding, profile creation, and seamless
-        networking through social links. Built using Flask, MySQL, AWS S3, and a modern UI,
-        EventLinker simplifies event management and enhances professional connections.
-      </p>
-      <button class="modal-btn" onclick="closeAboutModal()">Close</button>
-    </div>
-  </div> -->
-
   <script>
-    // About modal
-    // function openAboutModal() {
-    //   document.getElementById('aboutModal').style.display = 'flex';
-    // }
-    // function closeAboutModal() {
-    //   document.getElementById('aboutModal').style.display = 'none';
-    // }
-    // window.onclick = function (e) {
-    //   let modal = document.getElementById('aboutModal');
-    //   if (e.target === modal) {
-    //     modal.style.display = "none";
-    //   }
-    // }
-
-    // const eventsLink = document.getElementById('eventsLink');
-    // const eventsSubmenu = document.getElementById('eventsSubmenu');
-
-    // document.getElementById('eventsLink').addEventListener('click', function (e) {
-    //   e.preventDefault(); // ← this would stop navigation
-    // });
-
-
     function toggleProfileDropdown() {
       const menu = document.getElementById("profileDropdown");
       menu.style.display = menu.style.display === "flex" ? "none" : "flex";

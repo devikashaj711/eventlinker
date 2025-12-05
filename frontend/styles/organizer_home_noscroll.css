@@ -5,10 +5,6 @@
     box-sizing: border-box;
 }
 
-/* GLOBAL LAYOUT */
-/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
-
-/* body padding should match navbar height */
 body {
     font-family: "Poppins", sans-serif;
     color: #1e1238;
@@ -17,9 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     padding-top: 80px;
-    /* navbar height */
     padding-bottom: 56px;
-    /* footer height */
     overflow-x: hidden;
     font-size: 0.9rem;
 }
@@ -117,14 +111,12 @@ body {
 }
 
 /* ============ NAVBAR DROPDOWN (My Events) ============ */
-
 .nav-links .dropdown {
     position: relative;
     display: inline-flex;
     align-items: center;
 }
 
-/* top-level "My Events ▾" link */
 .nav-links .dropdown>a {
     display: inline-flex;
     align-items: center;
@@ -153,8 +145,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-
-    /* hidden by default */
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
@@ -188,7 +178,6 @@ body {
 
 
 /* ============ NAVBAR ROLE SWITCH DROPDOWN (View as:) ============ */
-
 .role-switch-form {
     display: inline-flex;
     align-items: center;
@@ -214,7 +203,6 @@ body {
     border: 1px solid #d6d0ff;
     border-radius: 999px;
     padding: 0.25rem 1.8rem 0.25rem 0.8rem;
-    /* extra right space for arrow */
     font-size: 0.8rem;
     background: #f7f5ff;
     color: #5b4f8b;
@@ -222,8 +210,6 @@ body {
     cursor: pointer;
     transition: border-color 0.2s ease, box-shadow 0.2s ease,
         background 0.2s ease, transform 0.15s ease;
-
-    /* hide native arrow */
     appearance: none;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -231,10 +217,8 @@ body {
 
 .role-switch-select-wrapper select::-ms-expand {
     display: none;
-    /* IE / Edge legacy */
 }
 
-/* our custom arrow */
 .role-switch-select-wrapper::after {
     content: "▾";
     position: absolute;
@@ -246,7 +230,6 @@ body {
     color: #6c4dfc;
 }
 
-/* hover / focus */
 .role-switch-select-wrapper select:hover {
     border-color: #b3a3ff;
     background: #f2efff;
@@ -258,22 +241,16 @@ body {
     box-shadow: 0 0 0 2px rgba(108, 77, 252, 0.2);
 }
 
-
-/* MAIN LAYOUT – fills remaining viewport between nav & footer */
 .main-layout {
     flex: 1 1 auto;
     width: 95%;
     max-width: 1350px;
     margin: 0 auto;
-    /* ↓ smaller padding so cards almost touch nav/footer */
-    /* padding: 0.35rem 0 0.4rem; */
     padding: 0.2rem 0 0.25rem;
     display: flex;
     flex-direction: column;
-    /* ↓ reduced gap so the two cards use more height */
     gap: 0.7rem;
     height: calc(100vh - 80px - 56px);
-    /* viewport minus nav & footer */
     overflow: hidden;
 }
 
@@ -307,7 +284,6 @@ body {
     gap: 1.8rem;
     padding: 1.4rem 1.9rem;
     flex: 1 1 0;
-    /* hero gets ~half height */
     min-height: 0;
 }
 
@@ -398,7 +374,6 @@ body {
 /* EVENTS CARD – same height as hero */
 .events-card {
     flex: 1 1 0;
-    /* same flex as hero → equal height */
     min-height: 0;
     display: flex;
     flex-direction: column;
@@ -447,7 +422,6 @@ body {
 /* TABLE CONTAINER – fills remaining space and scrolls */
 .table-container {
     flex: 1 1 0;
-    /* fill remaining height inside events-card */
     min-height: 0;
     overflow-y: auto;
     overflow-x: auto;
@@ -626,9 +600,6 @@ body {
     font-weight: 500;
 }
 
-/* 🔹 VIOLET SCROLLBAR FOR TABLE AREA */
-
-/* Chrome / Edge / Safari */
 .table-container::-webkit-scrollbar {
     width: 8px;
 }
@@ -647,19 +618,16 @@ body {
     background: #5b21b6;
 }
 
-/* Firefox */
 .table-container {
     scrollbar-width: thin;
     scrollbar-color: #7c3aed #e4dcff;
 }
 
-/* Flash message wrapper */
 .flash-wrapper {
     width: 100%;
     margin-bottom: 20px;
 }
 
-/* Flash box design */
 .flash-box {
     padding: 12px 16px;
     border-radius: 10px;
@@ -674,18 +642,14 @@ body {
 /* SUCCESS (greenish, soft) */
 .flash-box.success {
     background: rgba(34, 197, 94, 0.15);
-    /* #22C55E light */
     color: #166534;
-    /* dark green */
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
-/* ERROR (reddish, soft) */
+
 .flash-box.danger {
     background: rgba(239, 68, 68, 0.15);
-    /* #EF4444 light */
     color: #7F1D1D;
-    /* dark red */
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
@@ -729,9 +693,7 @@ body {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -752,8 +714,6 @@ body {
     color: #6c4dfc;
 }
 
-
-/* delete modal css */
 /* DELETE CONFIRMATION MODAL */
 .delete-modal {
     display: none;
@@ -836,9 +796,6 @@ body {
         opacity: 1;
     }
 }
-
-
-
 
 /* RESPONSIVE – fall back to normal scroll on small screens */
 @media (max-width: 900px) {

@@ -12,7 +12,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
     overflow: auto;
     padding-top: 72px;
     padding-bottom: 56px;
@@ -25,7 +24,7 @@ body {
     background: linear-gradient(135deg, #b8affe, #ffffff);
 }
 
-/* NAVBAR (reused from profile) */
+/* NAVBAR */
 .navbar {
     position: fixed;
     top: 0;
@@ -201,7 +200,6 @@ body {
 
 .notification-badge {
     background: #ff4b4b;
-    /* 🔴 Change this to any color */
     color: white;
     padding: 2px 8px;
     font-size: 0.7rem;
@@ -209,6 +207,7 @@ body {
     font-weight: 600;
     margin-left: 4px;
 }
+
 
 /* -------- PROFILE DROPDOWN -------- */
 .profile-dropdown-wrapper {
@@ -244,9 +243,7 @@ body {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -283,7 +280,6 @@ body {
     padding: 0.4rem 0.2rem;
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(88, 69, 177, 0.22);
-
     display: none;
     flex-direction: column;
     z-index: 150;

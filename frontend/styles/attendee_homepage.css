@@ -6,9 +6,6 @@
 }
 
 /* ========== BODY & BACKGROUND ========== */
-/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
-
-/* body padding should match navbar height */
 body {
   font-family: "Poppins", sans-serif;
   color: #1e1238;
@@ -17,14 +14,11 @@ body {
   display: flex;
   flex-direction: column;
   padding-top: 80px;
-  /* navbar height */
   padding-bottom: 56px;
-  /* footer height */
   overflow-x: hidden;
   font-size: 0.9rem;
 }
 
-/* gradient bg layer */
 .page-bg {
   position: fixed;
   inset: 0;
@@ -118,14 +112,12 @@ body {
 
 
 /* ============ NAVBAR DROPDOWN (My Events) ============ */
-
 .nav-links .dropdown {
   position: relative;
   display: inline-flex;
   align-items: center;
 }
 
-/* top-level "My Events ▾" link */
 .nav-links .dropdown>a {
   display: inline-flex;
   align-items: center;
@@ -141,7 +133,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* vertical submenu panel */
 .submenu-vertical {
   position: absolute;
   top: 130%;
@@ -154,8 +145,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.1rem;
-
-  /* hidden by default */
   opacity: 0;
   visibility: hidden;
   transform: translateY(6px);
@@ -163,7 +152,6 @@ body {
   z-index: 150;
 }
 
-/* submenu items */
 .submenu-vertical a {
   display: block;
   padding: 0.45rem 0.8rem;
@@ -180,7 +168,6 @@ body {
   color: #6c4dfc;
 }
 
-/* show submenu on hover */
 .nav-links .dropdown:hover .submenu-vertical {
   opacity: 1;
   visibility: visible;
@@ -203,18 +190,15 @@ body {
   cursor: pointer;
 }
 
-/* wrapper so we can draw our own arrow */
 .role-switch-select-wrapper {
   position: relative;
   display: inline-block;
 }
 
-/* select itself */
 .role-switch-select-wrapper select {
   border: 1px solid #d6d0ff;
   border-radius: 999px;
   padding: 0.25rem 1.8rem 0.25rem 0.8rem;
-  /* extra right space for arrow */
   font-size: 0.8rem;
   background: #f7f5ff;
   color: #5b4f8b;
@@ -223,7 +207,6 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease,
     background 0.2s ease, transform 0.15s ease;
 
-  /* hide native arrow */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -231,10 +214,8 @@ body {
 
 .role-switch-select-wrapper select::-ms-expand {
   display: none;
-  /* IE / Edge legacy */
 }
 
-/* our custom arrow */
 .role-switch-select-wrapper::after {
   content: "▾";
   position: absolute;
@@ -246,7 +227,6 @@ body {
   color: #6c4dfc;
 }
 
-/* hover / focus */
 .role-switch-select-wrapper select:hover {
   border-color: #b3a3ff;
   background: #f2efff;
@@ -258,39 +238,12 @@ body {
   box-shadow: 0 0 0 2px rgba(108, 77, 252, 0.2);
 }
 
-
 /* ========== EVENT CARDS SECTION ========== */
 .event-cards-section {
   flex: 1;
   padding: 2.5rem 3rem 3rem;
 }
 
-/* .card-container {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2.3rem;
-}
-
-
-.card {
-  background: #ffffff;
-  border-radius: 20px;
-  border: 1px solid #ece7ff;
-  box-shadow: 0 18px 60px rgba(108, 77, 252, 0.14);
-  overflow: hidden;
-  width: 340px;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-
-.card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 24px 70px rgba(108, 77, 252, 0.22);
-} */
-
-/* 4 cards per row on desktop */
 .card-container {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -298,7 +251,6 @@ body {
   justify-items: stretch;
 }
 
-/* card fills its grid cell */
 .card {
   background: #ffffff;
   border-radius: 20px;
@@ -310,12 +262,10 @@ body {
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-/* keep hover the same */
 .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 24px 70px rgba(108, 77, 252, 0.22);
 }
-
 
 .card-image {
   width: 100%;
@@ -356,7 +306,6 @@ body {
   flex-grow: 1;
 }
 
-/* primary button in card */
 .btn-primary {
   background: linear-gradient(90deg, #6c4dfc, #b46bff);
   color: #ffffff;
@@ -379,7 +328,6 @@ body {
   width: 100%;
 }
 
-/* message when there are no events */
 .event-cards-section p {
   color: #4f467e;
 }
@@ -396,7 +344,6 @@ body {
   z-index: 120;
 }
 
-/* modal box */
 .modal-content {
   width: 52%;
   max-width: 700px;
@@ -409,7 +356,6 @@ body {
   border: 1px solid #ece7ff;
 }
 
-/* optional tighter style for about text */
 .about-content h2 {
   font-size: 1.5rem;
   margin-bottom: 0.8rem;
@@ -421,7 +367,6 @@ body {
   color: #554c7d;
 }
 
-/* modal close button */
 .modal-btn,
 .modal-content button {
   margin-top: 1.4rem;
@@ -444,7 +389,6 @@ body {
 
 .nav-links a.active {
   color: #b988dc;
-  /* green text or any color */
   font-weight: 700;
   border-bottom: 2px solid #b988dc;
 }
@@ -452,7 +396,6 @@ body {
 
 .notification-badge {
   background: #ff4b4b;
-  /* 🔴 Change this to any color */
   color: white;
   padding: 2px 8px;
   font-size: 0.7rem;
@@ -472,7 +415,6 @@ body {
   font-size: 0.82rem;
   color: #7a719b;
   background: transparent;
-  /* z-index: 90; */
 }
 
 /* -------- PROFILE DROPDOWN -------- */
@@ -509,9 +451,7 @@ body {
   box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
   padding: 0.5rem 0;
   width: 160px;
-
   display: none;
-  /* hidden by default */
   flex-direction: column;
   z-index: 200;
 }

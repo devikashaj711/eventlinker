@@ -69,13 +69,6 @@
                 <span class="notification-badge">{{ g.pending_request_count }}</span>
                 {% endif %}
             </a>
-            <!-- <a href="#">Similarity</a> -->
-
-
-            <!-- <a href="{{ url_for('attendee_bp.attendee_registered_events') }}"
-                class="{% if from_registered %}active{% endif %}">
-                My Events
-            </a> -->
             {% endif %}
 
             <div class="profile-dropdown-wrapper">
@@ -186,12 +179,11 @@
     </footer>
 
     <script>
-        // Auto-hide flash messages after 2.5 seconds
         setTimeout(function () {
             const flashBox = document.querySelector('.flash-messages');
             if (flashBox) {
                 flashBox.classList.add('fade-out');
-                setTimeout(() => flashBox.remove(), 600); // remove from DOM after animation
+                setTimeout(() => flashBox.remove(), 600);
             }
         }, 2500);
 

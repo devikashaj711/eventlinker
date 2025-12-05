@@ -6,9 +6,6 @@
 }
 
 /* ========== BODY & BACKGROUND ========== */
-/* ======= SHARED NAVBAR STYLES (Organizer + Attendee) ======= */
-
-/* body padding should match navbar height */
 body {
     font-family: "Poppins", sans-serif;
     color: #1e1238;
@@ -19,8 +16,6 @@ body {
     padding-top: 80px;
     padding-bottom: 56px;
     font-size: 0.9rem;
-
-    /* no page scroll on desktop */
     overflow: hidden;
 }
 
@@ -117,14 +112,12 @@ body {
 }
 
 /* ============ NAVBAR DROPDOWN (My Events) ============ */
-
 .nav-links .dropdown {
     position: relative;
     display: inline-flex;
     align-items: center;
 }
 
-/* top-level "My Events ▾" link */
 .nav-links .dropdown>a {
     display: inline-flex;
     align-items: center;
@@ -153,8 +146,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-
-    /* hidden by default */
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
@@ -187,19 +178,13 @@ body {
 }
 
 .nav-links a.active {
-    color: #b988dc;       /* green text or any color */
+    color: #b988dc;
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
 
-/* =========================
-   CONNECTION LIST LAYOUT
-   (card + table styling to match organizer home)
-   ==========================*/
-
 /* Main card container */
 .member-container {
-    /* match overall card look from hero/events cards */
     width: 95%;
     max-width: 1350px;
     margin: 0 auto;
@@ -211,7 +196,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.9rem;
-    /* keep it nicely inside nav + footer area */
     min-height: calc(100vh - 80px - 56px - 1.5rem);
 }
 
@@ -240,7 +224,6 @@ body {
 .back-link i {
     font-size: 0.9rem;
 }
-
 
 /* Heading + empty text */
 .title {
@@ -335,7 +318,6 @@ body {
     box-shadow: none;
 }
 
-/* Optional: violet scrollbar just for the member table area */
 .member-table-wrapper::-webkit-scrollbar {
     width: 8px;
 }
@@ -362,32 +344,29 @@ body {
 .icon-btn {
     background: none;
     border: none;
-    font-size: 20px;         /* adjust size */
+    font-size: 20px;
     cursor: pointer;
     padding: 4px 8px;
     transition: transform 0.2s ease;
 }
 
 .icon-btn:hover:not(:disabled) {
-    transform: scale(1.2);  /* simple hover effect */
+    transform: scale(1.2);
 }
 
 .icon-btn:disabled {
-    color: #ccc;             /* gray out disabled */
+    color: #ccc;
     cursor: not-allowed;
 }
 
 .actions {
     display: flex;
-    gap: 15px;               /* space between check/cross */
+    gap: 15px;
     align-items: center;
-    padding-left: 50px;      /* horizontal padding */
+    padding-left: 50px;
 }
 
-
-
-
-/* ============ FOOTER (fixed) ============ */
+/* ============ FOOTER ============ */
 .footer {
     position: fixed;
     left: 0;
@@ -405,7 +384,6 @@ body {
 @media (max-width: 768px) {
     body {
         overflow-y: auto;
-        /* allow scroll on phones */
     }
 
     .navbar {
@@ -428,7 +406,6 @@ body {
         width: 100%;
         padding: 1.3rem 1.5rem;
         overflow-x: auto;
-        /* horizontal scroll if table is wide */
     }
 
     .title {
@@ -438,7 +415,6 @@ body {
     .member-table {
         font-size: 0.8rem;
         min-width: 480px;
-        /* keeps columns readable, container scrolls */
     }
 }
 

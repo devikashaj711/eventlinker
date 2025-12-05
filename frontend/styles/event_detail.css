@@ -12,19 +12,10 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
-    /* no page scroll on desktop */
-    /* overflow : hidden; */
     overflow-x: hidden;
-
-    /* space for fixed navbar + footer */
     padding-top: 72px;
-    /* navbar height */
-    /* padding-bottom: 56px; */
-    /* footer height */
 }
 
-/* gradient bg */
 .page-bg {
     position: fixed;
     inset: 0;
@@ -103,14 +94,12 @@ body {
 }
 
 /* ============ NAVBAR DROPDOWN (My Events) ============ */
-
 .nav-links .dropdown {
     position: relative;
     display: inline-flex;
     align-items: center;
 }
 
-/* top-level "My Events ▾" link */
 .nav-links .dropdown>a {
     display: inline-flex;
     align-items: center;
@@ -126,7 +115,6 @@ body {
     transform: translateY(-1px);
 }
 
-/* vertical submenu panel */
 .submenu-vertical {
     position: absolute;
     top: 130%;
@@ -139,8 +127,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-
-    /* hidden by default */
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
@@ -172,29 +158,22 @@ body {
     transform: translateY(0);
 }
 
-
-
 /* ============ MAIN & CARD LAYOUT ============ */
 main {
     flex: 1;
     display: flex;
     align-items: center;
-    /* ⬅ center card vertically */
     justify-content: center;
     padding: 1.4rem 0 1.4rem;
-    /* ⬅ more balanced top/bottom space */
 }
 
 .event-container {
     width: 95%;
     max-width: 1350px;
     margin: 0 auto;
-    /* ⬅ no extra bottom margin */
-
     background: #ffffff;
     border-radius: 24px;
     box-shadow: 0 16px 40px rgba(75, 61, 150, 0.18);
-
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     grid-template-rows: auto auto 1fr;
@@ -319,17 +298,13 @@ main {
     grid-row: 1 / 4;
     display: flex;
     align-items: stretch;
-    /* ⬅ stretch image to full column height */
     justify-content: center;
 }
 
 .event-banner img {
     width: 100%;
     height: 100%;
-    /* ⬅ take full column height */
     max-height: none;
-    /* ⬅ remove earlier limit */
-    /* object-fit: cover; */
     border-radius: 20px;
     box-shadow: 0 12px 32px rgba(75, 61, 150, 0.25);
 }
@@ -393,7 +368,6 @@ main {
 
 .nav-links a.active {
     color: #b988dc;
-    /* green text or any color */
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
@@ -421,7 +395,6 @@ main {
     margin-top: 12px;
     font-size: 0.95rem;
     color: #6a65d8;
-    /* EventLinker purple shade */
     text-align: center;
     font-weight: 500;
 }
@@ -460,9 +433,7 @@ main {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -486,7 +457,6 @@ main {
 
 .notification-badge {
     background: #ff4b4b;
-    /* 🔴 Change this to any color */
     color: white;
     padding: 2px 8px;
     font-size: 0.7rem;
@@ -526,7 +496,6 @@ main {
 @media (max-width: 768px) {
     body {
         overflow-y: auto;
-        /* allow scroll on very small screens */
     }
 
     .navbar {

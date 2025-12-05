@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>User Profile | EventLinker</title>
 
-    <!-- Your shared layout CSS (body + navbar + footer) -->
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile.css') }}">
 
     <!-- Fonts / Icons -->
@@ -14,10 +13,9 @@
 </head>
 
 <body>
-    <!-- soft gradient background -->
     <div class="page-bg"></div>
 
-    <!-- NAVBAR (same structure everywhere) -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-left">
             <div class="logo">
@@ -37,10 +35,6 @@
 
 
         <nav class="nav-links">
-            <!-- <a href="{{ url_for('user_bp.user_profile') }}"
-                class="{% if request.endpoint == 'user_bp.user_profile' %}active{% endif %}">
-                <i class="fa fa-user"></i> Profile
-            </a> -->
 
             {% if profile_home == 'attendee' %}
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}"
@@ -75,6 +69,7 @@
             </a>
 
             {% endif %}
+
             <!-- PROFILE DROPDOWN -->
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
@@ -103,7 +98,7 @@
         <section class="profile-card">
             <!-- LEFT COLUMN: profile text -->
             <div class="profile-left">
-                <!-- Back link (same style as forms) -->
+                <!-- Back link -->
                 <div class="back-link">
                     {% if profile_home == 'organizer' %}
                     <a href="{{ url_for('organizer_bp.organizer_homepage') }}">
@@ -215,23 +210,12 @@
 
             <!-- RIGHT COLUMN: avatar + illustration -->
             <div class="profile-right">
-                <!-- <div class="profile-avatar">
-                    <span>
-                        {% if user.first_name %}
-                        {{ user.first_name[0]|upper }}
-                        {% else %}
-                        U
-                        {% endif %}
-                    </span>
-                </div> -->
-
-                <!-- Save the generated profile illustration as: static/images/profile-hero.png -->
                 <img src="{{ url_for('static', filename='images/profile-img.jpeg') }}" alt="User profile illustration">
             </div>
         </section>
     </main>
 
-    <!-- FOOTER (fixed) -->
+    <!-- FOOTER -->
     <footer class="footer">
         <p>© 2025 EventLinker. All rights reserved.</p>
     </footer>
@@ -249,9 +233,6 @@
         {% endif %}
     </div>
 
-
-    <!-- JS STARTS HERE -->
-    <!-- Simple JS to toggle the edit form -->
     <script>
         const editBtn = document.getElementById('editToggleBtn');
         const cancelBtn = document.getElementById('cancelEditBtn');
@@ -285,10 +266,6 @@
             }
         });
 
-        // document.getElementById('eventsLink').addEventListener('click', function (e) {
-        //     e.preventDefault();
-        // });
-
         // Prevent crash when #eventsLink does not exist
         const eventsLink = document.getElementById('eventsLink');
         if (eventsLink) {
@@ -311,49 +288,6 @@
             if (modal) modal.style.display = "none";
         }
 
-
-        // function showModal() {
-        //     const modal = document.getElementById("successModal");
-        //     modal.style.display = "flex";
-        // }
-
-        // function closeModal() {
-        //     const modal = document.getElementById("successModal");
-        //     modal.style.display = "none";
-
-        //     const newUrl = window.location.origin + window.location.pathname;
-        //     window.history.replaceState({}, document.title, newUrl);
-        // }
-
-        // document.addEventListener("DOMContentLoaded", () => {
-        //     const modal = document.getElementById("successModal");
-
-        //     // Check if modal has content
-        //     if (modal && modal.querySelector(".modal-content")) {
-        //         modal.style.display = "flex";
-        //     }
-        // });
-
-
-
-
-
-        // window.onload = () => {
-        //     const modal = document.getElementById("successModal");
-        //     if (modal) {
-        //         modal.style.display = "flex";
-        //     }
-        // };
-
-
-        // const success = "{{ success | default('') }}";
-        // if (success === "true") {
-        //     window.onload = () => {
-        //         showModal();
-        //         const newUrl = window.location.origin + window.location.pathname;
-        //         window.history.replaceState({}, document.title, newUrl);
-        //     };
-        // }
     </script>
 </body>
 

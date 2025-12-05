@@ -14,7 +14,7 @@
 <body>
     <div class="page-bg"></div>
 
-    <!-- NAVBAR (shared look with registration screen) -->
+    <!-- NAVBAR -->
     <header class="navbar">
         <div class="nav-left">
             <div class="logo">
@@ -30,6 +30,7 @@
 
         <nav class="nav-links">
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
+
             <!-- MY EVENTS DROPDOWN -->
             <div class="dropdown">
                 <a href="#" id="eventsLink">My Events ▾</a>
@@ -49,15 +50,6 @@
                 </div>
             </div>
 
-            <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a> -->
             <a href="{{ url_for('attendee_bp.attendee_connections') }}" id="connections"
                 class="{% if request.endpoint == 'attendee_bp.attendee_connections' %}active{% endif %}">
                 Notifications
@@ -65,6 +57,7 @@
                 <span class="notification-badge">{{ g.pending_request_count }}</span>
                 {% endif %}
             </a>
+
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">
                     <i class="fa fa-user"></i>
@@ -154,7 +147,7 @@
     <script>
         document.querySelectorAll('.connection-form').forEach(form => {
             form.addEventListener('submit', function (e) {
-                e.preventDefault(); // prevent normal form submission
+                e.preventDefault();
 
                 const button = form.querySelector('button');
                 const isDecline = form.classList.contains('decline-form');
@@ -178,7 +171,6 @@
                 })
                     .then(response => {
                         if (response.ok) {
-                            // ⭐ Refresh page to update UI dynamically
                             window.location.reload();
                         }
                     })

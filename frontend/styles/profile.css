@@ -12,26 +12,16 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
-    /* no page scroll on desktop */
-    /* overflow: hidden; */
     overflow-x: hidden;
     overflow-y: auto;
-
-
-    /* space for fixed navbar + footer */
     padding-top: 72px;
-    /* navbar height */
     padding-bottom: 56px;
-    /* footer height */
 }
 
-/* gradient bg */
 .page-bg {
     position: fixed;
     inset: 0;
     z-index: -1 !important;
-    /* identical to event_form.css */
     background: linear-gradient(135deg, #b8affe, #ffffff);
 }
 
@@ -108,13 +98,11 @@ body {
 
 .nav-links a.active {
     color: #b988dc;
-    /* green text or any color */
     font-weight: 700;
     border-bottom: 2px solid #b988dc;
 }
 
 /* ============ PROFILE MAIN LAYOUT ============ */
-
 .profile-main {
     flex: 1;
     display: flex;
@@ -123,12 +111,9 @@ body {
     padding: 1.5rem 2.5rem;
 }
 
-/* white card, same feel as add / view event */
 .profile-card {
     width: 98%;
-    /* make card fill more of the page */
     max-width: 1320px;
-    /* a bit wider on large screens */
     background: #ffffff;
     border-radius: 26px;
     box-shadow: 0 24px 60px rgba(58, 35, 120, 0.18);
@@ -138,7 +123,6 @@ body {
     align-items: stretch;
     position: relative;
     z-index: 2;
-    /* card stays above page-bg, below modal */
 }
 
 
@@ -196,7 +180,6 @@ body {
     flex-direction: column;
     gap: 0.3rem;
     margin-top: 1.25rem;
-    /* adjust value as you like */
 }
 
 
@@ -230,7 +213,6 @@ body {
 
 .notification-badge {
     background: #ff4b4b;
-    /* 🔴 Change this to any color */
     color: white;
     padding: 2px 8px;
     font-size: 0.7rem;
@@ -274,18 +256,13 @@ body {
 .profile-right img {
     width: 100%;
     max-width: 380px;
-    /* a bit narrower */
     max-height: 260px;
-    /* ⬅️ controls how tall the image looks */
     height: auto;
     object-fit: contain;
     border-radius: 22px;
 }
 
 /* Edit profile */
-
-/* ============ PROFILE EDIT FORM ============ */
-
 .edit-toggle-btn,
 .primary-btn,
 .secondary-btn {
@@ -354,7 +331,7 @@ body {
     color: #51408a;
 }
 
-/* ✅ note the commas */
+/* note the commas */
 .profile-edit-form textarea,
 .profile-edit-form input[type="text"],
 .profile-edit-form input[type="url"] {
@@ -431,18 +408,14 @@ body {
 /* SUCCESS (greenish, soft) */
 .flash-box.success {
     background: rgba(34, 197, 94, 0.15);
-    /* #22C55E light */
     color: #166534;
-    /* dark green */
     border: 1px solid rgba(34, 197, 94, 0.3);
 }
 
 /* ERROR (reddish, soft) */
 .flash-box.danger {
     background: rgba(239, 68, 68, 0.15);
-    /* #EF4444 light */
     color: #7F1D1D;
-    /* dark red */
     border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
@@ -461,19 +434,7 @@ body {
     justify-content: center;
     align-items: center;
     z-index: 9999999 !important;
-    /* higher */
 }
-
-
-/* .modal-content {
-    width: min(430px, 90%);
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 1.6rem 1.4rem;
-    text-align: center;
-    box-shadow: 0 18px 55px rgba(46, 34, 115, 0.4);
-    color: #2a214e;
-} */
 
 .modal-content {
     background: white;
@@ -485,10 +446,7 @@ body {
     text-align: center;
     position: relative;
     z-index: 1000000;
-    /* FIX: bring modal content above everything */
 }
-
-
 
 .modal-content h3,
 .modal-content h2 {
@@ -515,10 +473,7 @@ body {
     font-weight: 500;
 }
 
-/* ================================
-   FOOTER (FIXED)
-=================================== */
-
+/* FOOTER (FIXED) */
 .footer {
     position: fixed;
     left: 0;
@@ -566,9 +521,7 @@ body {
     box-shadow: 0 12px 35px rgba(88, 69, 177, 0.22);
     padding: 0.5rem 0;
     width: 160px;
-
     display: none;
-    /* hidden by default */
     flex-direction: column;
     z-index: 200;
 }
@@ -590,7 +543,6 @@ body {
 }
 
 /* ---------------- MY EVENTS DROPDOWN ---------------- */
-
 .dropdown {
     position: relative;
     display: inline-flex;
@@ -606,17 +558,13 @@ body {
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 12px 30px rgba(88, 69, 177, 0.22);
-
     display: flex;
     flex-direction: column;
     gap: 0.1rem;
-
-    /* HIDDEN BY DEFAULT */
     opacity: 0;
     visibility: hidden;
     transform: translateY(6px);
     transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
-
     z-index: 150;
 }
 
@@ -639,16 +587,10 @@ body {
     color: #6c4dfc;
 }
 
-/* ================================
-   RESPONSIVE
-=================================== */
 
 /* ============ RESPONSIVE ============ */
-/* ============ RESPONSIVE ============ */
-
 @media (max-width: 1024px) {
 
-    /* allow scroll on smaller screens */
     body {
         overflow: auto;
     }
@@ -666,7 +608,6 @@ body {
 
     .profile-right {
         order: -1;
-        /* image on top for mobile */
     }
 
     .profile-right img {
@@ -686,7 +627,4 @@ body {
     .profile-card {
         padding: 1.4rem 1.1rem 1.6rem;
     }
-
-
-
 }

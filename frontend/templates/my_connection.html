@@ -6,6 +6,7 @@
     <title>My Connections | Event Linker</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/member_list.css') }}">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
@@ -29,7 +30,6 @@
             <a href="{{ url_for('attendee_bp.attendee_homepage') }}">Dashboard</a>
             <!-- MY EVENTS DROPDOWN -->
             <div class="dropdown">
-                <!-- <a href="#" id="eventsLink">My Events ▾</a> -->
                 <a href="#" id="eventsLink" class="{% if request.endpoint in [
                     'attendee_bp.attendee_registered_events',
                     'attendee_bp.attendee_my_connections',
@@ -39,10 +39,6 @@
                 </a>
 
                 <div class="submenu-vertical" id="eventsSubmenu">
-
-                    <!-- <a href="{{ url_for('attendee_bp.attendee_my_connections') }}">
-                My Connections
-            </a> -->
 
                     <a href="{{ url_for('attendee_bp.attendee_registered_events') }}">
                         Registered Events
@@ -64,16 +60,6 @@
                 <span class="notification-badge">{{ g.pending_request_count }}</span>
                 {% endif %}
             </a>
-            <!-- <a href="{{ url_for('user_bp.user_profile') }}" class="profile-link">
-                <i class="fa fa-user profile-icon"></i>
-                <span class="profile-text">Profile</span>
-            </a>
-            <a href="{{ url_for('attendee_bp.about_page') }}">About Us</a>
-
-            <a href="{{ url_for('user_bp.logout_user') }}" class="logout-link">
-                <i class="fa fa-sign-out"></i>
-                <span class="profile-text">Logout</span>
-            </a> -->
 
             <div class="profile-dropdown-wrapper">
                 <div class="profile-icon-btn" onclick="toggleProfileDropdown()">

@@ -28,11 +28,6 @@
         <span class="logo-text">EventLinker</span>
       </div>
 
-      <!-- <div class="logo">
-        <span class="logo-text">Event Linker</span>
-        <small class="logo-tagline">An Integrated Event Networking Platform</small>
-      </div> -->
-
       <form action="/register_user" method="POST" onsubmit="return validateForm()">
 
         <div class="form-group">
@@ -133,7 +128,7 @@
             "Password must be at least 8 characters and include an uppercase letter, lowercase letter, number, and special character."
           );
         } else {
-          passwordInput.setCustomValidity(""); // Clear error
+          passwordInput.setCustomValidity("");
         }
       });
 
