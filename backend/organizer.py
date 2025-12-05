@@ -17,9 +17,7 @@ from storage import upload_file_to_s3, upload_qr_to_s3, delete_from_s3
 import json
 from ai_utils import generate_embedding
 
-# -------------------------------------
 #  Blueprint Setup
-# -------------------------------------
 _current_dir = os.path.dirname(os.path.abspath(__file__))
 _project_root = os.path.join(_current_dir, "..")
 _templates_folder = os.path.join(_project_root, "frontend", "templates")
@@ -32,7 +30,7 @@ organizer_bp = Blueprint(
 
 
 # -------------------------------------
-#  Helper: restrict organizer-only access
+#  Access Control Helper
 # -------------------------------------
 def require_organizer():
     if "user_id" not in session or session.get("user_role_id") != 1:
@@ -42,26 +40,24 @@ def require_organizer():
 
 
 # -------------------------------------
-#  READ: Organizer Homepage → Event List
+#  Display Organizer Dashboard
 # -------------------------------------
 @organizer_bp.route("/organizer_home")
 def organizer_homepage():
     if not require_organizer():
         return redirect(url_for("login_user"))
     
-    # 🔹 Mark that the user is currently viewing the organizer dashboard
     session["active_view"] = "organizer"
 
     user_id = session["user_id"]
     conn = get_db_connection()
     cursor = None
     events = []
-    organizer_name = "Organizer"   # fallback
+    organizer_name = "Organizer"
 
     try:
         cursor = conn.cursor(dictionary=True)
 
-        # 🔹 Get organizer name (change table/columns to match your DB)
         cursor.execute("""
             SELECT first_name, last_name
             FROM users
@@ -69,10 +65,8 @@ def organizer_homepage():
         """, (user_id,))
         user = cursor.fetchone()
         if user:
-            # use full name or just first_name as you like
             organizer_name = f"{user['first_name']} {user['last_name']}".strip()
 
-        # 🔹 Get events
         cursor.execute("""
             SELECT event_id, event_title, event_date, location
             FROM event_details
@@ -85,7 +79,7 @@ def organizer_homepage():
 
     # Organizer is always true here
     is_organizer = True
-    # If active_role isn't set yet (e.g., typed URL manually), default to organizer
+
     if session.get("active_role") not in ("organizer", "attendee"):
         session["active_role"] = "organizer"
     active_role = session.get("active_role", "organizer")
@@ -100,13 +94,12 @@ def organizer_homepage():
     )
 
 
-
 # -------------------------------------
-#  CREATE (GET): Show Add Event form
+#  Load an Add Event Form
 # -------------------------------------
 @organizer_bp.route("/add", methods=["GET"])
 def add_event_page():
-    """Show the Add Event page with category dropdown."""
+
     if not require_organizer():
         return redirect(url_for("login_user"))
 
@@ -129,10 +122,11 @@ def add_event_page():
 
 
 # -------------------------------------
-#  CREATE: Save New Event
+#  Create a New Event
 # -------------------------------------
 @organizer_bp.route("/save_event", methods=["POST"])
 def save_event():
+    
     if not require_organizer():
         return redirect(url_for("login_user"))
 
@@ -160,16 +154,6 @@ def save_event():
 
     # Upload Event Image to S3
     image = request.files.get("image_file")
-    # image_path = None
-
-    # if image and image.filename.strip():
-    #     try:
-    #         image_path = upload_file_to_s3(image, "event_images")
-    #     except Exception as e:
-    #         print("Image upload error:", e)
-    #         flash("Failed to upload event image.", "danger")
-    #         return redirect(url_for("organizer_bp.add_event_page"))
-        
 
     if image and hasattr(image, "filename") and image.filename:
         try:
@@ -188,9 +172,7 @@ def save_event():
     try:
         cursor = conn.cursor()
 
-        # ---------------------------------------------
-        # 1️⃣ CREATE EVENT EMBEDDING
-        # ---------------------------------------------
+        # CREATE EVENT EMBEDDING
         embed_text = f"{title}. {description}. {location}"
         try:
             event_embedding = generate_embedding(embed_text)
@@ -198,9 +180,8 @@ def save_event():
             print("Embedding generation error:", e)
             event_embedding = None
 
-        # ---------------------------------------------
-        # 2️⃣ INSERT EVENT WITH EMBEDDING COLUMN
-        # ---------------------------------------------
+
+        # INSERT EVENT WITH EMBEDDING COLUMN
         insert_sql = """
             INSERT INTO event_details 
             (category_id, event_title, description, event_date, location, 
@@ -211,7 +192,7 @@ def save_event():
         cursor.execute(insert_sql, (
             category_id, title, description, event_date,
             location, image_path, user_id,
-            json.dumps(event_embedding)      # <–– NEW
+            json.dumps(event_embedding)
         ))
 
         conn.commit()
@@ -219,9 +200,7 @@ def save_event():
         # Get event_id
         event_id = cursor.lastrowid
 
-
         # Generate QR code
-        # qr_data = f"http://127.0.0.1:5000/organizer/event/{event_id}"
         qr_data = url_for('attendee_bp.register_event', event_id=event_id, _external=True)
         print('qr_data---', qr_data)
         qr_img = qrcode.make(qr_data)
@@ -258,7 +237,7 @@ def save_event():
 
 
 # -------------------------------------
-#  READ: View Single Event
+#  View a Single Event
 # -------------------------------------
 @organizer_bp.route("/event/<int:event_id>")
 def view_event(event_id):
@@ -296,7 +275,7 @@ def view_event(event_id):
 
 
 # -------------------------------------
-#  UPDATE: Load Edit Page
+#  Load Event Edit Page
 # -------------------------------------
 @organizer_bp.route("/event/<int:event_id>/edit")
 def edit_event(event_id):
@@ -328,7 +307,7 @@ def edit_event(event_id):
 
 
 # -------------------------------------
-#  UPDATE: Save Edited Event
+#  Save Updated Event Data
 # -------------------------------------
 @organizer_bp.route("/event/<int:event_id>/update", methods=["POST"])
 def update_event(event_id):
@@ -340,7 +319,6 @@ def update_event(event_id):
     category_id = request.form.get("category")
     location = request.form.get("location")
     date_str = request.form.get("date")
-
 
     # Convert/update date
     try:
@@ -375,7 +353,6 @@ def update_event(event_id):
     old_qr_link = event["qr_link"]
     old_date = event["event_date"]
 
-
     # Image Upload Handling
     new_image = request.files.get("image_file")
 
@@ -388,7 +365,6 @@ def update_event(event_id):
         new_image_path = upload_file_to_s3(new_image, "event_images")
     else:
         new_image_path = old_image
-
 
     # Regenerate QR Code if date changed
     regenerate_qr = False
@@ -411,8 +387,6 @@ def update_event(event_id):
     else:
         new_qr_path = old_qr
         qr_data = old_qr_link
-
-
 
     # Update Event in DB
     cursor.execute("""
@@ -442,7 +416,7 @@ def update_event(event_id):
 
 
 # -------------------------------------
-#  DELETE 
+#  Delete Event Completely
 # -------------------------------------
 @organizer_bp.route("/event/<int:event_id>/delete", methods=["POST"])
 def delete_event(event_id):
@@ -451,7 +425,6 @@ def delete_event(event_id):
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
-
 
     # Step 1 — Fetch image + QR paths
     cursor.execute("""
@@ -467,7 +440,6 @@ def delete_event(event_id):
         close_db_connection(conn, cursor)
         return redirect(url_for("organizer_bp.organizer_homepage"))
 
-
     # Step 2 — Delete related registrations
     cursor.execute("""
         DELETE FROM event_registrations
@@ -475,14 +447,12 @@ def delete_event(event_id):
     """, (event_id,))
     conn.commit()
 
-
     # Step 3 — Delete from S3
     if event["image_path"]:
         delete_from_s3(event["image_path"])
 
     if event["qr_code_path"]:
         delete_from_s3(event["qr_code_path"])
-
 
     # Step 4 — Delete event
     cursor.execute("""

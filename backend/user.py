@@ -13,13 +13,13 @@ from sib_api_v3_sdk.rest import ApiException
 from ai_utils import generate_embedding
 import json
 
-
+#user blueprint
 user_bp = Blueprint('user_bp', __name__, template_folder='../frontend/templates')
 
 
-# ------------------------------
-#  LOGIN PAGE & FUNCTIONALITY
-# ------------------------------
+# ---------------------------------
+#  User Login & Session Handling
+# ---------------------------------
 @user_bp.route('/login', methods=['GET', 'POST'])
 def login_user():
     if request.method == 'POST':
@@ -39,19 +39,13 @@ def login_user():
                 user = cursor.fetchone()
 
                 if user:
-                    # flash("Login successful! Welcome back.", "success")
-
                     session["user_id"] = user["user_id"]
                     session["user_role_id"] = user["user_role_id"]
 
-                    # --------------------------------------
-                    # STEP 2: Handle redirect after QR login
-                    # --------------------------------------
+                    # Handle redirect after QR login
                     if "redirect_after_login" in session:
                         next_url = session.pop("redirect_after_login")
                         return redirect(next_url)
-                    # --------------------------------------
-
 
                     # Redirect by user role
                     if user["user_role_id"] == 1:
@@ -76,15 +70,16 @@ def login_user():
     return render_template('login.html')
     
 
-
+# ---------------------------------
+#  Role Switching for Organizers
+# ---------------------------------
 @user_bp.route('/switch_view', methods=['POST'])
 def switch_view():
-    """
-    Switch the active dashboard view for organizer accounts.
+ 
+    # Switch the active dashboard view for organizer accounts.
+    # Only users with role_id == 1 (organizer) can switch between organizer/attendee.
+    # Pure attendees (role_id == 2) will always stay in attendee view.
 
-    - Only users with role_id == 1 (organizer) can switch between organizer/attendee.
-    - Pure attendees (role_id == 2) will always stay in attendee view.
-    """
     if "user_id" not in session:
         flash("Please log in first.", "danger")
         return redirect(url_for('user_bp.login_user'))
@@ -101,7 +96,6 @@ def switch_view():
 
     if selected_role not in allowed_roles:
         flash("Invalid view selected.", "danger")
-        # Fallback to previous or default
         selected_role = session.get("active_role", "attendee")
 
     session["active_role"] = selected_role
@@ -113,7 +107,9 @@ def switch_view():
         return redirect(url_for('attendee_bp.attendee_homepage'))
     
     
-
+# ---------------------------------
+#  Sending Password Reset OTP
+# ---------------------------------
 @user_bp.route('/send-reset-otp', methods=['POST'])
 def send_reset_otp():
     email = request.form.get("email")
@@ -172,6 +168,9 @@ def send_reset_otp():
     return redirect(url_for("user_bp.login_user"))
 
 
+# ---------------------------------
+#  OTP Verification
+# ---------------------------------
 @user_bp.route('/verify-reset-otp', methods=['POST'])
 def verify_reset_otp():
     typed_otp = request.form.get("otp")
@@ -186,6 +185,11 @@ def verify_reset_otp():
 
     return redirect(url_for('user_bp.login_user'))
 
+
+
+# ---------------------------------
+#  Set New Password
+# ---------------------------------
 @user_bp.route('/direct-reset-password', methods=['POST'])
 def direct_reset_password():
     if not session.get("otp_verified"):
@@ -220,8 +224,9 @@ def direct_reset_password():
     return redirect(url_for('user_bp.login_user'))
 
 
+
 # ------------------------------
-#  REGISTRATION PAGE
+#  Show Registration Form
 # ------------------------------
 @user_bp.route('/register')
 def register_page():
@@ -230,7 +235,7 @@ def register_page():
 
 
 # ------------------------------
-#  REGISTER NEW USER
+#  New User Registration
 # ------------------------------
 @user_bp.route('/register_user', methods=['POST'])
 def register_user():
@@ -244,15 +249,14 @@ def register_user():
     insta_link = request.form.get('instalink')
     linkedin_link = request.form.get('linkedinlink')
 
-    # -----------------------------
-    # 1️⃣ CREATE USER EMBEDDING
-    # -----------------------------
+
+    # CREATE USER EMBEDDING
     full_text = f"{bio}. {interests}"
     try:
         user_embedding = generate_embedding(full_text)
     except Exception as e:
         print("Embedding error:", e)
-        user_embedding = None  # allow registration without embedding
+        user_embedding = None
 
     conn = get_db_connection()
     if conn:
@@ -261,9 +265,6 @@ def register_user():
 
             user_role_id = 1 if role == 'organizer' else 2
 
-            # -----------------------------
-            # 2️⃣ INSERT WITH EMBEDDING COLUMN
-            # -----------------------------
             query = """
                 INSERT INTO users 
                 (user_role_id, email, password, first_name, last_name, bio, interests, 
@@ -292,9 +293,12 @@ def register_user():
 
 
 
+# ------------------------------
+#  Display User Profile
+# ------------------------------
 @user_bp.route('/profile')
 def user_profile():
-    # user must be logged in
+
     if "user_id" not in session:
         flash("Please log in first.", "danger")
         return redirect(url_for('user_bp.login_user'))
@@ -307,7 +311,6 @@ def user_profile():
 
     # Role flags
     is_organizer = (user_role_id == 1)
-    # Organizer (1) and pure attendee (2) can both act as attendee
     is_attendee = (user_role_id in (1, 2))
 
     # Which dashboard/view is currently active? (controlled by dropdown)
@@ -348,10 +351,14 @@ def user_profile():
         success=success
     )
 
-# Edit user details
 
+
+# ------------------------------
+#  Update Profile Information
+# ------------------------------
 @user_bp.route('/profile/update', methods=['POST'])
 def update_profile():
+
     if "user_id" not in session:
         flash("Please log in first.", "danger")
         return redirect(url_for('user_bp.login_user'))
@@ -361,7 +368,7 @@ def update_profile():
     instalink = request.form.get('instalink') or None
     linkedinlink = request.form.get('linkedinlink') or None
 
-    # 1️⃣ Recreate user embedding from updated bio + interests
+    # Recreate user embedding from updated bio + interests
     full_text = f"{bio}. {interests}"
     try:
         new_embedding = generate_embedding(full_text)
@@ -402,7 +409,7 @@ def update_profile():
 
 
 # ------------------------
-#  LOGOUT FUNCTIONALITY
+#  Log Out
 # ------------------------
 @user_bp.route('/logout')
 def logout_user():

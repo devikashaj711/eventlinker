@@ -13,9 +13,6 @@ import io
 BUCKET = os.getenv("AWS_S3_BUCKET")
 REGION = os.getenv("AWS_REGION")
 
-# print("DEBUG AWS BUCKET =", BUCKET)
-# print("DEBUG AWS REGION =", REGION)
-
 
 s3 = boto3.client(
     's3',
@@ -24,6 +21,10 @@ s3 = boto3.client(
     region_name=REGION
 )
 
+
+# -------------------------------------
+# Upload Event Images
+# -------------------------------------
 def upload_file_to_s3(file, folder):
 
     # Create unique filename
@@ -32,7 +33,7 @@ def upload_file_to_s3(file, folder):
 
     key = f"{folder}/{filename}"
 
-    if hasattr(file, "read"):  # FileStorage
+    if hasattr(file, "read"):
         s3.upload_fileobj(
             file,
             BUCKET,
@@ -45,13 +46,15 @@ def upload_file_to_s3(file, folder):
     return f"https://{BUCKET}.s3.{REGION}.amazonaws.com/{key}"
 
 
+# -------------------------------------
+# Upload QR Codes
+# -------------------------------------
 def upload_qr_to_s3(qr_img, folder="qr_codes"):
 
     buffer = io.BytesIO()
     qr_img.save(buffer, format="PNG")
     buffer.seek(0)
 
-    # key = f"{folder}/{uuid.uuid4().hex}.png"
     filename = f"{uuid.uuid4().hex}.png"
     key = f"{folder}/{filename}"
 
@@ -63,11 +66,13 @@ def upload_qr_to_s3(qr_img, folder="qr_codes"):
             "ContentType": "image/png",
             "ContentDisposition": f'attachment; filename="{filename}"'
         }
-        # ExtraArgs={'ContentType': 'image/png'}
     )
     return f"https://{BUCKET}.s3.{REGION}.amazonaws.com/{key}"
 
 
+# -------------------------------------
+# Delete Files When Needed
+# -------------------------------------
 def delete_from_s3(file_url):
 
     if not file_url:

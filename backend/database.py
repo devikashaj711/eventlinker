@@ -1,3 +1,7 @@
+# -------------------------------------
+# backend/database.py
+# -------------------------------------
+
 import mysql.connector
 
 # --- Database Configuration for AWS RDS MySQL ---
@@ -8,6 +12,10 @@ db_config = {
     'database': 'eventlinker_db'
 }
 
+
+# -------------------------------------
+# Establish Database Connection
+# -------------------------------------
 def get_db_connection():
     try:
         conn = mysql.connector.connect(**db_config)
@@ -18,6 +26,9 @@ def get_db_connection():
         return None
 
 
+# -------------------------------------
+# Safely Close Database Resources
+# -------------------------------------
 def close_db_connection(conn, cursor=None):
     if cursor:
         try:
@@ -31,7 +42,6 @@ def close_db_connection(conn, cursor=None):
             print("Database connection closed.")
         except mysql.connector.Error as err:
             print(f"Error closing connection: {err}")
-
 
 
 if __name__ == "__main__":

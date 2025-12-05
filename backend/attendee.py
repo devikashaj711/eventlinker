@@ -1,5 +1,5 @@
 # -----------------------------------------------------
-# attendee.py  (FINAL VERSION — MULTI-INTEREST READY)
+# backend/attendee.py
 # -----------------------------------------------------
 
 from flask import (
@@ -13,25 +13,41 @@ import json
 import numpy as np
 from ai_utils import generate_embedding
 
-
+#Attendee blueprint
 attendee_bp = Blueprint('attendee_bp', __name__)
 
 
 # -----------------------------------------------------
-# HELPER — COSINE SIMILARITY
+# Display Attendee Homepage
 # -----------------------------------------------------
-def cosine_sim(a, b):
-    a = np.array(a)
-    b = np.array(b)
+@attendee_bp.route('/attendee_homepage')
+def attendee_homepage():
+    if "user_id" not in session:
+        flash("Please log in", "danger")
+        return redirect(url_for('user_bp.login_user'))
 
-    if np.linalg.norm(a) == 0 or np.linalg.norm(b) == 0:
-        return None
+    conn = get_db_connection()
+    events = []
 
-    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+    if conn:
+        try:
+            cursor = conn.cursor(dictionary=True)
+            cursor.execute("SELECT * FROM event_details ORDER BY event_date ASC")
+            events = cursor.fetchall()
+        finally:
+            close_db_connection(conn, cursor)
+
+    return render_template(
+        'attendee_homepage.html',
+        events=events,
+        is_organizer=(session.get("user_role_id") == 1),
+        active_role=session.get("active_role", "attendee")
+    )
+
 
 
 # -----------------------------------------------------
-# EVENT DETAILS (ATTENDEE VIEW)
+# View Event Details based on event id
 # -----------------------------------------------------
 @attendee_bp.route('/attendee/event/<int:event_id>')
 def attendee_event_details(event_id):
@@ -68,7 +84,7 @@ def attendee_event_details(event_id):
 
 
 # -----------------------------------------------------
-# REGISTER FOR EVENT
+# Register for Event
 # -----------------------------------------------------
 @attendee_bp.route('/register_event/<int:event_id>')
 def register_event(event_id):
@@ -111,35 +127,7 @@ def register_event(event_id):
 
 
 # -----------------------------------------------------
-# ATTENDEE HOMEPAGE
-# -----------------------------------------------------
-@attendee_bp.route('/attendee_homepage')
-def attendee_homepage():
-    if "user_id" not in session:
-        flash("Please log in", "danger")
-        return redirect(url_for('user_bp.login_user'))
-
-    conn = get_db_connection()
-    events = []
-
-    if conn:
-        try:
-            cursor = conn.cursor(dictionary=True)
-            cursor.execute("SELECT * FROM event_details ORDER BY event_date ASC")
-            events = cursor.fetchall()
-        finally:
-            close_db_connection(conn, cursor)
-
-    return render_template(
-        'attendee_homepage.html',
-        events=events,
-        is_organizer=(session.get("user_role_id") == 1),
-        active_role=session.get("active_role", "attendee")
-    )
-
-
-# -----------------------------------------------------
-# MEMBER LIST
+# View Event Attendee List
 # -----------------------------------------------------
 @attendee_bp.route('/attendee/event/<int:event_id>/members')
 def attendee_member_list(event_id):
@@ -184,32 +172,7 @@ def attendee_member_list(event_id):
 
 
 # -----------------------------------------------------
-# ABOUT PAGE
-# -----------------------------------------------------
-@attendee_bp.route('/about')
-def about_page():
-    user_role_id = session["user_role_id"]
-    is_organizer = (user_role_id == 1)
-    active_role = session.get("active_role")
-
-    if is_organizer and active_role == "attendee":
-        profile_home = "attendee"
-    elif is_organizer:
-        profile_home = "organizer"
-    else:
-        profile_home = "attendee"
-
-    return render_template(
-        'about_us.html',
-        is_attendee=True,
-        is_organizer=is_organizer,
-        profile_home=profile_home,
-        active_role=active_role
-    )
-
-
-# -----------------------------------------------------
-# REGISTERED EVENTS
+# View Registered Events
 # -----------------------------------------------------
 @attendee_bp.route('/registered')
 def attendee_registered_events():
@@ -255,7 +218,7 @@ def attendee_registered_events():
 
 
 # -----------------------------------------------------
-# SEND CONNECTION REQUEST
+# Send Connection Request
 # -----------------------------------------------------
 @attendee_bp.route('/send_connection_request', methods=['POST'])
 def send_connection_request():
@@ -295,7 +258,7 @@ def send_connection_request():
 
 
 # -----------------------------------------------------
-# NOTIFICATIONS (CONNECTION REQUESTS)
+# View Incoming Connection Requests
 # -----------------------------------------------------
 @attendee_bp.route('/connections')
 def attendee_connections():
@@ -324,7 +287,7 @@ def attendee_connections():
 
 
 # -----------------------------------------------------
-# ACCEPT CONNECTION
+# Accept Connection Request
 # -----------------------------------------------------
 @attendee_bp.route('/accept_connection', methods=['POST'])
 def accept_connection():
@@ -353,7 +316,35 @@ def accept_connection():
 
 
 # -----------------------------------------------------
-# COUNT PENDING CONNECTION REQUESTS
+# Decline a Connection Request
+# -----------------------------------------------------
+@attendee_bp.route('/decline_connection', methods=['POST'])
+def decline_connection():
+    user_id = session.get('user_id')
+    requester_id = request.form.get('requester_id')
+
+    if not user_id or not requester_id:
+        flash("Invalid request", "danger")
+        return redirect(request.referrer)
+
+    conn = get_db_connection()
+    if conn:
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                UPDATE event_connections
+                SET status_id=3, modified_date=NOW()
+                WHERE requester_id=%s AND receiver_id=%s
+            """, (requester_id, user_id))
+            conn.commit()
+        finally:
+            close_db_connection(conn, cursor)
+
+    return ('', 204)
+
+
+# -----------------------------------------------------
+# Load Notification Count
 # -----------------------------------------------------
 @attendee_bp.before_app_request
 def load_pending_requests_count():
@@ -377,8 +368,9 @@ def load_pending_requests_count():
                 close_db_connection(conn, cursor)
 
 
+
 # -----------------------------------------------------
-# MY CONNECTIONS
+# View My Connections
 # -----------------------------------------------------
 @attendee_bp.route('/my-connections')
 def attendee_my_connections():
@@ -417,7 +409,7 @@ def attendee_my_connections():
 
 
 # -----------------------------------------------------
-# VIEW USER PROFILE
+# View Another User’s Profile
 # -----------------------------------------------------
 @attendee_bp.route('/user/<int:user_id>')
 def view_user(user_id):
@@ -448,35 +440,7 @@ def view_user(user_id):
 
 
 # -----------------------------------------------------
-# DECLINE CONNECTION
-# -----------------------------------------------------
-@attendee_bp.route('/decline_connection', methods=['POST'])
-def decline_connection():
-    user_id = session.get('user_id')
-    requester_id = request.form.get('requester_id')
-
-    if not user_id or not requester_id:
-        flash("Invalid request", "danger")
-        return redirect(request.referrer)
-
-    conn = get_db_connection()
-    if conn:
-        try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                UPDATE event_connections
-                SET status_id=3, modified_date=NOW()
-                WHERE requester_id=%s AND receiver_id=%s
-            """, (requester_id, user_id))
-            conn.commit()
-        finally:
-            close_db_connection(conn, cursor)
-
-    return ('', 204)
-
-
-# -----------------------------------------------------
-# UNREGISTER EVENT
+# Unregister from Event
 # -----------------------------------------------------
 @attendee_bp.route('/attendee/unregister_event', methods=['POST'])
 def unregister_event():
@@ -506,20 +470,175 @@ def unregister_event():
     return redirect(url_for('attendee_bp.attendee_registered_events', from_registered=1))
 
 
+# -----------------------------------------------------
+# Display About Us Page
+# -----------------------------------------------------
+@attendee_bp.route('/about')
+def about_page():
+    user_role_id = session["user_role_id"]
+    is_organizer = (user_role_id == 1)
+    active_role = session.get("active_role")
+
+    if is_organizer and active_role == "attendee":
+        profile_home = "attendee"
+    elif is_organizer:
+        profile_home = "organizer"
+    else:
+        profile_home = "attendee"
+
+    return render_template(
+        'about_us.html',
+        is_attendee=True,
+        is_organizer=is_organizer,
+        profile_home=profile_home,
+        active_role=active_role
+    )
+
 # =====================================================================
-#                     ✨ AI-POWERED SIMILARITY ENGINE ✨
+#                     AI-POWERED SIMILARITY ENGINE
 # =====================================================================
+
+# -----------------------------------------------------
+# Cosine Similarity Helper
+# -----------------------------------------------------
+def cosine_sim(a, b):
+    a = np.array(a)
+    b = np.array(b)
+
+    if np.linalg.norm(a) == 0 or np.linalg.norm(b) == 0:
+        return None
+
+    return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
+
+
+# @attendee_bp.route("/similarity")
+# def attendee_similarity():
+
+#     # 1️⃣ LOGIN CHECK
+#     if "user_id" not in session:
+#         flash("Please log in first.", "danger")
+#         return redirect(url_for("user_bp.login_user"))
+
+#     user_id = session["user_id"]
+
+#     # 2️⃣ LOAD USER EMBEDDING
+#     conn = get_db_connection()
+#     cursor = conn.cursor(dictionary=True)
+
+#     cursor.execute("""
+#         SELECT bio, interests, embedding
+#         FROM users
+#         WHERE user_id=%s
+#     """, (user_id,))
+#     user_row = cursor.fetchone()
+
+#     if not user_row or not user_row["embedding"]:
+#         flash("Please update your Bio & Interests to receive AI recommendations.", "warning")
+#         return redirect(url_for("attendee_bp.attendee_homepage"))
+
+#     user_embedding = json.loads(user_row["embedding"])
+
+#     # Create keyword list
+#     interests = user_row["interests"] or ""
+#     interest_keywords = [
+#         w.strip().lower()
+#         for w in interests.replace(",", " ").split()
+#         if w.strip()
+#     ]
+
+#     # 3️⃣ FETCH ALL UPCOMING EVENTS
+#     cursor.execute("""
+#         SELECT e.event_id, e.event_title, e.description, e.event_date,
+#                e.location, e.image_path, e.embedding,
+#                c.category_name
+#         FROM event_details e
+#         LEFT JOIN event_category c ON e.category_id = c.category_id
+#         WHERE e.event_date >= NOW()
+#           AND e.is_active = 1
+#     """)
+#     events = cursor.fetchall()
+
+#     cursor.execute("SELECT event_id FROM event_registrations WHERE user_id=%s", (user_id,))
+#     registered_event_ids = {row["event_id"] for row in cursor.fetchall()}
+
+#     conn.close()
+
+#     # ---------------------------------------------------------
+#     # 4️⃣ CATEGORY BOOSTING (NOT FILTERING)
+#     # ---------------------------------------------------------
+#     category_matched_events = set()
+
+#     if interest_keywords:
+#         for e in events:
+#             cat = (e.get("category_name") or "").lower()
+#             cat_words = cat.replace("&", " ").replace("-", " ").split()
+
+#             if any(k == cw for k in interest_keywords for cw in cat_words):
+#                 category_matched_events.add(e["event_id"])
+
+#     # ---------------------------------------------------------
+#     # 5️⃣ COSINE SIMILARITY + THRESHOLD + BOOST
+#     # ---------------------------------------------------------
+#     SIMILARITY_THRESHOLD = 0.30
+#     CATEGORY_BOOST = 0.15
+
+#     scored = []
+
+#     for e in events:
+#         raw_emb = e["embedding"]
+
+#         if not raw_emb or raw_emb in ["null", "None", ""]:
+#             continue
+
+#         if e["event_id"] in registered_event_ids:
+#             continue
+
+#         try:
+#             event_vec = json.loads(raw_emb)
+#         except:
+#             continue
+
+#         score = cosine_sim(user_embedding, event_vec)
+
+#         if score is None or score != score:
+#             continue
+
+#         # ⭐ BOOST if category is matched
+#         if e["event_id"] in category_matched_events:
+#             score += CATEGORY_BOOST
+
+#         if score < SIMILARITY_THRESHOLD:
+#             continue
+
+#         e["similarity_score"] = score
+#         scored.append(e)
+
+#     # ---------------------------------------------------------
+#     # 6️⃣ SORT + LIMIT
+#     # ---------------------------------------------------------
+#     scored.sort(key=lambda x: x["similarity_score"], reverse=True)
+#     recommended_events = scored[:10]
+
+#     return render_template(
+#         "similarity.html",
+#         recommended_events=recommended_events
+#     )
+
+
+# ---------------------------------------------------------
+# Generate Personalized Event Recommendations
+# ---------------------------------------------------------
 @attendee_bp.route("/similarity")
 def attendee_similarity():
 
-    # 1️⃣ LOGIN CHECK
+    # LOGIN CHECK
     if "user_id" not in session:
         flash("Please log in first.", "danger")
         return redirect(url_for("user_bp.login_user"))
 
     user_id = session["user_id"]
 
-    # 2️⃣ LOAD USER EMBEDDING
+    # FETCH USER
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -531,12 +650,12 @@ def attendee_similarity():
     user_row = cursor.fetchone()
 
     if not user_row or not user_row["embedding"]:
-        flash("Please update your Bio & Interests to receive AI recommendations.", "warning")
+        flash("Please update your Bio & Interests first.", "warning")
         return redirect(url_for("attendee_bp.attendee_homepage"))
 
     user_embedding = json.loads(user_row["embedding"])
 
-    # Create keyword list
+    # Extract interest keywords
     interests = user_row["interests"] or ""
     interest_keywords = [
         w.strip().lower()
@@ -544,51 +663,37 @@ def attendee_similarity():
         if w.strip()
     ]
 
-    # 3️⃣ FETCH ALL UPCOMING EVENTS
+    # FETCH ALL ACTIVE UPCOMING EVENTS
     cursor.execute("""
         SELECT e.event_id, e.event_title, e.description, e.event_date,
-               e.location, e.image_path, e.embedding,
-               c.category_name
+               e.location, e.image_path, e.embedding, c.category_name
         FROM event_details e
         LEFT JOIN event_category c ON e.category_id = c.category_id
         WHERE e.event_date >= NOW()
           AND e.is_active = 1
     """)
     events = cursor.fetchall()
-
-    cursor.execute("SELECT event_id FROM event_registrations WHERE user_id=%s", (user_id,))
-    registered_event_ids = {row["event_id"] for row in cursor.fetchall()}
-
     conn.close()
 
-    # ---------------------------------------------------------
-    # 4️⃣ CATEGORY BOOSTING (NOT FILTERING)
-    # ---------------------------------------------------------
-    category_matched_events = set()
+    # CATEGORY MATCH COLLECTION
+    category_matched = set()
 
-    if interest_keywords:
-        for e in events:
-            cat = (e.get("category_name") or "").lower()
-            cat_words = cat.replace("&", " ").replace("-", " ").split()
+    for e in events:
+        category = (e.get("category_name") or "").lower()
+        category_words = category.replace("&", " ").replace("-", " ").split()
 
-            if any(k == cw for k in interest_keywords for cw in cat_words):
-                category_matched_events.add(e["event_id"])
+        if any(k == cw for k in interest_keywords for cw in category_words):
+            category_matched.add(e["event_id"])
 
-    # ---------------------------------------------------------
-    # 5️⃣ COSINE SIMILARITY + THRESHOLD + BOOST
-    # ---------------------------------------------------------
-    SIMILARITY_THRESHOLD = 0.30
-    CATEGORY_BOOST = 0.15
 
+    # SCORE CALCULATION
     scored = []
+    CATEGORY_BOOST = 0.20
+    SIMILARITY_THRESHOLD = 0.20
 
     for e in events:
         raw_emb = e["embedding"]
-
-        if not raw_emb or raw_emb in ["null", "None", ""]:
-            continue
-
-        if e["event_id"] in registered_event_ids:
+        if not raw_emb:
             continue
 
         try:
@@ -597,27 +702,24 @@ def attendee_similarity():
             continue
 
         score = cosine_sim(user_embedding, event_vec)
-
         if score is None or score != score:
-            continue
+            score = 0
 
-        # ⭐ BOOST if category is matched
-        if e["event_id"] in category_matched_events:
+        # BOOST category match
+        if e["event_id"] in category_matched:
             score += CATEGORY_BOOST
 
-        if score < SIMILARITY_THRESHOLD:
-            continue
+        # Keep category matches even with low similarity
+        if e["event_id"] in category_matched:
+            keep = True
+        else:
+            keep = score >= SIMILARITY_THRESHOLD
 
-        e["similarity_score"] = score
-        scored.append(e)
+        if keep:
+            e["similarity_score"] = score
+            scored.append(e)
 
-    # ---------------------------------------------------------
-    # 6️⃣ SORT + LIMIT
-    # ---------------------------------------------------------
+    # SORT by final score
     scored.sort(key=lambda x: x["similarity_score"], reverse=True)
-    recommended_events = scored[:10]
 
-    return render_template(
-        "similarity.html",
-        recommended_events=recommended_events
-    )
+    return render_template("similarity.html", recommended_events=scored[:20])

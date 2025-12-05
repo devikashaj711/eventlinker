@@ -54,18 +54,17 @@ app.register_blueprint(user_bp)
 
 
 # -------------------------------------
-#  Go to first landing page
+#  Landing Page Redirect
 # -------------------------------------
-# Our first landing page is login page hence redirected to login method -- madhuri
 @app.route('/')
 def index():
     return redirect(url_for('user_bp.login_user'))
 
 
 
-# -------------------------------------
-#  Main Method
-# -------------------------------------
+# ---------------------------------------------------------
+#  8.4	main Execution Block – Start Development Server
+# ---------------------------------------------------------
 if __name__ == '__main__':
     app.run(debug=True)
 
