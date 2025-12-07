@@ -45,7 +45,7 @@ def require_organizer():
 @organizer_bp.route("/organizer_home")
 def organizer_homepage():
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
     
     session["active_view"] = "organizer"
 
@@ -101,7 +101,7 @@ def organizer_homepage():
 def add_event_page():
 
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
 
     conn = get_db_connection()
     cursor = None
@@ -128,7 +128,7 @@ def add_event_page():
 def save_event():
     
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
 
     user_id = session["user_id"]
 
@@ -201,7 +201,7 @@ def save_event():
         event_id = cursor.lastrowid
 
         # Generate QR code
-        qr_data = url_for('attendee_bp.register_event', event_id=event_id, _external=True)
+        qr_data = request.host_url + url_for('attendee_bp.register_event', event_id=event_id).lstrip('/')
         print('qr_data---', qr_data)
         qr_img = qrcode.make(qr_data)
 
@@ -242,7 +242,7 @@ def save_event():
 @organizer_bp.route("/event/<int:event_id>")
 def view_event(event_id):
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
     
 
     is_organizer = (session.get("user_role_id") == 1)
@@ -280,7 +280,7 @@ def view_event(event_id):
 @organizer_bp.route("/event/<int:event_id>/edit")
 def edit_event(event_id):
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
 
     conn = get_db_connection()
     cursor = None
@@ -312,7 +312,7 @@ def edit_event(event_id):
 @organizer_bp.route("/event/<int:event_id>/update", methods=["POST"])
 def update_event(event_id):
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
 
     title = request.form.get("title")
     description = request.form.get("description")
@@ -421,7 +421,7 @@ def update_event(event_id):
 @organizer_bp.route("/event/<int:event_id>/delete", methods=["POST"])
 def delete_event(event_id):
     if not require_organizer():
-        return redirect(url_for("login_user"))
+        return redirect(url_for("user_bp.login_user"))
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)

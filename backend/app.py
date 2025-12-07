@@ -31,6 +31,8 @@ app = Flask(
 )
 app.secret_key = "eventlinker_secret_key"
 
+app.config['PREFERRED_URL_SCHEME'] = 'http'
+app.config['SERVER_NAME'] = '18.212.148.134:5000'
 
 
 # --------------------------------------------------------------------
@@ -66,5 +68,5 @@ def index():
 #  8.4	main Execution Block – Start Development Server
 # ---------------------------------------------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
 

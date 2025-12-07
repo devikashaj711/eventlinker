@@ -299,3 +299,137 @@ body {
   opacity: 0;
   transition: opacity 1s ease-out;
 }
+
+/* Responsive Design */
+/* ----------- Large Tablets (≤ 1200px) ----------- */
+@media (max-width: 1200px) {
+  .left-side {
+    padding: 4rem 4rem;
+  }
+
+  .welcome-title {
+    font-size: 38px;
+  }
+
+  .form-group input {
+    width: 300px;
+  }
+
+  .options-row {
+    width: 300px;
+  }
+
+  .right-side {
+    padding: 24px;
+  }
+}
+
+/* ----------- Medium Tablets (≤ 992px) ----------- */
+@media (max-width: 992px) {
+  body {
+    overflow: auto;
+  }
+
+  .login-container {
+    flex-direction: column-reverse;
+    height: auto;
+    width: 100%;
+  }
+
+  /* Illustration comes first on top */
+  .right-side {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 40vh;
+    padding: 0;
+  }
+
+  .illustration-clean {
+    border-radius: 0;
+    object-fit: cover;
+  }
+
+  .left-side {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    padding: 3rem 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .form-group input,
+  .options-row {
+    width: 100%;
+    max-width: 380px;
+  }
+
+  .btn-primary {
+    width: 100%;
+    max-width: 220px;
+  }
+}
+
+/* ----------- Mobile Screens (≤ 768px) ----------- */
+@media (max-width: 768px) {
+  .welcome-title {
+    font-size: 32px;
+  }
+
+  .welcome-subtitle {
+    font-size: 14px;
+    margin-bottom: 1.8rem;
+  }
+
+  .left-side {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .form-group input {
+    padding: 0.9rem 1rem;
+  }
+
+  .modal-box {
+    width: 90%;
+    padding: 24px;
+  }
+
+  .modal-btn {
+    width: 80%;
+  }
+}
+
+/* ----------- Small Phones (≤ 480px) ----------- */
+@media (max-width: 480px) {
+  .welcome-title {
+    font-size: 26px;
+  }
+
+  .form-group input {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .btn-primary {
+    padding: 0.8rem;
+    font-size: 0.95rem;
+  }
+
+  .options-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .logo-text {
+    font-size: 26px;
+  }
+
+  .modal-box {
+    padding: 20px;
+  }
+
+  .modal-input {
+    width: 100%;
+  }
+}

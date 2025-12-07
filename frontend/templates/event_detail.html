@@ -144,7 +144,7 @@
                     <p><strong>QR Code:</strong></p>
                     <img src="{{ event.qr_code_path }}" alt="Event QR Code">
                     <p>Scan QR code to register for this event or
-                        <a href="{{ url_for('attendee_bp.register_event', event_id=event.event_id) }}">
+                        <a href="{{ url_for('attendee_bp.register_event', event_id=event.event_id, _external=True) }}">
                             click here to join using link
                         </a>.
                     </p>

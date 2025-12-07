@@ -283,7 +283,7 @@ def attendee_connections():
         finally:
             close_db_connection(conn, cursor)
 
-    return render_template("connection_list.html", requests=requests)
+    return render_template("Connection_list.html", requests=requests)
 
 
 # -----------------------------------------------------
